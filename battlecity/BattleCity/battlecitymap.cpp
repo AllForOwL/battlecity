@@ -6,7 +6,7 @@
 #include "sprite.h"
 #include "battlecitymap.h"
 
-BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client) : QGraphicsScene() {
+BattleCityMap::BattleCityMap(int regimeGame, UdpClient *&client) : QGraphicsScene() {
 
     this->setBackgroundBrush(Qt::black);                        // Встановлення фонового кольору
     this->setSceneRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);      // Встановлення розміру сцени з початковими координатами 0,0

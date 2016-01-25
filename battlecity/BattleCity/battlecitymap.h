@@ -16,7 +16,7 @@
 class BattleCityMap: public QGraphicsScene {
     Q_OBJECT
 public:
-    explicit BattleCityMap(int regimeGame, UdpClient *client);
+    explicit BattleCityMap(int regimeGame, UdpClient*& client);
             ~BattleCityMap();
 
     int n_Map[CNT_ROWS_MAP][CNT_COLS_MAP];      // розмер карты
