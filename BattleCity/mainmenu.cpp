@@ -388,6 +388,7 @@ void mainMenu::slotRunServer()
 
     viewRunServer->setLayout(headLayout);
     viewRunServer->setFixedSize(250, 120);
+    viewRunServer->setWindowTitle("server");
 
     viewServer->close();
     viewRunServer->show();
@@ -425,6 +426,7 @@ void mainMenu::slotConnectToServer()
 
     viewConnectToServer->setLayout(headLayout);
     viewConnectToServer->setFixedSize(250, 120);
+    viewConnectToServer->setWindowTitle("client");
 
     viewClient->close();
     viewConnectToServer->show();
