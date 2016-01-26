@@ -34,7 +34,7 @@ mainMenu::mainMenu(): id_elementOfMenu(1) {
     btnClient = new QPushButton("create client");
 
     btnConnect   = new QPushButton("connect");
-    btnStartGame = new QPushButton("start");
+    btnStartGame = new QPushButton("start game");
     btnUpdate    = new QPushButton("update");
 
     btnChooiseServer = new QPushButton("server");
