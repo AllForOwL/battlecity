@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
+<<<<<<< HEAD
 <!-- Written by QtCreator 3.5.1, 2016-01-26T00:27:47. -->
+=======
+<!-- Written by QtCreator 3.5.1, 2016-01-26T12:48:18. -->
+>>>>>>> game_on_network
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>

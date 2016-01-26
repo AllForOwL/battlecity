@@ -11,7 +11,7 @@ class BattleCityView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    BattleCityView(int regimeGame, UdpClient*& client);
+    BattleCityView(int regimeGame, UdpClient* client);
     ~BattleCityView();
 
     void ShowWalls(const QString &strTypeWall, int numberTypeWall, const QString &pathToImage);

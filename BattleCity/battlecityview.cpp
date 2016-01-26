@@ -11,7 +11,7 @@
 #include <QDebug>
 #include "battlecityview.h"
 
-BattleCityView::BattleCityView(int regimeGame, UdpClient*& client): QGraphicsView() {
+BattleCityView::BattleCityView(int regimeGame, UdpClient *client): QGraphicsView() {
 
     map = new BattleCityMap(regimeGame, client);
     this->setScene(map);
