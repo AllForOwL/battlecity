@@ -197,6 +197,7 @@ BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client) : QGraphicsScene
     QObject::connect( timerMoveBot   , SIGNAL( timeout()                       )   , this  , SLOT( slotRunOneBot() ));        // добавить первого бота на карту
     QObject::connect( this           , SIGNAL( signalMoveOneBot()              )   , this  , SLOT( slotTimeout()   ));        // обновить первого бота
     QObject::connect( this           , SIGNAL( signalTimeoutForOneBot()        )   , bot   , SLOT( Atack(        ) ));        // найти путь к цели и переместить бота
+    QObject::connect( this           , SIGNAL( signalTimeoutForOneBot(int,int) )   , bot   , SLOT( Atack(int, int) ));        // найти путь к цели и переместить бота
     QObject::connect( bot            , SIGNAL( signalShot(QString)             )   , bot   , SLOT( slotTankShot(QString)  )); // стрелять
 
     QObject::connect( timerMoveBot_2 , SIGNAL( timeout()                       )   , this  , SLOT( slotRunTwoBot() ));
@@ -302,7 +303,7 @@ void BattleCityMap::slotShotTank()
 
 void BattleCityMap::slotIncreaseSpeedBots()
 {
-    if (_increaseSpeedBots >= 30)
+    if (_increaseSpeedBots >= 40)
     {
         _increaseSpeedBots -= 10;
         timerMoveBots->start(_increaseSpeedBots);
@@ -320,33 +321,43 @@ void BattleCityMap::slotTimeout()
         switch (updateOnlyOneBots)
         {
         case 0:
-        {
-            emit signalTimeoutForOneBot   ();
-            ++updateOnlyOneBots;
-
+            {
+                if (_increaseSpeedBots == 40)
+                {
+                    emit signalTimeoutForOneBot(TankForPlay1->x(),  TankForPlay1->x());
+                }
+                else
+                {
+                    emit signalTimeoutForOneBot();
+                }
+                ++updateOnlyOneBots;
             break;
-        }
+            }
         case 1:
-        {
-            emit signalTimeoutForTwoBot   () ;
-            ++updateOnlyOneBots;
-
+            {
+                if (_increaseSpeedBots == 30)
+                {
+                    emit signalTimeoutForTwoBot(TankForPlay1->x(), TankForPlay1->x());
+                }
+                else
+                {
+                    emit signalTimeoutForTwoBot() ;
+                }
+                ++updateOnlyOneBots;
             break;
-        }
+            }
         case 2:
-        {
-            emit signalTimeoutForThreeBot ( TankForPlay1->x(), TankForPlay1->y() );
-            ++updateOnlyOneBots;
-
+            {
+                emit signalTimeoutForThreeBot ( TankForPlay1->x(), TankForPlay1->y() );
+                ++updateOnlyOneBots;
             break;
-        }
+            }
         case 3:
-        {
-            emit signalTimeoutForFourBot  ( TankForPlay1->x(), TankForPlay1->y() );
-            updateOnlyOneBots = 0;
-
+            {
+                emit signalTimeoutForFourBot  ( TankForPlay1->x(), TankForPlay1->y() );
+                updateOnlyOneBots = 0;
             break;
-        }
+            }
         }
     }
     else if (runThreeBot)
@@ -360,7 +371,7 @@ void BattleCityMap::slotTimeout()
         }
         else
         {
-            emit signalTimeoutForTwoBot   ();
+            emit signalTimeoutForTwoBot ();
 
             updateOnlyTwoBots = true;
         }
@@ -369,7 +380,7 @@ void BattleCityMap::slotTimeout()
     {
         if (updateOnlyTwoBots)
         {
-            emit signalTimeoutForOneBot   ();
+            emit signalTimeoutForOneBot ();
 
             updateOnlyTwoBots = false;
         }
@@ -382,7 +393,7 @@ void BattleCityMap::slotTimeout()
     }
     else if (runOneBot)
     {
-        emit signalTimeoutForOneBot       ();
+        emit signalTimeoutForOneBot     ();
     }
 
 }

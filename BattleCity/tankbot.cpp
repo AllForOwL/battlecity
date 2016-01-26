@@ -99,17 +99,119 @@ void TankBot::Atack(int xPlayer, int yPlayer) {
 
         }
 
-        if ((_previousPoint.x != 0) || (_previousPoint.y != 0))
+        if (_previousStep.size() == 5)
         {
-            if ((_previousPoint.x == this->x()) && (_previousPoint.y == this->y()))
+            if ((this->x() == _previousStep[4].x) && (this->y() == _previousStep[4].y))
             {
-               emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL); // поиск пути
-            }
+                _previousStep.clear();
+                switch (this->_rotate)
+                {
+                case 0:
+                {
+                    int xPlayer = 0;
+                    int yPlayer = 0;
 
-       }
+                    if (this->x() >= 250)
+                    {
+                        xPlayer = rand() % (int)(this->x()+32) + 128;
+                        yPlayer = this->y();
+                    }
+                    else
+                    {
+                        xPlayer = rand() % 480 + 128;
+                        yPlayer = this->y();
+                    }
+
+                    _xPlayer = xPlayer;
+                    _yPlayer = yPlayer;
+                    break;
+                }
+                case 90:
+                {
+                    int xPlayer = 0;
+                    int yPlayer = 0;
+
+                    if (this->y() >= 250)
+                    {
+                        xPlayer = this->x();
+                        yPlayer = rand() % (int)(this->y() + 34) + 128;
+                    }
+                    else
+                    {
+                        xPlayer = this->x();
+                        yPlayer = rand() % 480 + (this->y() + 34);
+                    }
+
+                    _xPlayer = xPlayer;
+                    _yPlayer = yPlayer;
+                    break;
+                }
+                case 180:
+                {
+                    int xPlayer = 0;
+                    int yPlayer = 0;
+
+                    if (this->x() >= 250)
+                    {
+                        xPlayer = rand() % (int)(this->x() + 32) + 128;
+                        yPlayer = this->y();
+                    }
+                    else
+                    {
+                        xPlayer = rand() % 480 + 128;
+                        yPlayer = this->y();
+                    }
+
+                    _xPlayer = xPlayer;
+                    _yPlayer = yPlayer;
+                    break;
+                }
+                case 270:
+                {
+                    int xPlayer = 0;
+                    int yPlayer = 0;
+
+                    if (this->y() >= 250)
+                    {
+                        xPlayer = this->x();
+                        yPlayer = rand() % (int)(this->y() + 34) + 128;
+                    }
+                    else
+                    {
+                        xPlayer = this->x();
+                        yPlayer = rand() % 480 + (this->y() + 34);
+                    }
+
+                    _xPlayer = xPlayer;
+                    _yPlayer = yPlayer;
+                    break;
+                }
+                default:
+                {
+                    int xPlayer = 0;
+                    int yPlayer = 0;
+
+                    xPlayer = rand() % 450 + 100;
+                    yPlayer = rand() % 480 + 100;
+
+                    _xPlayer = xPlayer;
+                    _yPlayer = yPlayer;
+                    break;
+                }
+                }
+
+                emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
+                return;
+            }
+            else
+            {
+                _previousStep.clear();
+            }
+        }
 
         _previousPoint.x = this->x();
         _previousPoint.y = this->y();
+        _previousStep.push_back(_previousPoint);
 
         if ((this->x() == x_end) && (this->y() == y_end)) // когда текущие x і y ровны елементу пути
         {
@@ -184,210 +286,268 @@ void TankBot::Atack(int xPlayer, int yPlayer) {
 }
 
 // поиск пути для ботов
-void TankBot::Atack() {
+void TankBot::Atack()
+{
+    if (indexWay == 0) // если достигли финиша
+    {
+        qDebug() << "finish";
+        searchWay = false;
+        indexWay = CNT_NOT_FOUND_WAY;
+    }
+    if (searchWay)                         // был найден путь
+    {
+        if (indexWay == CNT_NOT_FOUND_WAY) // и бот находится вконце пути
+        {
+            if (
+                    (algorithmSearchWay->vectorFoundWay.size() == 0) ||
+                    (algorithmSearchWay->vectorFoundWay.size() == 1)
+                    )
+            {
+                int xPlayer = 0;
+                int yPlayer = 0;
 
-     if (indexWay == 0) // если достигли финиша
-     {
-         qDebug() << "finish";
-         searchWay = false;
-         indexWay = CNT_NOT_FOUND_WAY;
-     }
-     if (searchWay)                         // был найден путь
-     {
-         if (indexWay == CNT_NOT_FOUND_WAY) // и бот находится вконце пути
-         {
-             if (
-                 (algorithmSearchWay->vectorFoundWay.size() == 0) ||
-                 (algorithmSearchWay->vectorFoundWay.size() == 1)
-                )
-             {
-                 int xPlayer = 0;
-                 int yPlayer = 0;
+                xPlayer = rand() % 450 + 50;
+                yPlayer = rand() % 480 + 100;
+                _xPlayer = xPlayer;
+                _yPlayer = yPlayer;
 
-                 if (this->objectName() == OBJ_NAME_BOT_1)
-                 {
-                    xPlayer = rand() % 250 + 80;
-                    yPlayer = rand() % 480 + 200;
-                    _xPlayer = xPlayer;
-                    _yPlayer = yPlayer;
-                 }
-                 else
-                 {
-                     xPlayer = rand() % 450 + 250;
-                     yPlayer = rand() % 480 + 100;
-                     _xPlayer = xPlayer;
-                     _yPlayer = yPlayer;
-                 }
+                emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, yPlayer/SIZE_WALL, xPlayer/SIZE_WALL); // поиск пути
 
-                 emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, yPlayer/SIZE_WALL, xPlayer/SIZE_WALL); // поиск пути
+                return;
+            }
 
-                 return;
-             }
+            vectorFoundWay.resize(algorithmSearchWay->vectorFoundWay.size());
+            copy(algorithmSearchWay->vectorFoundWay.begin(), algorithmSearchWay->vectorFoundWay.end(),
+                 vectorFoundWay.begin()); // копирование пути в вектор этого класса с класса нахождения пути
 
-             vectorFoundWay.resize(algorithmSearchWay->vectorFoundWay.size());
-             copy(algorithmSearchWay->vectorFoundWay.begin(), algorithmSearchWay->vectorFoundWay.end(),
-                  vectorFoundWay.begin()); // копирование пути в вектор этого класса с класса нахождения пути
+            indexWay = vectorFoundWay.size() - 2;           // получаем предпоследний елемент пути
+            x_end = vectorFoundWay[indexWay].y * SIZE_WALL; // получаем x и y предпоследнего
+            y_end = vectorFoundWay[indexWay].x * SIZE_WALL; // елемента пути
 
-             indexWay = vectorFoundWay.size() - 2;           // получаем предпоследний елемент пути
-             x_end = vectorFoundWay[indexWay].y * SIZE_WALL; // получаем x и y предпоследнего
-             y_end = vectorFoundWay[indexWay].x * SIZE_WALL; // елемента пути
-
-             if (x_end == this->x())      // когда текущий x и x - следующего елемента пути ровны
-             {
-                 if (y_end < this->y())   // если текущий y больше y - следующего шага пути
-                 {
-                     this->_rotate = 0;   // едем вверх
-                 }
-                 else
-                 {
-                     this->_rotate = 180; // едем вниз
-                 }
-             }
-             else
-             {
-                 if (x_end > this->x())   // если тaекущий x менше x следующего елемента пути
-                 {
-                     this->_rotate = 90;  // едем вправо
-                 }
-                 else
-                 {
-                     this->_rotate = 270; // едем влево
-                 }
-             }
+            if (x_end == this->x())      // когда текущий x и x - следующего елемента пути ровны
+            {
+                if (y_end < this->y())   // если текущий y больше y - следующего шага пути
+                {
+                    this->_rotate = 0;   // едем вверх
+                }
+                else
+                {
+                    this->_rotate = 180; // едем вниз
+                }
+            }
+            else
+            {
+                if (x_end > this->x())   // если тaекущий x менше x следующего елемента пути
+                {
+                    this->_rotate = 90;  // едем вправо
+                }
+                else
+                {
+                    this->_rotate = 270; // едем влево
+                }
+            }
         }
-             if (indexWay <= 5)
-             {
-                 int xPlayer = 0;
-                 int yPlayer = 0;
 
-                 if (this->objectName() == OBJ_NAME_BOT_1)
-                 {
-                    xPlayer = rand() % 250 + 80;
-                    yPlayer = rand() % 480 + 0;
-                    _xPlayer = xPlayer;
-                    _yPlayer = yPlayer;
-                 }
-                 else
-                 {
-                     xPlayer = rand() % 440 + 180;
-                     yPlayer = rand() % 480 + 100;
-                     _xPlayer = xPlayer;
-                     _yPlayer = yPlayer;
-                 }
-
-                  emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
-             }
-
-             if ((this->x() != 0) && (this->y() != 0))
-                if ((this->x() == _previousPoint.x) && (this->y() == _previousPoint.y))
+        if (_previousStep.size() == 5)
+        {qDebug() << "this badd";
+            if ((this->x() == _previousStep[4].x) && (this->y() == _previousStep[4].y))
+            {qDebug() << "this badввd";
+                _previousStep.clear();
+                switch (this->_rotate)
+                {
+                case 0:
                 {
                     int xPlayer = 0;
                     int yPlayer = 0;
 
-                    if (this->objectName() == OBJ_NAME_BOT_1)
+                    if (this->x() >= 250)
                     {
-                       xPlayer = rand() % 250 + 80;
-                       yPlayer = rand() % 480 + 0;
-                       _xPlayer = xPlayer;
-                       _yPlayer = yPlayer;
+                        xPlayer = rand() % (int)(this->x()+32) + 64;
+                        yPlayer = this->y();
                     }
                     else
                     {
-                        xPlayer = rand() % 440 + 180;
-                        yPlayer = rand() % 480 + 100;
-                        _xPlayer = xPlayer;
-                        _yPlayer = yPlayer;
+                        xPlayer = rand() % 480 + 64;
+                        yPlayer = this->y();
                     }
 
-                     emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
+                    _xPlayer = xPlayer;
+                    _yPlayer = yPlayer;
+                    break;
+                }
+                case 90:
+                {
+                    int xPlayer = 0;
+                    int yPlayer = 0;
+
+                    if (this->y() >= 250)
+                    {
+                        xPlayer = this->x();
+                        yPlayer = rand() % (int)(this->y() + 34) + 64;
+                    }
+                    else
+                    {
+                        xPlayer = this->x();
+                        yPlayer = rand() % 480 + (this->y() + 34);
+                    }
+
+                    _xPlayer = xPlayer;
+                    _yPlayer = yPlayer;
+                    break;
+                }
+                case 180:
+                {
+                    int xPlayer = 0;
+                    int yPlayer = 0;
+
+                    if (this->x() >= 250)
+                    {
+                        xPlayer = rand() % (int)(this->x() + 32) + 64;
+                        yPlayer = this->y();
+                    }
+                    else
+                    {
+                        xPlayer = rand() % 480 + 64;
+                        yPlayer = this->y();
+                    }
+
+                    _xPlayer = xPlayer;
+                    _yPlayer = yPlayer;
+                    break;
+                }
+                case 270:
+                {
+                    int xPlayer = 0;
+                    int yPlayer = 0;
+
+                    if (this->y() >= 250)
+                    {
+                        xPlayer = this->x();
+                        yPlayer = rand() % (int)(this->y() + 34) + 64;
+                    }
+                    else
+                    {
+                        xPlayer = this->x();
+                        yPlayer = rand() % 480 + (this->y() + 34);
+                    }
+
+                    _xPlayer = xPlayer;
+                    _yPlayer = yPlayer;
+                    break;
+                }
+                default:
+                {
+                    int xPlayer = 0;
+                    int yPlayer = 0;
+
+                    xPlayer = rand() % 450 + 50;
+                    yPlayer = rand() % 480 + 100;
+
+                    _xPlayer = xPlayer;
+                    _yPlayer = yPlayer;
+                    break;
+                }
                 }
 
-         _previousPoint.x = this->x();
-         _previousPoint.y = this->y();
+                emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
+                return;
+            }
+            else
+            {
+                _previousStep.clear();
+            }
+        }
 
-         if ((this->x() == x_end) && (this->y() == y_end)) // когда текущие x і y ровны елементу пути
-         {
-             --indexWay;                                   // переходим к следующему елементу пути
-             x_end = vectorFoundWay[indexWay].y * SIZE_WALL;
-             y_end = vectorFoundWay[indexWay].x * SIZE_WALL;
+        _previousPoint.x = this->x();
+        _previousPoint.y = this->y();
+        _previousStep.push_back(_previousPoint);
 
-             if (x_end == this->x())
-             {
-                 if (y_end < this->y())
-                 {
-                     this->_rotate = 0;
-                 }
-                 else
-                 {
-                     this->_rotate = 180;
-                 }
-             }
-             else if (y_end == this->y())
-             {
-                 if (x_end > this->x())
-                 {
-                     this->_rotate = 90;
-                 }
-                 else
-                 {
-                     this->_rotate = 270;
-                 }
-             }
-         }
-     }
-     else
-     {
-             int xPlayer = 0;
-             int yPlayer = 0;
+        if (indexWay <= 3)
+        {
+            int xPlayer = 0;
+            int yPlayer = 0;
 
-             if (this->objectName() == OBJ_NAME_BOT_1)
-             {
-                xPlayer = rand() % 250 + 80;
-                yPlayer = rand() % 480 + 0;
-                _xPlayer = xPlayer;
-                _yPlayer = yPlayer;
-             }
-             else
-             {
-                 xPlayer = rand() % 440 + 180;
-                 yPlayer = rand() % 480 + 100;
-                 _xPlayer = xPlayer;
-                 _yPlayer = yPlayer;
-             }
+            xPlayer = rand() % 450 + 50;
+            yPlayer = rand() % 480 + 100;
+            _xPlayer = xPlayer;
+            _yPlayer = yPlayer;
 
-             emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, yPlayer/SIZE_WALL, xPlayer/SIZE_WALL); // поиск пути
-             return;
-     }
+            emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
+        }
 
-     activeKey.clear();
-     switch (MODE_OF_ATACK) {
-         case FREE: {
-             switch (this->_rotate) {
-             case 0:
-                     activeKey.push_back(Qt::Key_Up);
-                 break;
-             case 90:
-                     activeKey.push_back(Qt::Key_Right);
-                 break;
-             case 180:
-                     activeKey.push_back(Qt::Key_Down);
-                 break;
-             case 270:
-                     activeKey.push_back(Qt::Key_Left);
-                 break;
-         }
-         break;
-         }
-         case KILL_PLAYER: {
-             break;
-         }
-         case KILL_FLAG: {
-             break;
-         }
-     }
+        if ((this->x() == x_end) && (this->y() == y_end)) // когда текущие x і y ровны елементу пути
+        {
+            --indexWay;                                   // переходим к следующему елементу пути
+            x_end = vectorFoundWay[indexWay].y * SIZE_WALL;
+            y_end = vectorFoundWay[indexWay].x * SIZE_WALL;
 
-       emit slotMoveTank();
-       emit slotTankShot(this->objectName());
+            if (x_end == this->x())
+            {
+                if (y_end < this->y())
+                {
+                    this->_rotate = 0;
+                }
+                else
+                {
+                    this->_rotate = 180;
+                }
+            }
+            else if (y_end == this->y())
+            {
+                if (x_end > this->x())
+                {
+                    this->_rotate = 90;
+                }
+                else
+                {
+                    this->_rotate = 270;
+                }
+            }
+        }
+    }
+    else
+    {
+        int xPlayer = 0;
+        int yPlayer = 0;
+
+        xPlayer = rand() % 450 + 50;
+        yPlayer = rand() % 480 + 100;
+        _xPlayer = xPlayer;
+        _yPlayer = yPlayer;
+
+        emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, yPlayer/SIZE_WALL, xPlayer/SIZE_WALL); // поиск пути
+        return;
+    }
+
+    activeKey.clear();
+    switch (MODE_OF_ATACK) {
+    case FREE: {
+        switch (this->_rotate) {
+        case 0:
+            activeKey.push_back(Qt::Key_Up);
+            break;
+        case 90:
+            activeKey.push_back(Qt::Key_Right);
+            break;
+        case 180:
+            activeKey.push_back(Qt::Key_Down);
+            break;
+        case 270:
+            activeKey.push_back(Qt::Key_Left);
+            break;
+        }
+        break;
+    }
+    case KILL_PLAYER: {
+        break;
+    }
+    case KILL_FLAG: {
+        break;
+    }
+    }
+
+    emit slotMoveTank();
+    emit slotTankShot(this->objectName());
 }
 
 void TankBot::outMap(/*const int map[CNT_ROWS_MAP][CNT_COLS_MAP]*/) {

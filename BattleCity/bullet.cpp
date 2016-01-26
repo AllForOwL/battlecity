@@ -17,7 +17,7 @@ Bullet::Bullet(int tempPowerTank, QPointF start, int angle, QObject *parent):  Q
     this->setPos(start);                                            // Початкова позиції пулі
     timerBullet = new QTimer();
     connect(timerBullet, SIGNAL(timeout()), SLOT(slotTimerBullet()));   // Таймер, який переміщує пулю
-    timerBullet->start(2);                                         // Швидкість обновлення таймеру. 15 млсек.
+    timerBullet->start(1);                                         // Швидкість обновлення таймеру. 15 млсек.
                                                                     // 1 сек == 1000 млсек
 }
 

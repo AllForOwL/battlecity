@@ -93,6 +93,9 @@ protected:
 signals:
     void signalTimeoutForOneBot   (                        ); // вызывается когда нужно переместить бота
     void signalTimeoutForTwoBot   (                        );
+    void signalTimeoutForOneBot   ( int xBase , int yBase  ); // уничтожение базы
+    void signalTimeoutForTwoBot   ( int xBase , int yBase  );
+
     void signalTimeoutForThreeBot (int xPlayer, int yPlayer);
     void signalTimeoutForFourBot  (int xPlayer, int yPlayer);
 

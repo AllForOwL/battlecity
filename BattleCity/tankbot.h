@@ -40,6 +40,7 @@ private:
 
     vector <QPoint2D> path;
     vector <QPoint2D> shortPath;
+    QVector <point> _previousStep;
 
     bool searchWay; // был ли поиск пути
     int  indexWay;   // в какой точке сейчас находимся
