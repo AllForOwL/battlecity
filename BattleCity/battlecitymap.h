@@ -45,6 +45,8 @@ private:
     QTimer *timerForShowExplosionBonus;
     QTimer *timerRemoveExplosionBonus;
 
+    QTimer *timerChangeSpeedBots;
+
     TankForPlayer *TankForPlay1;            // Танк первого и
     TankForPlayer *TankForPlay2;            // в второго игрока
 
@@ -80,6 +82,8 @@ private:
     UdpClient *_client;
     QTimer    *timerForSendPosPlayer;
     bool       shot;
+
+    int _increaseSpeedBots;
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event);       // Обробка нажаття клавіші та
@@ -134,6 +138,7 @@ public slots:
     void slotSetPosPlayerForSend();
     void slotMoveOpponent(int x, int y, int rotate, bool shot2);
     void slotShotTank();
+    void slotIncreaseSpeedBots();
 };
 
 #endif // BATTLECITYMAP_H

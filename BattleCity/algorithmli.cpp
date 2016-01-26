@@ -1,4 +1,5 @@
 #include <QtDebug>
+#include <QException>
 #include "algorithmli.h"
 
 algorithmLI::algorithmLI(int x_begin, int y_begin, int x_end, int y_end)
@@ -19,21 +20,28 @@ algorithmLI::algorithmLI(int x_begin, int y_begin, int x_end, int y_end)
             tempStep = vectorFoundWay[_i].index;
             --tempStep;
 
-            for (int i(0); i < vectorPassableElement.size(); i++)
+            try
             {
-                if (vectorPassableElement[i].index == tempStep)
+                for (int i(0); i < vectorPassableElement.size(); i++)
                 {
-                    if (
-                        (( vectorPassableElement[i].x == vectorFoundWay[_i].x-1 ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y   )) ||
-                        (( vectorPassableElement[i].x == vectorFoundWay[_i].x   ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y+1 )) ||
-                        (( vectorPassableElement[i].x == vectorFoundWay[_i].x+1 ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y   )) ||
-                        (( vectorPassableElement[i].x == vectorFoundWay[_i].x   ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y-1 ))
-                       )
+                    if (vectorPassableElement[i].index == tempStep)
                     {
-                        vectorFoundWay.push_back(vectorPassableElement[i]);
-                        break;
+                        if (
+                            (( vectorPassableElement[i].x == vectorFoundWay[_i].x-1 ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y   )) ||
+                            (( vectorPassableElement[i].x == vectorFoundWay[_i].x   ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y+1 )) ||
+                            (( vectorPassableElement[i].x == vectorFoundWay[_i].x+1 ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y   )) ||
+                            (( vectorPassableElement[i].x == vectorFoundWay[_i].x   ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y-1 ))
+                           )
+                        {
+                            vectorFoundWay.push_back(vectorPassableElement[i]);
+                            break;
+                        }
                     }
                 }
+            } catch (QException *ex)
+            {
+                qDebug() << "out of index vector";
+                return;
             }
            ++_i;
         }
@@ -107,7 +115,7 @@ bool algorithmLI::SearchWay(int x, int y, int end_x, int end_y)
                 begin.y = y;                            // индекса
                 begin.index = distance;                 // индекс
                 vectorPassableElement.push_back(begin); // добавляем текущую точку в вектор проходимых
-                added = true;                           // есть возможность подяльшего продвижения
+                added = true;                           // есть возможность подальшего продвижения
             }
         }
         if (y < CNT_COLS_MAP-1)

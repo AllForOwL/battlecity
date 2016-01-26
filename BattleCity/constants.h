@@ -74,7 +74,9 @@ const int CNT_BEGIN_X_FOUR_BOT  = 350;
 const int CNT_BEGIN_Y_FOUR_BOT  = 0;
 
 const int CNT_SPEED_MOVE_ONE_PLAYER = 40;
-const int CNT_SPEED_MOVE_BOTS       = 30;
+const int CNT_SPEED_MOVE_BOTS       = 60;
+
+const int CNT_CHANGE_SPEED_BOTS     = 10000;
 
 const int CNT_TIME_APPEARANCE_ONE_BOT   = 1000;
 const int CNT_TIME_APPEARANCE_TWO_BOT   = 7000;

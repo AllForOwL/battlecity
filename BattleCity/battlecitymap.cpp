@@ -16,6 +16,7 @@ BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client) : QGraphicsScene
     shot = false;
 
     _regimeGame = regimeGame;
+    _increaseSpeedBots = CNT_SPEED_MOVE_BOTS;
 
     p_ReadFromFile = new Parsing();
     p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_Map);   // Завантаження карти з файлу
@@ -54,6 +55,8 @@ BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client) : QGraphicsScene
     timerMoveBot_3      = new QTimer(this);
     timerMoveBot_4      = new QTimer(this);
     timerMoveBots       = new QTimer(this);
+
+    timerChangeSpeedBots = new QTimer(this);
 
     runOneBot           = false;
     runTwoBot           = false;
@@ -171,7 +174,8 @@ BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client) : QGraphicsScene
     timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
     timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
 
-    timerMoveBots->start(CNT_SPEED_MOVE_BOTS);
+    timerMoveBots->start(_increaseSpeedBots);
+    timerChangeSpeedBots->start(CNT_CHANGE_SPEED_BOTS);
 
     timerForShowBonus->start(CNT_SECOND_SHOW_STAR);
     timerForShowProtectionBase->start(CNT_SECOND_PROTECTION_BASE);
@@ -233,6 +237,8 @@ BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client) : QGraphicsScene
 
     QObject::connect( timerForSendPosPlayer , SIGNAL( timeout()), this, SLOT( slotSetPosPlayerForSend() ));
 
+    QObject::connect( timerChangeSpeedBots  , SIGNAL( timeout()), this, SLOT( slotIncreaseSpeedBots()   ));
+
     delete p_ReadFromFile;
 }
 
@@ -292,6 +298,19 @@ void BattleCityMap::slotMoveOpponent(int x, int y, int rotate, bool shot2)
 void BattleCityMap::slotShotTank()
 {
     shot = true;
+}
+
+void BattleCityMap::slotIncreaseSpeedBots()
+{
+    if (_increaseSpeedBots >= 30)
+    {
+        _increaseSpeedBots -= 10;
+        timerMoveBots->start(_increaseSpeedBots);
+    }
+    else
+    {
+        timerMoveBots->start(_increaseSpeedBots);
+    }
 }
 
 void BattleCityMap::slotTimeout()
