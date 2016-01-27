@@ -211,31 +211,31 @@ void Tank::slotMoveTank() {
     ) {
         this->moveBy(-np.x(), -np.y());
 
-        if (
-            (QObject::sender()->objectName() == OBJ_NAME_BOT_1) ||
-            (QObject::sender()->objectName() == OBJ_NAME_BOT_2) ||
-            (QObject::sender()->objectName() == OBJ_NAME_BOT_3) ||
-            (QObject::sender()->objectName() == OBJ_NAME_BOT_4)
-           )
-        {
-            this->_rotate += 90;
-            if (this->_rotate > 270)
-                _rotate = 0;
-            switch (this->_rotate) {
-                case 0:
-                        activeKey.push_back(Qt::Key_Up);
-                    break;
-                case 90:
-                        activeKey.push_back(Qt::Key_Right);
-                    break;
-                case 180:
-                        activeKey.push_back(Qt::Key_Down);
-                    break;
-                case 270:
-                        activeKey.push_back(Qt::Key_Left);
-                    break;
-            }
-        }
+//        if (
+//            (QObject::sender()->objectName() == OBJ_NAME_BOT_1) ||
+//            (QObject::sender()->objectName() == OBJ_NAME_BOT_2) ||
+//            (QObject::sender()->objectName() == OBJ_NAME_BOT_3) ||
+//            (QObject::sender()->objectName() == OBJ_NAME_BOT_4)
+//           )
+//        {
+//            this->_rotate += 90;
+//            if (this->_rotate > 270)
+//                _rotate = 0;
+//            switch (this->_rotate) {
+//                case 0:
+//                        activeKey.push_back(Qt::Key_Up);
+//                    break;
+//                case 90:
+//                        activeKey.push_back(Qt::Key_Right);
+//                    break;
+//                case 180:
+//                        activeKey.push_back(Qt::Key_Down);
+//                    break;
+//                case 270:
+//                        activeKey.push_back(Qt::Key_Left);
+//                    break;
+//            }
+//        }
 
     }
 

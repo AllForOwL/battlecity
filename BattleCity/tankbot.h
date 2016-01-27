@@ -53,6 +53,8 @@ private:
 
     point _previousPoint;
 
+    bool changeRotate;
+
 public:
     int x_end;
     int y_end;

@@ -6,7 +6,7 @@
 #include "sprite.h"
 #include "battlecitymap.h"
 
-BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client) : QGraphicsScene() {
+BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client, QObject* parent) : QGraphicsScene(parent) {
 
     this->setBackgroundBrush(Qt::black);                        // Встановлення фонового кольору
     this->setSceneRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);      // Встановлення розміру сцени з початковими координатами 0,0
@@ -250,7 +250,7 @@ BattleCityMap::~BattleCityMap() {
     delete _client;
 
     delete TankForPlay1;
-    delete TankForPlay2;
+    //delete TankForPlay2;
 
     delete bot;
     delete bot_2;
@@ -272,6 +272,7 @@ BattleCityMap::~BattleCityMap() {
     delete timerRemoveProtectionBase;
     delete timerRemoveStar;
     delete timerRemoveTimerBonus;
+
 }
 
 void BattleCityMap::slotSetPosPlayerForSend()
@@ -335,7 +336,7 @@ void BattleCityMap::slotTimeout()
             }
         case 1:
             {
-                if (_increaseSpeedBots == 30)
+                if (_increaseSpeedBots == 40)
                 {
                     emit signalTimeoutForTwoBot(TankForPlay1->x(), TankForPlay1->x());
                 }
@@ -661,28 +662,28 @@ void BattleCityMap::slotAddBot_2()
     ++bot_2->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
-    int _x = rand() % 250 - 400;
+    int _x = 228;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
-    myRect.setWidth(64);
-    myRect.setHeight(32);
+    myRect.setWidth(128);
+    myRect.setHeight(30);
 
     do
     {
         listItems.clear();
         myRect.setX(_x);
-        _x -= 64;
+        _x += 128;
         listItems = this->items(myRect);
 
-        if (_x < 0)
+        if (_x > 500)
         {
-            _x = 400;
+            _x = 228;
         }
-
+        qDebug() << "bot_2";
     } while(listItems.size() != 0);
 
-    _x += 32;
+    _x -= 32;
     bot_2->setPos(_x, 0);
 }
 
@@ -691,57 +692,56 @@ void BattleCityMap::slotAddBot_3()
     ++bot_3->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
-    int _x = rand() % 250 - 0;
+    int _x = 328;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
     myRect.setWidth(128);
-    myRect.setHeight(32);
+    myRect.setHeight(30);
 
     do
     {
         listItems.clear();
         myRect.setX(_x);
-        _x += 64;
+        _x -= 128;
         listItems = this->items(myRect);
 
-        if (_x > 500)
+        if (_x < 0)
         {
-            _x = 200;
+            _x = 328;
         }
-
+        qDebug() << "bot_3";
     } while(listItems.size() != 0);
 
-    _x -= 32;
+    _x += 32;
     bot_3->setPos(_x, 0);
 }
 
 void BattleCityMap::slotAddBot_4()
 {
-
-
     ++bot_4->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
-    int _x = rand() % 400 - 250;
+    int _x = 428;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
     myRect.setWidth(128);
-    myRect.setHeight(32);
+    myRect.setHeight(30);
 
     do
     {
         listItems.clear();
         myRect.setX(_x);
-        _x -= 64;
+        _x -= 128;
         listItems = this->items(myRect);
 
         if (_x < 0 )
         {
-            _x = 400;
+            _x = 428 ;
         }
 
+        qDebug() << "bot_2";
     } while(listItems.size() != 0);
 
     _x += 32;
@@ -753,24 +753,25 @@ void BattleCityMap::slotAddBot_1()
     ++bot->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
-    int _x = rand() % 250 - 0;
+    int _x = 128;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
     myRect.setWidth(128);
-    myRect.setHeight(32);
+    myRect.setHeight(30);
 
     do
     {
         listItems.clear();
         myRect.setX(_x);
-        _x += 64;
+        _x += 128;
         listItems = this->items(myRect);
 
         if (_x > 500)
         {
-            _x = 200;
+            _x = 128;
         }
+        qDebug() << "bot_1";
 
     } while(listItems.size() != 0);
 

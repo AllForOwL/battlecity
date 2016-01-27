@@ -1,2 +1,5 @@
+battlecity/
 build-BattleCity-Desktop-Debug/
 *.pro
+*.user
+*.7z

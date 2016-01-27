@@ -28,7 +28,7 @@ BattleCityView::BattleCityView(int regimeGame, UdpClient *client): QGraphicsView
 }
 
 BattleCityView::~BattleCityView() {
-    delete map;
+    map->~BattleCityMap();
 }
 
 void BattleCityView::ShowWalls(const QString &strTypeWall,
@@ -348,5 +348,5 @@ void BattleCityView::slotClose(int numberKillsOnePlayer, int numberKillsTwoPlaye
 
     this->close();
     view->show();
-    view->update();
+
 }
