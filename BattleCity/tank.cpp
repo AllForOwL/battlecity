@@ -129,9 +129,11 @@ void Tank::slotTankShot(QString typeObject) {
         bullet->nameObjectSender = typeObject;
         bullet->setData(0, OBJ_NAME_BULLET);
         this->_shot = false;
+
         connect( bullet, SIGNAL( signalDestroy()  )  , this, SLOT( slotAllowShot() ));
         connect( bullet, SIGNAL( signalGameOver() )  , this, SLOT( slotGameOver()  ));
         connect( bullet, SIGNAL( signalKillBot()  )  , this, SLOT( slotKillBot()   ));
+
         scene()->addItem(bullet);
 
     } catch (QException *ex)
@@ -176,26 +178,30 @@ void Tank::slotMoveTank() {
         this->_speed = 2;                                   // тоді він має "сковзатися"
 
     qDebug() << "lastKey = " << lastKey;
-    if (lastKey == this->iArrowUp) {
+    if (lastKey == this->iArrowUp)
+    {
         this->setY(y - this->_speed);
         this->currentFrame = (this->currentFrame != 4) ? 4 : 5;
         this->_rotate = 0;
         np.setY(-this->_speed);
 
     }
-    else if (lastKey == this->iArrowDown) {
+    else if (lastKey == this->iArrowDown)
+    {
         this->setY(y + this->_speed);
         this->currentFrame = (this->currentFrame != 0) ? 0 : 1;
         this->_rotate = 180;
         np.setY(this->_speed);
     }
-    else if (lastKey == this->iArrowRight) {
+    else if (lastKey == this->iArrowRight)
+    {
         this->setX(x + this->_speed);
         this->currentFrame = (this->currentFrame != 6) ? 6 : 7;
         this->_rotate = 90;
         np.setX(this->_speed);
     }
-    else if (lastKey == this->iArrowLeft) {
+    else if (lastKey == this->iArrowLeft)
+    {
         this->setX(x - this->_speed);
         this->currentFrame = (this->currentFrame != 2) ? 2 : 3;
         this->_rotate = 270;
@@ -206,10 +212,10 @@ void Tank::slotMoveTank() {
     y = this->y();
 
     if (
-            ( (x+33)  > WINDOW_WIDTH )  ||
-            ( (y+33)  >= WINDOW_HEIGHT) ||
-            (x < 0) || (y < 0)
-            )
+         (x+33)  > WINDOW_WIDTH   ||
+         (y+33)  >= WINDOW_HEIGHT ||
+         (x < 0) || (y < 0)
+        )
     {
         this->moveBy(-np.x(), -np.y());
     }
@@ -220,15 +226,25 @@ void Tank::slotMoveTank() {
             continue;
 
         if (
-                it->data(0) == OBJ_NAME_WATER      ||
-                it->data(0) == OBJ_NAME_RED_WALL   ||
-                it->data(0) == OBJ_NAME_WHITE_WALL
+            it->data(0)  == OBJ_NAME_BOT_1 ||
+            it->data(0)  == OBJ_NAME_BOT_2 ||
+            it->data(0)  == OBJ_NAME_BOT_3 ||
+            it->data(0)  == OBJ_NAME_BOT_4
+           )
+        {
+            this->moveBy(-np.x(), -np.y());
+        }
+
+        if (
+            it->data(0) == OBJ_NAME_WATER      ||
+            it->data(0) == OBJ_NAME_RED_WALL   ||
+            it->data(0) == OBJ_NAME_WHITE_WALL
           )
         {
             if (
-                  this->objectName() != OBJ_NAME_PLAYER_1  &&
-                  this->objectName() != OBJ_NAME_PLAYER_2  &&
-                  it->data(0) != OBJ_NAME_RED_WALL
+                this->objectName() != OBJ_NAME_PLAYER_1  &&
+                this->objectName() != OBJ_NAME_PLAYER_2  &&
+                it->data(0) != OBJ_NAME_RED_WALL
                )
             {
                 emit signalSearchNewWay();
@@ -240,16 +256,14 @@ void Tank::slotMoveTank() {
             }
 
             if (
-                    (QObject::sender()->objectName() == OBJ_NAME_BOT_1) ||
-                    (QObject::sender()->objectName() == OBJ_NAME_BOT_2) ||
-                    (QObject::sender()->objectName() == OBJ_NAME_BOT_3) ||
-                    (QObject::sender()->objectName() == OBJ_NAME_BOT_4)
-                    )
+                 QObject::sender()->objectName() == OBJ_NAME_BOT_1 ||
+                 QObject::sender()->objectName() == OBJ_NAME_BOT_2 ||
+                 QObject::sender()->objectName() == OBJ_NAME_BOT_3 ||
+                 QObject::sender()->objectName() == OBJ_NAME_BOT_4
+               )
             {
                 emit signalShot(this->objectName());
             }
-
-            break;
         }
 
         if (it->data(0) == OBJ_NAME_STAR)
