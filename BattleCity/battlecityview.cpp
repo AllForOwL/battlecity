@@ -348,5 +348,4 @@ void BattleCityView::slotClose(int numberKillsOnePlayer, int numberKillsTwoPlaye
 
     this->close();
     view->show();
-
 }

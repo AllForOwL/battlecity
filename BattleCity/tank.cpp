@@ -156,7 +156,8 @@ void Tank::slotKillBot()
 
 
 void Tank::slotMoveTank() {
-    if (this->activeKey.isEmpty()) {
+    if (this->activeKey.isEmpty())
+    {
         return;
     }
 
@@ -166,8 +167,8 @@ void Tank::slotMoveTank() {
     int lastKey = this->activeKey.last();
 
     QPointF np;
-        np.setX(0);
-        np.setY(0);
+    np.setX(0);
+    np.setY(0);
 
     _speed = 2;                                   // Швидкість по замовчуванню
     QGraphicsItem *obstacleWithIce = itemCollidesWith(this);
@@ -205,38 +206,12 @@ void Tank::slotMoveTank() {
     y = this->y();
 
     if (
-        ( (x+33)  > WINDOW_WIDTH )  ||
-        ( (y+33)  >= WINDOW_HEIGHT) ||
-          (x < 0) || (y < 0)
-    ) {
+            ( (x+33)  > WINDOW_WIDTH )  ||
+            ( (y+33)  >= WINDOW_HEIGHT) ||
+            (x < 0) || (y < 0)
+            )
+    {
         this->moveBy(-np.x(), -np.y());
-
-//        if (
-//            (QObject::sender()->objectName() == OBJ_NAME_BOT_1) ||
-//            (QObject::sender()->objectName() == OBJ_NAME_BOT_2) ||
-//            (QObject::sender()->objectName() == OBJ_NAME_BOT_3) ||
-//            (QObject::sender()->objectName() == OBJ_NAME_BOT_4)
-//           )
-//        {
-//            this->_rotate += 90;
-//            if (this->_rotate > 270)
-//                _rotate = 0;
-//            switch (this->_rotate) {
-//                case 0:
-//                        activeKey.push_back(Qt::Key_Up);
-//                    break;
-//                case 90:
-//                        activeKey.push_back(Qt::Key_Right);
-//                    break;
-//                case 180:
-//                        activeKey.push_back(Qt::Key_Down);
-//                    break;
-//                case 270:
-//                        activeKey.push_back(Qt::Key_Left);
-//                    break;
-//            }
-//        }
-
     }
 
     QList<QGraphicsItem *> obstacle = scene()->collidingItems(this);
@@ -245,46 +220,34 @@ void Tank::slotMoveTank() {
             continue;
 
         if (
-             it->data(0) == OBJ_NAME_WATER      ||
-             it->data(0) == OBJ_NAME_RED_WALL   ||
-             it->data(0) == OBJ_NAME_WHITE_WALL ||
-             it->data(0) == OBJ_NAME_PLAYER_1   ||
-             it->data(0) == OBJ_NAME_PLAYER_2   ||
-             it->data(0) == OBJ_NAME_BOT_1      ||
-             it->data(0) == OBJ_NAME_BOT_2      ||
-             it->data(0) == OBJ_NAME_BOT_3      ||
-             it->data(0) == OBJ_NAME_BOT_4
-        ) {
-            this->moveBy(-np.x(), -np.y());
+                it->data(0) == OBJ_NAME_WATER      ||
+                it->data(0) == OBJ_NAME_RED_WALL   ||
+                it->data(0) == OBJ_NAME_WHITE_WALL
+          )
+        {
+            if (
+                  this->objectName() != OBJ_NAME_PLAYER_1  &&
+                  this->objectName() != OBJ_NAME_PLAYER_2  &&
+                  it->data(0) != OBJ_NAME_RED_WALL
+               )
+            {
+                emit signalSearchNewWay();
+                return;
+            }
+            else
+            {
+                this->moveBy(-np.x(), -np.y());
+            }
 
-           /* if (it->data(0) != OBJ_NAME_RED_WALL && QObject::sender()->objectName() == OBJ_NAME_BOT) {
-         //       this->_rotate += 90;
-                qDebug() << "activeKey = " << activeKey.size();
-//                if (this->_rotate > 270)
-//                    _rotate = 0;
-                switch (this->_rotate) {
-                    case 0:
-                            activeKey.push_back(Qt::Key_Up);
-                        break;
-                    case 90:
-                            activeKey.push_back(Qt::Key_Right);
-                        break;
-                    case 180:
-                            activeKey.push_back(Qt::Key_Down);
-                        break;
-                    case 270:
-                            activeKey.push_back(Qt::Key_Left);
-                        break;
-                }
-            } else*/ if (
-                         (QObject::sender()->objectName() == OBJ_NAME_BOT_1) ||
-                         (QObject::sender()->objectName() == OBJ_NAME_BOT_2) ||
-                         (QObject::sender()->objectName() == OBJ_NAME_BOT_3) ||
-                         (QObject::sender()->objectName() == OBJ_NAME_BOT_4)
-                        )
-                       {
-                            emit signalShot(this->objectName());
-                       }
+            if (
+                    (QObject::sender()->objectName() == OBJ_NAME_BOT_1) ||
+                    (QObject::sender()->objectName() == OBJ_NAME_BOT_2) ||
+                    (QObject::sender()->objectName() == OBJ_NAME_BOT_3) ||
+                    (QObject::sender()->objectName() == OBJ_NAME_BOT_4)
+                    )
+            {
+                emit signalShot(this->objectName());
+            }
 
             break;
         }

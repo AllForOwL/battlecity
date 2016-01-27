@@ -95,6 +95,8 @@ signals:
     void signalExplosionAllBots();
 
     void signalGameOver2();
+
+    void signalSearchNewWay();
 };
 
 #endif // TANK_H

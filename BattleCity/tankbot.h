@@ -72,6 +72,8 @@ public slots:
     void slotSearchPath(int x_begin, int y_begin, int x_end, int y_end);
     void Atack(int xPlayer, int yPlayer);   // поиск пути для игроков
     void Atack();                           // поиск пути для ботов
+
+    void slotSearchNewWayAfterCollision();
 };
 
 #endif // TANKBOT_H

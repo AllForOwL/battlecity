@@ -25,6 +25,7 @@ TankBot::TankBot(const QList<QString> fileNames): Tank(fileNames) {
     QObject::connect(timerFoundNewWay, SIGNAL(timeout())                          , this, SLOT(slotForStartSearchPath()        ));
     QObject::connect(this            , SIGNAL(signalOneSearchWay(int,int,int,int)), this, SLOT(slotSearchPath(int,int,int,int) ));
 
+    QObject::connect( this           , SIGNAL(signalSearchNewWay())               , this, SLOT(slotSearchNewWayAfterCollision()));
 }
 
 void TankBot::setModeOfAtack(TankBot::MODE_ATACK M_A) {
@@ -132,9 +133,9 @@ void TankBot::Atack(int xPlayer, int yPlayer) {
        }
 
 
-        if (_previousStep.size() == 10)
+        if (_previousStep.size() == 7)
         {
-            if ((this->x() == _previousStep[4].x) && (this->y() == _previousStep[4].y))
+            if ((this->x() == _previousStep[0].x) && (this->y() == _previousStep[0].y))
             {
                 _previousStep.clear();
 
@@ -224,19 +225,6 @@ void TankBot::Atack(int xPlayer, int yPlayer) {
         _previousPoint.y = this->y();
         _previousStep.push_back(_previousPoint);
 
-
-
-        if (indexWay <= 2 && !changeRotate)
-        {
-             emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
-             return;
-        }
-        else if (indexWay == 1 && changeRotate)
-        {
-            changeRotate = false;
-            emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
-            return;
-        }
     }
     else
     {
@@ -339,36 +327,6 @@ void TankBot::Atack()
             }
         }
 
-
-        if (indexWay <= 3 && !changeRotate)
-        {
-            int xPlayer = 0;
-            int yPlayer = 0;
-
-            xPlayer = rand() % 450 + 50;
-            yPlayer = rand() % 480 + 100;
-            _xPlayer = xPlayer;
-            _yPlayer = yPlayer;
-
-            emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
-            return;
-        }
-        else if (indexWay == 1 && changeRotate)
-        {
-            changeRotate = false;
-
-            int xPlayer = 0;
-            int yPlayer = 0;
-
-            xPlayer = rand() % 450 + 50;
-            yPlayer = rand() % 480 + 100;
-            _xPlayer = xPlayer;
-            _yPlayer = yPlayer;
-
-            emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
-            return;
-        }
-
         if ((this->x() == x_end) && (this->y() == y_end)) // когда текущие x і y ровны елементу пути
         {
             --indexWay;                                   // переходим к следующему елементу пути
@@ -399,9 +357,9 @@ void TankBot::Atack()
             }
         }
 
-        if (_previousStep.size() == 10)
+        if (_previousStep.size() == 7)
         {
-            if ((this->x() == _previousStep[4].x) && (this->y() == _previousStep[4].y))
+            if ((this->x() == _previousStep[0].x) && (this->y() == _previousStep[0].y))
             {
                 _previousStep.clear();
 
@@ -535,6 +493,87 @@ qDebug() << "search for bot";
 
     emit slotMoveTank();
     emit slotTankShot(this->objectName());
+}
+
+void TankBot::slotSearchNewWayAfterCollision()
+{
+    _previousStep.clear();
+
+    int xPlayer = 0;
+    int yPlayer = 0;
+
+    switch (this->_rotate)
+    {
+    case 0:
+    {
+        if (this->x() >= 250)
+        {
+            xPlayer = rand() % (int)(this->x()+32) + 128;
+            yPlayer = this->y();
+        }
+        else
+        {
+            xPlayer = rand() % 480 + 128;
+            yPlayer = this->y();
+        }
+        break;
+    }
+    case 90:
+    {
+        if (this->y() >= 250)
+        {
+            xPlayer = this->x();
+            yPlayer = rand() % (int)(this->y() + 34) + 128;
+        }
+        else
+        {
+            xPlayer = this->x();
+            yPlayer = rand() % 480 + (this->y() + 34);
+        }
+        break;
+    }
+    case 180:
+    {
+        if (this->x() >= 250)
+        {
+            xPlayer = rand() % (int)(this->x() + 32) + 128;
+            yPlayer = this->y();
+        }
+        else
+        {
+            xPlayer = rand() % 480 + 128;
+            yPlayer = this->y();
+        }
+        break;
+    }
+    case 270:
+    {
+        if (this->y() >= 250)
+        {
+            xPlayer = this->x();
+            yPlayer = rand() % (int)(this->y() + 34) + 128;
+        }
+        else
+        {
+            xPlayer = this->x();
+            yPlayer = rand() % 480 + (this->y() + 34);
+        }
+        break;
+    }
+    default:
+    {
+        xPlayer = rand() % 450 + 100;
+        yPlayer = rand() % 480 + 100;
+        break;
+    }
+    }
+
+    _xPlayer = xPlayer;
+    _yPlayer = yPlayer;
+
+    emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
+    changeRotate = true;
+    Atack();
 }
 
 void TankBot::outMap(/*const int map[CNT_ROWS_MAP][CNT_COLS_MAP]*/) {

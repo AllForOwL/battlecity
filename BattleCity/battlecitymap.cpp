@@ -574,9 +574,6 @@ void BattleCityMap::slotShowTimeBonus()
 
 void BattleCityMap::slotShowExplosionBonus()
 {
-    int x = (rand() % WINDOW_WIDTH)-30;
-    int y = (rand() % WINDOW_HEIGHT)-30;
-
     pixmapForExplosion = addPixmap(QPixmap(PATH_TO_BONUS_EXPLOSION));
 
     pixmapForExplosion->setPos(175, 440);
@@ -662,7 +659,7 @@ void BattleCityMap::slotAddBot_2()
     ++bot_2->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
-    int _x = 228;
+    int _x = 0;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
@@ -678,7 +675,7 @@ void BattleCityMap::slotAddBot_2()
 
         if (_x > 500)
         {
-            _x = 228;
+            _x = 0;
         }
         qDebug() << "bot_2";
     } while(listItems.size() != 0);
@@ -692,7 +689,7 @@ void BattleCityMap::slotAddBot_3()
     ++bot_3->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
-    int _x = 328;
+    int _x = 0;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
@@ -703,12 +700,12 @@ void BattleCityMap::slotAddBot_3()
     {
         listItems.clear();
         myRect.setX(_x);
-        _x -= 128;
+        _x += 128;
         listItems = this->items(myRect);
 
-        if (_x < 0)
+        if (_x > 500)
         {
-            _x = 328;
+            _x = 0;
         }
         qDebug() << "bot_3";
     } while(listItems.size() != 0);
@@ -722,7 +719,7 @@ void BattleCityMap::slotAddBot_4()
     ++bot_4->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
-    int _x = 428;
+    int _x = 0;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
@@ -733,12 +730,12 @@ void BattleCityMap::slotAddBot_4()
     {
         listItems.clear();
         myRect.setX(_x);
-        _x -= 128;
+        _x += 128;
         listItems = this->items(myRect);
 
-        if (_x < 0 )
+        if (_x > 500)
         {
-            _x = 428 ;
+            _x = 0;
         }
 
         qDebug() << "bot_2";
@@ -753,7 +750,7 @@ void BattleCityMap::slotAddBot_1()
     ++bot->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
-    int _x = 128;
+    int _x = 0;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
@@ -769,7 +766,7 @@ void BattleCityMap::slotAddBot_1()
 
         if (_x > 500)
         {
-            _x = 128;
+            _x = 0;
         }
         qDebug() << "bot_1";
 
