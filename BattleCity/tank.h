@@ -96,7 +96,7 @@ signals:
 
     void signalGameOver2();
 
-    void signalSearchNewWay();
+    void signalSearchNewWay(bool useRotate);
 };
 
 #endif // TANK_H

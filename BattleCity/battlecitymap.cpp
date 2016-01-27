@@ -336,15 +336,8 @@ void BattleCityMap::slotTimeout()
             }
         case 1:
             {
-                if (_increaseSpeedBots == 40)
-                {
-                    emit signalTimeoutForTwoBot(TankForPlay1->x(), TankForPlay1->x());
-                }
-                else
-                {
-                    emit signalTimeoutForTwoBot() ;
-                }
-                ++updateOnlyOneBots;
+               emit signalTimeoutForTwoBot() ;
+               ++updateOnlyOneBots;
             break;
             }
         case 2:

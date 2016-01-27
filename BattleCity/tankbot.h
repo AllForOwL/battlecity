@@ -54,6 +54,7 @@ private:
     point _previousPoint;
 
     bool changeRotate;
+    //bool useRotate;
 
 public:
     int x_end;
@@ -73,7 +74,7 @@ public slots:
     void Atack(int xPlayer, int yPlayer);   // поиск пути для игроков
     void Atack();                           // поиск пути для ботов
 
-    void slotSearchNewWayAfterCollision();
+    void slotSearchNewWayAfterCollision(bool useRotate);
 };
 
 #endif // TANKBOT_H

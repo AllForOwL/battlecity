@@ -2,7 +2,6 @@
 
 #include <QPixmap>
 #include <QBitmap>
-#include <QException>
 
 #include "constants.h"
 #include "redwall.h"
@@ -136,7 +135,7 @@ void Tank::slotTankShot(QString typeObject) {
 
         scene()->addItem(bullet);
 
-    } catch (QException *ex)
+    } catch (QString *str)
     {
         qDebug() << "Good";
     }
@@ -238,17 +237,22 @@ void Tank::slotMoveTank() {
         if (
             it->data(0) == OBJ_NAME_WATER      ||
             it->data(0) == OBJ_NAME_RED_WALL   ||
-            it->data(0) == OBJ_NAME_WHITE_WALL
+            it->data(0) == OBJ_NAME_WHITE_WALL ||
+            it->data(0)  == OBJ_NAME_BOT_1     ||
+            it->data(0)  == OBJ_NAME_BOT_2     ||
+            it->data(0)  == OBJ_NAME_BOT_3     ||
+            it->data(0)  == OBJ_NAME_BOT_4
           )
         {
             if (
-                this->objectName() != OBJ_NAME_PLAYER_1  &&
-                this->objectName() != OBJ_NAME_PLAYER_2  &&
+//                this->objectName() != OBJ_NAME_PLAYER_1  &&
+//                this->objectName() != OBJ_NAME_PLAYER_2  &&
                 it->data(0) != OBJ_NAME_RED_WALL
                )
-            {
-                emit signalSearchNewWay();
-                return;
+            {   qDebug() << "one";
+                this->moveBy(-np.x(), -np.y());
+                emit signalSearchNewWay(true);
+
             }
             else
             {
