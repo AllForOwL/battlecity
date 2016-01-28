@@ -217,6 +217,8 @@ void Tank::slotMoveTank() {
         )
     {
         this->moveBy(-np.x(), -np.y());
+        emit signalSearchNewWay(true);
+
     }
 
     QList<QGraphicsItem *> obstacle = scene()->collidingItems(this);
@@ -232,32 +234,25 @@ void Tank::slotMoveTank() {
            )
         {
             this->moveBy(-np.x(), -np.y());
+            emit signalSearchNewWay(true);
+            return;
         }
 
         if (
             it->data(0) == OBJ_NAME_WATER      ||
-            it->data(0) == OBJ_NAME_RED_WALL   ||
             it->data(0) == OBJ_NAME_WHITE_WALL ||
-            it->data(0)  == OBJ_NAME_BOT_1     ||
-            it->data(0)  == OBJ_NAME_BOT_2     ||
-            it->data(0)  == OBJ_NAME_BOT_3     ||
-            it->data(0)  == OBJ_NAME_BOT_4
+            it->data(0)  == OBJ_NAME_PLAYER_1  ||
+            it->data(0)  == OBJ_NAME_PLAYER_2
           )
         {
-            if (
-//                this->objectName() != OBJ_NAME_PLAYER_1  &&
-//                this->objectName() != OBJ_NAME_PLAYER_2  &&
-                it->data(0) != OBJ_NAME_RED_WALL
-               )
-            {   qDebug() << "one";
                 this->moveBy(-np.x(), -np.y());
                 emit signalSearchNewWay(true);
-
-            }
-            else
-            {
-                this->moveBy(-np.x(), -np.y());
-            }
+                return;
+         }
+         else if (it->data(0)  == OBJ_NAME_RED_WALL)
+         {
+             this->moveBy(-np.x(), -np.y());
+         }
 
             if (
                  QObject::sender()->objectName() == OBJ_NAME_BOT_1 ||
@@ -268,7 +263,7 @@ void Tank::slotMoveTank() {
             {
                 emit signalShot(this->objectName());
             }
-        }
+
 
         if (it->data(0) == OBJ_NAME_STAR)
         {
