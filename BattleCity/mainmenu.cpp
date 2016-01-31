@@ -473,11 +473,6 @@ void mainMenu::slotStartGameClient()
     viewConnectToServer->close();
     view->move(400,0);
 
-    if (!_friend)
-    {
-        view->rotate(180);
-    }
-
     view->show();
 }
 
@@ -486,5 +481,11 @@ void mainMenu::slotStartGameServer()
     view = new BattleCityView(3, _friend, server);
     viewRunServer->close();
     view->move(400,0);
+
+    if (!_friend)
+    {
+        view->rotate(180);
+    }
+
     view->show();
 }

@@ -80,6 +80,22 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
         this->addItem(TankForPlay1);                                            // Добавлення на сцену
 
         _client = new UdpClient("", "", "");
+
+
+        timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
+        timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
+
+        timerMoveBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
+        timerMoveBot_2->setObjectName(OBJ_NAME_BOT_2);
+
+        timerMoveBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
+        timerMoveBot_3->setObjectName(OBJ_NAME_BOT_3);
+
+        timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
+        timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
+
+        timerMoveBots->start(_increaseSpeedBots);
+
     }
     else if (regimeGame == 2)   // режым игры двоих игроков
     {
@@ -123,6 +139,25 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
         if (!_friend)
         {
             DeleteBase();
+            TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER_BATTLE, CNT_BEGIN_Y_ONE_PLAYER_BATTLE);
+            TankForPlay1->_friendOrBattle = true;
+        }
+        else
+        {
+
+            timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
+            timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
+
+            timerMoveBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
+            timerMoveBot_2->setObjectName(OBJ_NAME_BOT_2);
+
+            timerMoveBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
+            timerMoveBot_3->setObjectName(OBJ_NAME_BOT_3);
+
+            timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
+            timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
+
+            timerMoveBots->start(_increaseSpeedBots);
         }
 
         _client = new UdpClient(client);
@@ -153,8 +188,22 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
         if (!_friend)
         {
             DeleteBase();
-            TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER_BATTLE, CNT_BEGIN_Y_ONE_PLAYER_BATTLE);
-            TankForPlay1->_friendOrBattle = true;
+        }
+        else
+        {
+            timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
+            timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
+
+            timerMoveBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
+            timerMoveBot_2->setObjectName(OBJ_NAME_BOT_2);
+
+            timerMoveBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
+            timerMoveBot_3->setObjectName(OBJ_NAME_BOT_3);
+
+            timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
+            timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
+
+            timerMoveBots->start(_increaseSpeedBots);
         }
 
         _client = new UdpClient(client);
@@ -203,19 +252,6 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
     timerMoveTank1->start(CNT_SPEED_MOVE_ONE_PLAYER);
     timerMoveTank1->setObjectName(OBJ_NAME_PLAYER_1);
 
-//    timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
-//    timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
-
-//    timerMoveBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
-//    timerMoveBot_2->setObjectName(OBJ_NAME_BOT_2);
-
-//    timerMoveBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
-//    timerMoveBot_3->setObjectName(OBJ_NAME_BOT_3);
-
-//    timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
-//    timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
-
-    timerMoveBots->start(_increaseSpeedBots);
     timerChangeSpeedBots->start(CNT_CHANGE_SPEED_BOTS);
 
     timerForShowBonus->start(CNT_SECOND_SHOW_STAR);

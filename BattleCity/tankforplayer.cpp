@@ -62,7 +62,15 @@ void TankForPlayer::setNumberLife()
 
 void TankForPlayer::setInBeginPosition()
 {
-    this->setPos(CNT_BEGIN_X_ONE_PLAYER, CNT_BEGIN_Y_ONE_PLAYER);
+    if (this->_friendOrBattle)
+    {
+        this->setPos(CNT_BEGIN_X_ONE_PLAYER_BATTLE, CNT_BEGIN_Y_ONE_PLAYER_BATTLE);
+
+    }
+    else
+    {
+        this->setPos(CNT_BEGIN_X_ONE_PLAYER, CNT_BEGIN_Y_ONE_PLAYER);
+    }
 }
 
 /* virtual */ void TankForPlayer::keyReleaseEvent(QKeyEvent *event) {
