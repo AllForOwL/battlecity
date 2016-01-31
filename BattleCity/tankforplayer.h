@@ -14,6 +14,7 @@ public:
     int  getNumberLife();
     void setNumberLife();
     void setInBeginPosition();
+    int  _regimeGame;
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);

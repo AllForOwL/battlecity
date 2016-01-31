@@ -11,9 +11,9 @@
 #include <QDebug>
 #include "battlecityview.h"
 
-BattleCityView::BattleCityView(int regimeGame, UdpClient *client): QGraphicsView() {
+BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client): QGraphicsView() {
 
-    map = new BattleCityMap(regimeGame, client);
+    map = new BattleCityMap(regimeGame,_friend, client);
     this->setScene(map);
     this->setFixedSize(WINDOW_WIDTH+2, WINDOW_HEIGHT+2);
 

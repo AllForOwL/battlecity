@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QComboBox>
 
 #include "battlecityview.h"
 #include "udpclient.h"
@@ -55,6 +56,8 @@ private:
     UdpClient *client;
     UdpClient *server;
 
+    QComboBox *cmbFriendGame;
+    bool _friend;
 
     int id_elementOfMenu;
 

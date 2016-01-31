@@ -16,11 +16,14 @@
 class BattleCityMap: public QGraphicsScene {
     Q_OBJECT
 public:
-    BattleCityMap(int regimeGame, UdpClient* client, QObject* parent = 0);
+    BattleCityMap(int regimeGame, bool _friend,  UdpClient* client, QObject* parent = 0);
             ~BattleCityMap();
 
     int n_Map[CNT_ROWS_MAP][CNT_COLS_MAP];      // розмер карты
     QList <QGraphicsItem *> listObjectAtBase;   // Елементы что розмещены вокруг базы
+    void DeleteBase();
+
+    int  _regimeGame;
 
 private:
     QTimer *timerMoveTank1;                 // Таймер для переміщення танку плеєра 1
@@ -47,6 +50,8 @@ private:
 
     QTimer *timerChangeSpeedBots;
 
+
+
     TankForPlayer *TankForPlay1;            // Танк первого и
     TankForPlayer *TankForPlay2;            // в второго игрока
 
@@ -63,8 +68,6 @@ private:
     bool runFourBot;
     bool updateOnlyTwoBots; // переместить в данный момент только 2 бота(что-бы все боти одновременно не обновлялисьs)
     int  updateOnlyOneBots; // переместить в данный момень только 1 бота(когда все боты уже на карте)
-
-    int _regimeGame;
 
     QGraphicsPixmapItem *pixmapForStar;     // Тут зберігається картинка бонуса
     QGraphicsPixmapItem *pixmapForBase;
@@ -140,7 +143,7 @@ public slots:
 
     void slotSetPosPlayerForSend();
     void slotMoveOpponent(int x, int y, int rotate, bool shot2);
-    void slotShotTank();
+    void slotShotTank(QString str);
     void slotIncreaseSpeedBots();
 };
 

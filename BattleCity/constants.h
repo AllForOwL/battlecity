@@ -63,6 +63,8 @@ const int CNT_BEGIN_X_ONE_PLAYER = 150;
 const int CNT_BEGIN_Y_ONE_PLAYER = 475;
 const int CNT_BEGIN_X_TWO_PLAYER = 350;
 const int CNT_BEGIN_Y_TWO_PLAYER = 475;
+const int CNT_BEGIN_X_ONE_PLAYER_BATTLE = 250;
+const int CNT_BEGIN_Y_ONE_PLAYER_BATTLE = 0;
 
 const int CNT_BEGIN_X_ONE_BOT   = 0;
 const int CNT_BEGIN_Y_ONE_BOT   = 0;

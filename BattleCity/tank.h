@@ -40,6 +40,8 @@ public:
     int iArrowLeft;
     int iKeySpace;
 
+    int _friendOrBattle;
+
 protected:
     struct Frame {
         QPixmap pixmap;

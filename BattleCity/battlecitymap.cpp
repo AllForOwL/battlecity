@@ -6,7 +6,7 @@
 #include "sprite.h"
 #include "battlecitymap.h"
 
-BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client, QObject* parent) : QGraphicsScene(parent) {
+BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QObject* parent) : QGraphicsScene(parent) {
 
     this->setBackgroundBrush(Qt::black);                        // Встановлення фонового кольору
     this->setSceneRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);      // Встановлення розміру сцени з початковими координатами 0,0
@@ -106,7 +106,7 @@ BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client, QObject* parent)
 
         _client = new UdpClient("", "", "");
     }
-    else                        // игра по сети
+    else if (regimeGame == 3)                        // игра по сети
     {
         TankForPlay1 = new TankForPlayer(fileNames, 1);
         TankForPlay1->setZValue(0.5);
@@ -120,11 +120,52 @@ BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client, QObject* parent)
         TankForPlay2->setZValue(0.5);
         this->addItem(TankForPlay2);
 
+        if (!_friend)
+        {
+            DeleteBase();
+        }
+
         _client = new UdpClient(client);
         timerForSendPosPlayer->start(CNT_TIMER_FOR_SEND_POS_PLAYER);
 
+        QObject::connect( timerMoveTank2 , SIGNAL( timeout()           ), TankForPlay2  , SLOT( slotMoveTank()        ));
+        QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), TankForPlay2  , SLOT( slotTankShot(QString) ));   // Постріл танком
+        QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), this          , SLOT( slotShotTank()        ));   // Постріл танком
+        QObject::connect( TankForPlay2, SIGNAL( signalTankTookStar() ), this, SLOT( slotRemoveBonus() ));
+
         QObject::connect( client , SIGNAL( signalReadInformationOpponent(int,int, int, bool)), this, SLOT( slotMoveOpponent(int,int, int, bool) ));
 
+    }
+    else
+    {
+        TankForPlay1 = new TankForPlayer(fileNames, 1);
+        TankForPlay1->setZValue(0.5);
+        TankForPlay1->setData(0, OBJ_NAME_PLAYER_1);                            // Ім’я об’єкта
+        TankForPlay1->setPos(CNT_BEGIN_X_TWO_PLAYER, CNT_BEGIN_Y_TWO_PLAYER);   // Початкова позиція
+        this->addItem(TankForPlay1);                                            // Добавлення на сцену
+
+        TankForPlay2 = new TankForPlayer(fileNames, 2);
+        TankForPlay2->setData(0, OBJ_NAME_PLAYER_2);
+        TankForPlay2->setPos(-40, 0);
+        TankForPlay2->setZValue(0.5);
+        this->addItem(TankForPlay2);
+
+        if (!_friend)
+        {
+            DeleteBase();
+            TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER_BATTLE, CNT_BEGIN_Y_ONE_PLAYER_BATTLE);
+            TankForPlay1->_friendOrBattle = true;
+        }
+
+        _client = new UdpClient(client);
+        timerForSendPosPlayer->start(CNT_TIMER_FOR_SEND_POS_PLAYER);
+
+        QObject::connect( timerMoveTank2 , SIGNAL( timeout()           ), TankForPlay2  , SLOT( slotMoveTank()        ));
+        QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), TankForPlay2  , SLOT( slotTankShot(QString) ));   // Постріл танком
+        QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), this          , SLOT( slotShotTank()        ));   // Постріл танком
+        QObject::connect( TankForPlay2   , SIGNAL( signalTankTookStar() ), this, SLOT( slotRemoveBonus() ));
+
+        QObject::connect( client , SIGNAL( signalReadInformationOpponent(int,int, int, bool)), this, SLOT( slotMoveOpponent(int,int, int, bool) ));
     }
 
     bot = new TankBot(fileNames);
@@ -162,17 +203,17 @@ BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client, QObject* parent)
     timerMoveTank1->start(CNT_SPEED_MOVE_ONE_PLAYER);
     timerMoveTank1->setObjectName(OBJ_NAME_PLAYER_1);
 
-    timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
-    timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
+//    timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
+//    timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
 
-    timerMoveBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
-    timerMoveBot_2->setObjectName(OBJ_NAME_BOT_2);
+//    timerMoveBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
+//    timerMoveBot_2->setObjectName(OBJ_NAME_BOT_2);
 
-    timerMoveBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
-    timerMoveBot_3->setObjectName(OBJ_NAME_BOT_3);
+//    timerMoveBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
+//    timerMoveBot_3->setObjectName(OBJ_NAME_BOT_3);
 
-    timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
-    timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
+//    timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
+//    timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
 
     timerMoveBots->start(_increaseSpeedBots);
     timerChangeSpeedBots->start(CNT_CHANGE_SPEED_BOTS);
@@ -184,7 +225,7 @@ BattleCityMap::BattleCityMap(int regimeGame, UdpClient *client, QObject* parent)
 
     QObject::connect( timerMoveTank1 , SIGNAL( timeout()           ) , TankForPlay1 , SLOT( slotMoveTank()        ));   // Переміщення танка
     QObject::connect( TankForPlay1   , SIGNAL( signalShot(QString) ) , TankForPlay1 , SLOT( slotTankShot(QString) ));   // Постріл танком
-    QObject::connect( TankForPlay1   , SIGNAL( signalShot(QString) ) , this         , SLOT( slotShotTank()        ));   // Постріл танком
+    QObject::connect( TankForPlay1   , SIGNAL( signalShot(QString) ) , this         , SLOT( slotShotTank(QString) ));   // Постріл танком
 
     QObject::connect( timerMoveBots , SIGNAL( timeout() )  , this, SLOT( slotMoveBots() ));
 
@@ -275,6 +316,14 @@ BattleCityMap::~BattleCityMap() {
 
 }
 
+void BattleCityMap::DeleteBase()
+{
+    for (int i(0); i < listObjectAtBase.size(); i++)    // удалаем текущие елементы вокруг базы
+    {
+        removeItem(listObjectAtBase[i]);
+    }
+}
+
 void BattleCityMap::slotSetPosPlayerForSend()
 {
     int x = TankForPlay1->x();
@@ -294,10 +343,11 @@ void BattleCityMap::slotMoveOpponent(int x, int y, int rotate, bool shot2)
     if (shot2)
     {
         emit TankForPlay2->signalShot(TankForPlay2->objectName());
+        qDebug() << "tank2 shot";
     }
 }
 
-void BattleCityMap::slotShotTank()
+void BattleCityMap::slotShotTank(QString str)
 {
     shot = true;
 }
@@ -675,6 +725,10 @@ void BattleCityMap::slotAddBot_2()
 
     _x -= 32;
     bot_2->setPos(_x, 0);
+    bot_2->setData(0, OBJ_NAME_BOT_2);
+    bot_2->setObjectName(OBJ_NAME_BOT_2);
+    bot_2->setZValue(0.5);
+    this->addItem(bot_2);
 }
 
 void BattleCityMap::slotAddBot_3()
@@ -705,6 +759,10 @@ void BattleCityMap::slotAddBot_3()
 
     _x += 32;
     bot_3->setPos(_x, 0);
+    bot_3->setData(0, OBJ_NAME_BOT_3);
+    bot_3->setObjectName(OBJ_NAME_BOT_3);
+    bot_3->setZValue(0.5);
+    this->addItem(bot_3);
 }
 
 void BattleCityMap::slotAddBot_4()
@@ -716,14 +774,14 @@ void BattleCityMap::slotAddBot_4()
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
-    myRect.setWidth(128);
+    myRect.setWidth(64);
     myRect.setHeight(30);
 
     do
     {
         listItems.clear();
         myRect.setX(_x);
-        _x += 128;
+        _x += 64;
         listItems = this->items(myRect);
 
         if (_x > 500)
@@ -736,6 +794,10 @@ void BattleCityMap::slotAddBot_4()
 
     _x += 32;
     bot_4->setPos(_x, 0);
+    bot_4->setData(0, OBJ_NAME_BOT_4);
+    bot_4->setObjectName(OBJ_NAME_BOT_4);
+    bot_4->setZValue(0.5);
+    this->addItem(bot_4);
 }
 
 void BattleCityMap::slotAddBot_1()
@@ -767,4 +829,8 @@ void BattleCityMap::slotAddBot_1()
 
     _x -= 32;
     bot->setPos(_x, 0);
+    bot->setData(0, OBJ_NAME_BOT_1);
+    bot->setObjectName(OBJ_NAME_BOT_1);
+    bot->setZValue(0.5);
+    this->addItem(bot);
 }

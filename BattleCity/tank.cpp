@@ -15,6 +15,7 @@ Tank::Tank(const QList<QString> fileNames, QObject *parent) : QObject(parent),
     _power       = 1;
     _numberKills = 0;
     collision    = false;
+    _friendOrBattle = false;
 
     int size = fileNames.size();
     for (int i = 0; i < size; ++i) {
@@ -166,6 +167,26 @@ void Tank::slotMoveTank() {
     int y = this->y();
 
     int lastKey = this->activeKey.last();
+
+    if (this->_friendOrBattle)
+    {
+       if (lastKey == this->iArrowDown)
+       {
+           lastKey = this->iArrowUp;
+       }
+       else if (lastKey == this->iArrowUp)
+       {
+           lastKey = this->iArrowDown;
+       }
+       else if (lastKey == iArrowLeft)
+       {
+           lastKey = this->iArrowRight;
+       }
+       else
+       {
+           lastKey = this->iArrowLeft;
+       }
+    }
 
     QPointF np;
     np.setX(0);

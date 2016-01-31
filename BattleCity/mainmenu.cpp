@@ -15,9 +15,12 @@
 #include <QMessageBox>
 #include <QRegExp>
 #include <QValidator>
+#include <QFontComboBox>
 
 mainMenu::mainMenu(): id_elementOfMenu(1) {
     scene = new QGraphicsScene();
+
+    _friend = false;
 
     scene->setSceneRect(0, 0, 512, 512);
     this->setFixedSize(512, 512);
@@ -28,7 +31,9 @@ mainMenu::mainMenu(): id_elementOfMenu(1) {
     showMainMenu();
 
     this->setScene(scene);
+    this->move(400,0);
     this->show();
+
 
     btnServer = new QPushButton("create server");
     btnClient = new QPushButton("create client");
@@ -139,8 +144,9 @@ void mainMenu::ShowGame(int regimeGame)
 {
     UdpClient *udp = new UdpClient("", "", "");
 
-    view = new BattleCityView(regimeGame, udp);
+    view = new BattleCityView(regimeGame, true, udp);
     this->close();
+    view->move(400,0);
     view->show();
 }
 
@@ -291,6 +297,9 @@ void mainMenu::slotCreateServer()
     viewServer = new QGraphicsView;
     QLabel *lblNameServer = new QLabel("name server");
     QLabel *lblIpServer   = new QLabel("ip server");
+    cmbFriendGame = new QComboBox;
+    cmbFriendGame->addItem("friend");
+    cmbFriendGame->addItem("battle");
 
     editNameServer = new QLineEdit;
 
@@ -312,6 +321,7 @@ void mainMenu::slotCreateServer()
 
     headLayout->addLayout(hLayoutNameServer);
     headLayout->addLayout(hLayoutIpServer);
+    headLayout->addWidget(cmbFriendGame);
     headLayout->addWidget(btnServer);
 
     viewServer->setWindowTitle("creating server");
@@ -368,6 +378,11 @@ void mainMenu::slotRunServer()
         return;
     }
 
+    if (cmbFriendGame->currentText() == "friend")
+    {
+        _friend = true;
+    }
+
     QString ipServer;
     QString nameServer;
 
@@ -375,6 +390,7 @@ void mainMenu::slotRunServer()
     nameServer = editNameServer->text();
 
     server = new UdpClient(nameServer, ipServer, "");
+    server->server = true;
 
     list   = new QListWidget;
 
@@ -409,6 +425,7 @@ void mainMenu::slotConnectToServer()
     strIpClient = editIpClient->text();
 
     client = new UdpClient("", strIpClient, strIpServer);
+    client->server = false;
 
     list = new QListWidget;
 
@@ -452,14 +469,22 @@ void mainMenu::slotStartGameClient()
         return;
     }
 
-    view = new BattleCityView(3, client);
+    view = new BattleCityView(4, _friend, client);
     viewConnectToServer->close();
+    view->move(400,0);
+
+    if (!_friend)
+    {
+        view->rotate(180);
+    }
+
     view->show();
 }
 
 void mainMenu::slotStartGameServer()
 {
-    view = new BattleCityView(3, server);
+    view = new BattleCityView(3, _friend, server);
     viewRunServer->close();
+    view->move(400,0);
     view->show();
 }
