@@ -103,7 +103,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
         TankForPlay1->setZValue(0.5);
         TankForPlay1->setData(0, OBJ_NAME_PLAYER_1);                            // Ім’я об’єкта
         TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER, CNT_BEGIN_Y_ONE_PLAYER);   // Початкова позиція
-        this->addItem(TankForPlay1);                                            // Добавлення на сцену
+        this->addItem(TankForPlay1);                                            // Добавлення на сцену  
 
         TankForPlay2 = new TankForPlayer(fileNames, 2);
         TankForPlay2->setData(0, OBJ_NAME_PLAYER_2);
@@ -111,9 +111,30 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
         TankForPlay2->setZValue(0.5);
         this->addItem(TankForPlay2);
 
+        if (!_friend)
+        {
+            TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER_BATTLE, CNT_BEGIN_Y_ONE_PLAYER_BATTLE);
+        }
+        else
+        {
+            timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
+            timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
+
+            timerMoveBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
+            timerMoveBot_2->setObjectName(OBJ_NAME_BOT_2);
+
+            timerMoveBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
+            timerMoveBot_3->setObjectName(OBJ_NAME_BOT_3);
+
+            timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
+            timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
+
+            timerMoveBots->start(_increaseSpeedBots);
+        }
+
         QObject::connect( timerMoveTank2 , SIGNAL( timeout()           ), TankForPlay2  , SLOT( slotMoveTank()        ));
         QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), TankForPlay2  , SLOT( slotTankShot(QString) ));   // Постріл танком
-        QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), this          , SLOT( slotShotTank()        ));   // Постріл танком
+        QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), this          , SLOT( slotShotTank(QString) ));   // Постріл танком
 
         QObject::connect( TankForPlay2, SIGNAL( signalTankTookStar() ), this, SLOT( slotRemoveBonus() ));
 

@@ -152,7 +152,24 @@ void mainMenu::ShowGame(int regimeGame)
 
 void mainMenu::playTwoPlayers()
 {    // Передать количества игроков
-    ShowGame(2);
+    viewRunTwoPlayer = new QGraphicsView;
+
+    QPushButton* btnFriend  = new QPushButton("friend");
+    QPushButton* btnBattle  = new QPushButton("battle");
+    QVBoxLayout* headLayout = new QVBoxLayout;
+
+    headLayout->addWidget(btnFriend);
+    headLayout->addWidget(btnBattle);
+
+    viewRunTwoPlayer->setLayout(headLayout);
+
+    viewRunTwoPlayer->setFixedSize(200, 100);
+    viewRunTwoPlayer->show();
+
+    QObject::connect( btnFriend, SIGNAL( clicked(bool) ), this, SLOT( slotRunGameFriend() ));
+    QObject::connect( btnBattle, SIGNAL( clicked(bool) ), this, SLOT( slotRunGameBattle() ));
+
+   // ShowGame(2);
 }
 
 void mainMenu::showMultiply() {
@@ -474,6 +491,23 @@ void mainMenu::slotStartGameClient()
     view->move(400,0);
 
     view->show();
+}
+
+void mainMenu::slotRunGameBattle()
+{
+    UdpClient *udp = new UdpClient("", "", "");
+
+    view = new BattleCityView(2, false, udp);
+    this->close();
+    view->move(400,0);
+    viewRunTwoPlayer->close();
+    view->show();
+}
+
+void mainMenu::slotRunGameFriend()
+{
+    ShowGame(2);
+    viewRunTwoPlayer->close();
 }
 
 void mainMenu::slotStartGameServer()

@@ -34,6 +34,7 @@ private:
     QGraphicsView   *viewClient;            // создание клиента
     QGraphicsView   *viewConnectToServer;
     QGraphicsView   *viewRunServer;
+    QGraphicsView   *viewRunTwoPlayer;
 
     QPushButton   *btnChooiseServer;
     QPushButton   *btnChooiseClient;
@@ -79,6 +80,8 @@ public slots:
 
     void slotStartGameServer();                     // старт игры как сервер
     void slotStartGameClient();                     // старт игры как клиент
+    void slotRunGameFriend();
+    void slotRunGameBattle();
 };
 
 #endif // MAINMENU_H
