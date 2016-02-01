@@ -24,6 +24,7 @@ public:
     void DeleteBase();
 
     int  _regimeGame;
+    bool _deleteBase;
 
 private:
     QTimer *timerMoveTank1;                 // Таймер для переміщення танку плеєра 1

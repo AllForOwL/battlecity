@@ -17,6 +17,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
 
     _regimeGame = regimeGame;
     _increaseSpeedBots = CNT_SPEED_MOVE_BOTS;
+    _deleteBase = false;
 
     p_ReadFromFile = new Parsing();
     p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_Map);   // Завантаження карти з файлу
@@ -113,6 +114,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
 
         if (!_friend)
         {
+            _deleteBase = true;
             TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER_BATTLE, CNT_BEGIN_Y_ONE_PLAYER_BATTLE);
         }
         else
@@ -159,7 +161,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
 
         if (!_friend)
         {
-            DeleteBase();
+            _deleteBase = true;
             TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER_BATTLE, CNT_BEGIN_Y_ONE_PLAYER_BATTLE);
             TankForPlay1->_friendOrBattle = true;
         }
@@ -208,7 +210,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
 
         if (!_friend)
         {
-            DeleteBase();
+            _deleteBase = true;
         }
         else
         {

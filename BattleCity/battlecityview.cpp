@@ -35,6 +35,14 @@ void BattleCityView::ShowWalls(const QString &strTypeWall,
                                int numberTypeWall,
                                const QString &pathToImage)
 {
+    if (
+        map->_deleteBase &&
+        numberTypeWall == OBJ_TYPE_BASE
+       )
+    {
+        return;
+    }
+
     for (int i = 0; i < CNT_ROWS_MAP; i++)
         for (int j = 0; j < CNT_COLS_MAP; j++)
             if (map->n_Map[i][j] == numberTypeWall)
@@ -51,16 +59,27 @@ void BattleCityView::ShowWalls(const QString &strTypeWall,
                     (   i >= 28  )  && ( i < 32  ) &&   // строки
                     ( ( j == 14  )  || ( j == 19 ) )    // столбцы
                    )
-                {
-                    map->listObjectAtBase.push_back(p_MyImage);
-                }
-
+                    if (!map->_deleteBase)
+                    {
+                        map->listObjectAtBase.push_back(p_MyImage);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 if (
                      ( j >= 14 ) && ( j < 19 ) &&      // столбцы
                      ( i == 28 )                       // строки
                    )
                 {
-                    map->listObjectAtBase.push_back(p_MyImage);
+                    if (!map->_deleteBase)
+                    {
+                        map->listObjectAtBase.push_back(p_MyImage);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
 
                 map->addItem(p_MyImage);
