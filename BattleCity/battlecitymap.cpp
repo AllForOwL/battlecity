@@ -6,8 +6,8 @@
 #include "sprite.h"
 #include "battlecitymap.h"
 
-BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QObject* parent) : QGraphicsScene(parent) {
-
+BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QObject* parent) : QGraphicsScene(parent)
+{
     this->setBackgroundBrush(Qt::black);                        // Встановлення фонового кольору
     this->setSceneRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);      // Встановлення розміру сцени з початковими координатами 0,0
     // вверху лівої частини вікна
@@ -51,18 +51,18 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
     timerForShowExplosionBonus = new QTimer(this);
     timerRemoveExplosionBonus  = new QTimer(this);
 
-    timerMoveBot        = new QTimer(this);
-    timerMoveBot_2      = new QTimer(this);
-    timerMoveBot_3      = new QTimer(this);
-    timerMoveBot_4      = new QTimer(this);
-    timerMoveBots       = new QTimer(this);
+    timerMoveBot    = new QTimer(this);
+    timerMoveBot_2  = new QTimer(this);
+    timerMoveBot_3  = new QTimer(this);
+    timerMoveBot_4  = new QTimer(this);
+    timerMoveBots   = new QTimer(this);
 
     timerChangeSpeedBots = new QTimer(this);
 
-    runOneBot           = false;
-    runTwoBot           = false;
-    runThreeBot         = false;
-    runFourBot          = false;
+    runOneBot   = false;
+    runTwoBot   = false;
+    runThreeBot = false;
+    runFourBot  = false;
 
     updateOnlyTwoBots   = false;
     updateOnlyOneBots   = 0;
@@ -79,9 +79,6 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
         TankForPlay1->setData(0, OBJ_NAME_PLAYER_1);                            // Ім’я об’єкта
         TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER, CNT_BEGIN_Y_ONE_PLAYER);   // Початкова позиція
         this->addItem(TankForPlay1);                                            // Добавлення на сцену
-
-        _client = new UdpClient("", "", "");
-
 
         timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
         timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
@@ -142,8 +139,6 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
 
         timerMoveTank2->start(CNT_SPEED_MOVE_ONE_PLAYER);
         timerMoveTank2->setObjectName(OBJ_NAME_PLAYER_2);
-
-        _client = new UdpClient("", "", "");
     }
     else if (regimeGame == 3)                        // игра по сети
     {
@@ -189,7 +184,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
         QObject::connect( timerMoveTank2 , SIGNAL( timeout()           ), TankForPlay2  , SLOT( slotMoveTank()        ));
         QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), TankForPlay2  , SLOT( slotTankShot(QString) ));   // Постріл танком
         QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), this          , SLOT( slotShotTank()        ));   // Постріл танком
-        QObject::connect( TankForPlay2, SIGNAL( signalTankTookStar() ), this, SLOT( slotRemoveBonus() ));
+        QObject::connect( TankForPlay2   , SIGNAL( signalTankTookStar()), this          , SLOT( slotRemoveBonus()     ));
 
         QObject::connect( client , SIGNAL( signalReadInformationOpponent(int,int, int, bool)), this, SLOT( slotMoveOpponent(int,int, int, bool) ));
 
@@ -235,7 +230,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
         QObject::connect( timerMoveTank2 , SIGNAL( timeout()           ), TankForPlay2  , SLOT( slotMoveTank()        ));
         QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), TankForPlay2  , SLOT( slotTankShot(QString) ));   // Постріл танком
         QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), this          , SLOT( slotShotTank()        ));   // Постріл танком
-        QObject::connect( TankForPlay2   , SIGNAL( signalTankTookStar() ), this, SLOT( slotRemoveBonus() ));
+        QObject::connect( TankForPlay2   , SIGNAL( signalTankTookStar()), this          , SLOT( slotRemoveBonus()     ));
 
         QObject::connect( client , SIGNAL( signalReadInformationOpponent(int,int, int, bool)), this, SLOT( slotMoveOpponent(int,int, int, bool) ));
     }
@@ -335,6 +330,11 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
 
     QObject::connect( TankForPlay1, SIGNAL( signalGameOver()     ), this, SLOT( slotGameOver()    ));   // 3 убийствах танка
     QObject::connect( TankForPlay1, SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
+    QObject::connect( bot         , SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
+    QObject::connect( bot_2       , SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
+    QObject::connect( bot_3       , SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
+    QObject::connect( bot_4       , SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
+
 
     QObject::connect( timerForSendPosPlayer , SIGNAL( timeout()), this, SLOT( slotSetPosPlayerForSend() ));
 
@@ -350,7 +350,10 @@ BattleCityMap::~BattleCityMap() {
     delete _client;
 
     delete TankForPlay1;
-    //delete TankForPlay2;
+    if (_regimeGame == 2 || _regimeGame == 4)
+    {
+        delete TankForPlay2;
+    }
 
     delete bot;
     delete bot_2;
@@ -375,12 +378,54 @@ BattleCityMap::~BattleCityMap() {
 
 }
 
-void BattleCityMap::DeleteBase()
+bool BattleCityMap::AuditPressKey(int key)
 {
-    for (int i(0); i < listObjectAtBase.size(); i++)    // удалаем текущие елементы вокруг базы
+    if (_regimeGame == 1 || _regimeGame == 3)   // если один игрок или сервер
     {
-        removeItem(listObjectAtBase[i]);
+        if (
+            key != Qt::Key_Space &&
+            key != Qt::Key_Up    &&
+            key != Qt::Key_Down  &&
+            key != Qt::Key_Left  &&
+            key != Qt::Key_Right
+           )
+        {
+            return false;
+        }
     }
+    else if (_regimeGame == 2)                  // два игрока
+    {
+        if (
+            key != Qt::Key_Space &&
+            key != Qt::Key_Up    &&
+            key != Qt::Key_Down  &&
+            key != Qt::Key_Left  &&
+            key != Qt::Key_Right &&
+            key != Qt::Key_B     &&
+            key != Qt::Key_W     &&
+            key != Qt::Key_S     &&
+            key != Qt::Key_A     &&
+            key != Qt::Key_D
+          )
+        {
+            return false;
+        }
+    }
+    else                                        // клиент
+    {
+        if (
+            key != Qt::Key_B     &&
+            key != Qt::Key_W     &&
+            key != Qt::Key_S     &&
+            key != Qt::Key_A     &&
+            key != Qt::Key_D
+           )
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void BattleCityMap::slotSetPosPlayerForSend()
@@ -737,6 +782,11 @@ void BattleCityMap::slotRemoveBonusForTimeBonus()
 /* virtual*/ void BattleCityMap::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
 
+    if (!AuditPressKey(key))
+    {
+        return;
+    }
+
     if (TankForPlay1->actions.contains(key)) {
         emit TankForPlay1->keyPressEvent(event);
     }
@@ -747,6 +797,11 @@ void BattleCityMap::slotRemoveBonusForTimeBonus()
 
 /* virtual */void BattleCityMap::keyReleaseEvent(QKeyEvent *event) {
     int key = event->key();
+
+    if (!AuditPressKey(key))
+    {
+        return;
+    }
 
     if (TankForPlay1->actions.contains(key)) {
         emit TankForPlay1->keyReleaseEvent(event);
@@ -761,7 +816,7 @@ void BattleCityMap::slotAddBot_2()
     ++bot_2->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
-    int _x = 0;
+    int _x = 128;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
@@ -773,7 +828,7 @@ void BattleCityMap::slotAddBot_2()
         listItems.clear();
         myRect.setX(_x);
         _x += 128;
-        listItems = this->items(myRect);
+        listItems = this->items(myRect, Qt::IntersectsItemShape, Qt::AscendingOrder);
 
         if (_x > 500)
         {
@@ -807,7 +862,7 @@ void BattleCityMap::slotAddBot_3()
         listItems.clear();
         myRect.setX(_x);
         _x += 128;
-        listItems = this->items(myRect);
+        listItems = this->items(myRect, Qt::IntersectsItemShape, Qt::AscendingOrder);
 
         if (_x > 500)
         {
@@ -816,7 +871,7 @@ void BattleCityMap::slotAddBot_3()
         qDebug() << "bot_3";
     } while(listItems.size() != 0);
 
-    _x += 32;
+    _x -= 32;
     bot_3->setPos(_x, 0);
     bot_3->setData(0, OBJ_NAME_BOT_3);
     bot_3->setObjectName(OBJ_NAME_BOT_3);
@@ -841,7 +896,7 @@ void BattleCityMap::slotAddBot_4()
         listItems.clear();
         myRect.setX(_x);
         _x += 64;
-        listItems = this->items(myRect);
+        listItems = this->items(myRect, Qt::IntersectsItemShape, Qt::AscendingOrder);
 
         if (_x > 500)
         {
@@ -876,7 +931,7 @@ void BattleCityMap::slotAddBot_1()
         listItems.clear();
         myRect.setX(_x);
         _x += 128;
-        listItems = this->items(myRect);
+        listItems = this->items(myRect, Qt::IntersectsItemShape, Qt::AscendingOrder);
 
         if (_x > 500)
         {

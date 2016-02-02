@@ -21,7 +21,8 @@ public:
 
     int n_Map[CNT_ROWS_MAP][CNT_COLS_MAP];      // розмер карты
     QList <QGraphicsItem *> listObjectAtBase;   // Елементы что розмещены вокруг базы
-    void DeleteBase();
+
+    bool AuditPressKey(int key);
 
     int  _regimeGame;
     bool _deleteBase;
@@ -50,8 +51,6 @@ private:
     QTimer *timerRemoveExplosionBonus;
 
     QTimer *timerChangeSpeedBots;
-
-
 
     TankForPlayer *TankForPlay1;            // Танк первого и
     TankForPlayer *TankForPlay2;            // в второго игрока

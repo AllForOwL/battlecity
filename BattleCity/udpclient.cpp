@@ -29,7 +29,7 @@ UdpClient::UdpClient(QString nameServer, QString strIpForBind, QString strIpForS
     _socket = new QUdpSocket(this);
     _socket->bind(QHostAddress(_strIpForBind), CNT_PORT_FOR_CONNECT);       // привязка к данному ip i порту
 
-    QObject::connect(_socket, SIGNAL( readyRead()), this, SLOT( slotReadMessageClient()));
+    QObject::connect(_socket, SIGNAL( readyRead()), this, SLOT( slotReadMessageClient() ));
 }
 
 void UdpClient::slotReadMessageClient()
@@ -40,7 +40,8 @@ void UdpClient::slotReadMessageClient()
     {
         baDatagram.resize(_socket->pendingDatagramSize());
         _socket->readDatagram(baDatagram.data(), baDatagram.size());
-    } while(_socket->hasPendingDatagrams());
+    }
+    while(_socket->hasPendingDatagrams());
 
     int  x;
     int  y;

@@ -17,19 +17,18 @@ TankBot::TankBot(const QList<QString> fileNames): Tank(fileNames) {
     indexWay  = CNT_NOT_FOUND_WAY;
     addTank = false;
     changeRotate = false;
-   // useRotate    = false;
     numberDeaths = 0;
     _previousPoint.x = 0;
     _previousPoint.y = 0;
-    timerFoundNewWay = new QTimer(this);
+    timerFoundNewWay    = new QTimer(this);
     timerFoundNewWay->setObjectName("timer");
 
-    timerFoundNewWay->start(4000);
+    timerFoundNewWay->start(CNT_SECOND_SEARCH_NEW_WAY);
 
-    QObject::connect(timerFoundNewWay, SIGNAL(timeout())                          , this, SLOT(slotForStartSearchPath()));
-    QObject::connect(this            , SIGNAL(signalOneSearchWay(int,int,int,int)), this, SLOT(slotSearchPath(int,int,int,int) ));
+    QObject::connect( timerFoundNewWay, SIGNAL(timeout())                          , this, SLOT(slotForStartSearchPath()            ));
+    QObject::connect( this            , SIGNAL(signalOneSearchWay(int,int,int,int)), this, SLOT(slotSearchPath(int,int,int,int)     ));
 
-    QObject::connect( this           , SIGNAL(signalSearchNewWay(bool))               , this, SLOT(slotSearchNewWayAfterCollision(bool)));
+    QObject::connect( this            , SIGNAL(signalSearchNewWay(bool))           , this, SLOT(slotSearchNewWayAfterCollision(bool)));
 }
 
 void TankBot::setModeOfAtack(TankBot::MODE_ATACK M_A) {
@@ -61,7 +60,7 @@ void TankBot::Atack(int xPlayer, int yPlayer) {
    _xPlayer = xPlayer;
    _yPlayer = yPlayer;
 
-    if (indexWay <= 2) // если достигли финиша
+    if (indexWay <= 1) // если достигли финиша
     {
         qDebug() << "finish";
         searchWay = false;
@@ -212,8 +211,7 @@ void TankBot::Atack(int xPlayer, int yPlayer) {
 // поиск пути для ботов
 void TankBot::Atack()
 {
-
-    if (indexWay <= 2 )// если достигли финиша
+    if (indexWay <= 3 )// если достигли финиша
     {
         qDebug() << "finish";
         searchWay = false;
@@ -342,7 +340,7 @@ void TankBot::Atack()
 }
 
 void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
-{qDebug() << "goodd";
+{
     int xPlayer = 0;
     int yPlayer = 0;
 
@@ -350,91 +348,9 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
     {
         if (this->y() <= 250)
         {
-        switch (this->_rotate)
-        {
-            case 0:
-            {qDebug() << "0";
-                if (this->x() >= 250)
-                {
-                    xPlayer = 64;
-                    yPlayer = this->y();
-                }
-                else
-                {
-                    xPlayer = 440;
-                    yPlayer = this->y();
-                }
-                break;
-            }
-            case 90:
-            {qDebug() << "90";
-                if (this->y() >= 250)
-                {
-                    xPlayer = this->x();
-                    yPlayer = 64;
-                }
-                else
-                {
-                    xPlayer = this->x();
-                    yPlayer = 440;
-                }
-                break;
-            }
-            case 180:
-            {qDebug() << "180";
-                if (this->x() >= 250)
-                {
-                    xPlayer = 64;
-                    yPlayer = this->y();
-                }
-                else
-                {
-                    xPlayer = 440;
-                    yPlayer = this->y();
-                }
-                break;
-            }
-            case 270:
-            {qDebug() << "270";
-                if (this->y() >= 250)
-                {
-                    xPlayer = this->x();
-                    yPlayer = 64;
-                }
-                else
-                {
-                    xPlayer = this->x();
-                    yPlayer = 440;
-                }
-                break;
-            }
-            default:
-            {
-                xPlayer = rand() % 450 + 100;
-                yPlayer = rand() % 450 + 100;
-                break;
-            }
-        }
-        }
-        else
-        {
             switch (this->_rotate)
             {
-            case 0:
-            {qDebug() << "90";
-                if (this->y() >= 250)
-                {
-                    xPlayer = this->x();
-                    yPlayer = 64;
-                }
-                else
-                {
-                    xPlayer = this->x();
-                    yPlayer = 440;
-                }
-                break;
-            }
-                case 90:
+                case 0:
                 {qDebug() << "0";
                     if (this->x() >= 250)
                     {
@@ -448,9 +364,35 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                     }
                     break;
                 }
-
-
+                case 90:
+                {qDebug() << "90";
+                    if (this->y() >= 250)
+                    {
+                        xPlayer = this->x();
+                        yPlayer = 64;
+                    }
+                    else
+                    {
+                        xPlayer = this->x();
+                        yPlayer = 440;
+                    }
+                    break;
+                }
                 case 180:
+                {qDebug() << "180";
+                    if (this->x() >= 250)
+                    {
+                        xPlayer = 64;
+                        yPlayer = this->y();
+                    }
+                    else
+                    {
+                        xPlayer = 440;
+                        yPlayer = this->y();
+                    }
+                    break;
+                }
+                case 270:
                 {qDebug() << "270";
                     if (this->y() >= 250)
                     {
@@ -464,20 +406,76 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                     }
                     break;
                 }
-            case 270:
-            {qDebug() << "180";
-                if (this->x() >= 250)
+                default:
                 {
-                    xPlayer = 64;
-                    yPlayer = this->y();
+                    xPlayer = rand() % 450 + 100;
+                    yPlayer = rand() % 450 + 100;
+                    break;
                 }
-                else
-                {
-                    xPlayer = 440;
-                    yPlayer = this->y();
-                }
-                break;
             }
+         }
+        else
+        {
+            switch (this->_rotate)
+            {
+                case 0:
+                {qDebug() << "90";
+                    if (this->y() >= 250)
+                    {
+                        xPlayer = this->x();
+                        yPlayer = 64;
+                    }
+                    else
+                    {
+                        xPlayer = this->x();
+                        yPlayer = 440;
+                    }
+                    break;
+                }
+                    case 90:
+                    {qDebug() << "0";
+                        if (this->x() >= 250)
+                        {
+                            xPlayer = 64;
+                            yPlayer = this->y();
+                        }
+                        else
+                        {
+                            xPlayer = 440;
+                            yPlayer = this->y();
+                        }
+                        break;
+                    }
+
+
+                    case 180:
+                    {qDebug() << "270";
+                        if (this->y() >= 250)
+                        {
+                            xPlayer = this->x();
+                            yPlayer = 64;
+                        }
+                        else
+                        {
+                            xPlayer = this->x();
+                            yPlayer = 440;
+                        }
+                        break;
+                    }
+                case 270:
+                {qDebug() << "180";
+                    if (this->x() >= 250)
+                    {
+                        xPlayer = 64;
+                        yPlayer = this->y();
+                    }
+                    else
+                    {
+                        xPlayer = 440;
+                        yPlayer = this->y();
+                    }
+                    break;
+                }
             }
         }
     }

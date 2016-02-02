@@ -51,10 +51,11 @@ private:
     int    mapSearchWay[CNT_ROWS_MAP][CNT_COLS_MAP];
     QTimer *timerFoundNewWay;
 
+    QTimer* timerSetAtackRegime;
+
     point _previousPoint;
 
     bool changeRotate;
-    //bool useRotate;
 
 public:
     int x_end;

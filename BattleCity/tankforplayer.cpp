@@ -103,6 +103,7 @@ void TankForPlayer::setInBeginPosition()
 
 /* virtual */ void TankForPlayer::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
+
     Tank* t = dynamic_cast<Tank* >(QObject::sender());
 
     if (event->isAutoRepeat() || !actions.contains(key)) {

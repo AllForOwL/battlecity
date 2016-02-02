@@ -153,9 +153,8 @@ void Tank::slotGameOver()
 
 void Tank::slotKillBot()
 {
-   ++_numberKills;
+    ++_numberKills;
 }
-
 
 void Tank::slotMoveTank() {
     if (this->activeKey.isEmpty())
