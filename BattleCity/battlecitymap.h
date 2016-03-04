@@ -136,12 +136,13 @@ public slots:
     void slotRemoveExplosionBonus      ();
     void slotRemoveExplosionBonusTimer ();
 
-    void slotTimeout     ();        // определяет какой бот должен быть перемещён
-    void slotMoveBots    ();        // вызывает слот который вызывает слот который определяет какой бот должен быть перемещён
     void slotRunOneBot   ();        // первоначальное помещение бота на карту
     void slotRunTwoBot   ();
     void slotRunThreeBot ();
     void slotRunFourBot  ();
+
+    void slotMoveThreeBot();
+    void slotMoveFourBot();
 
     void slotGameOver    ();
 
