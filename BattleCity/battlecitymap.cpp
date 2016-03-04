@@ -5,6 +5,8 @@
 #include <QGraphicsTextItem>
 #include "sprite.h"
 #include "battlecitymap.h"
+#include <QDebug>
+#include <QMessageBox>
 
 BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QObject* parent) : QGraphicsScene(parent)
 {
@@ -14,6 +16,8 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
 
     timerForSendPosPlayer = new QTimer(this);
     shot = false;
+
+    qDebug() << "good";
 
     _regimeGame = regimeGame;
     _increaseSpeedBots = CNT_SPEED_MOVE_BOTS;
@@ -51,6 +55,11 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
     timerForShowExplosionBonus = new QTimer(this);
     timerRemoveExplosionBonus  = new QTimer(this);
 
+    timerRunBot    = new QTimer(this);
+    timerRunBot_2  = new QTimer(this);
+    timerRunBot_3  = new QTimer(this);
+    timerRunBot_4  = new QTimer(this);
+
     timerMoveBot    = new QTimer(this);
     timerMoveBot_2  = new QTimer(this);
     timerMoveBot_3  = new QTimer(this);
@@ -80,17 +89,17 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
         TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER, CNT_BEGIN_Y_ONE_PLAYER);   // Початкова позиція
         this->addItem(TankForPlay1);                                            // Добавлення на сцену
 
-        timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
-        timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
+        timerRunBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
+        timerRunBot->setObjectName(OBJ_NAME_BOT_1);
 
-        timerMoveBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
-        timerMoveBot_2->setObjectName(OBJ_NAME_BOT_2);
+        timerRunBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
+        timerRunBot_2->setObjectName(OBJ_NAME_BOT_2);
 
-        timerMoveBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
-        timerMoveBot_3->setObjectName(OBJ_NAME_BOT_3);
+        timerRunBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
+        timerRunBot_3->setObjectName(OBJ_NAME_BOT_3);
 
-        timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
-        timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
+        timerRunBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
+        timerRunBot_4->setObjectName(OBJ_NAME_BOT_4);
 
         timerMoveBots->start(_increaseSpeedBots);
 
@@ -116,17 +125,18 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
         }
         else
         {
-            timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
-            timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
 
-            timerMoveBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
-            timerMoveBot_2->setObjectName(OBJ_NAME_BOT_2);
+            timerRunBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
+            timerRunBot->setObjectName(OBJ_NAME_BOT_1);
 
-            timerMoveBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
-            timerMoveBot_3->setObjectName(OBJ_NAME_BOT_3);
+            timerRunBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
+            timerRunBot_2->setObjectName(OBJ_NAME_BOT_2);
 
-            timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
-            timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
+            timerRunBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
+            timerRunBot_3->setObjectName(OBJ_NAME_BOT_3);
+
+            timerRunBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
+            timerRunBot_4->setObjectName(OBJ_NAME_BOT_4);
 
             timerMoveBots->start(_increaseSpeedBots);
         }
@@ -161,19 +171,18 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
             TankForPlay1->_friendOrBattle = true;
         }
         else
-        {
+        {            
+            timerRunBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
+            timerRunBot->setObjectName(OBJ_NAME_BOT_1);
 
-            timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
-            timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
+            timerRunBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
+            timerRunBot_2->setObjectName(OBJ_NAME_BOT_2);
 
-            timerMoveBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
-            timerMoveBot_2->setObjectName(OBJ_NAME_BOT_2);
+            timerRunBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
+            timerRunBot_3->setObjectName(OBJ_NAME_BOT_3);
 
-            timerMoveBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
-            timerMoveBot_3->setObjectName(OBJ_NAME_BOT_3);
-
-            timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
-            timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
+            timerRunBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
+            timerRunBot_4->setObjectName(OBJ_NAME_BOT_4);
 
             timerMoveBots->start(_increaseSpeedBots);
         }
@@ -209,17 +218,17 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
         }
         else
         {
-            timerMoveBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
-            timerMoveBot->setObjectName(OBJ_NAME_BOT_1);
+            timerRunBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
+            timerRunBot->setObjectName(OBJ_NAME_BOT_1);
 
-            timerMoveBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
-            timerMoveBot_2->setObjectName(OBJ_NAME_BOT_2);
+            timerRunBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
+            timerRunBot_2->setObjectName(OBJ_NAME_BOT_2);
 
-            timerMoveBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
-            timerMoveBot_3->setObjectName(OBJ_NAME_BOT_3);
+            timerRunBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
+            timerRunBot_3->setObjectName(OBJ_NAME_BOT_3);
 
-            timerMoveBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
-            timerMoveBot_4->setObjectName(OBJ_NAME_BOT_4);
+            timerRunBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
+            timerRunBot_4->setObjectName(OBJ_NAME_BOT_4);
 
             timerMoveBots->start(_increaseSpeedBots);
         }
@@ -229,7 +238,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
 
         QObject::connect( timerMoveTank2 , SIGNAL( timeout()           ), TankForPlay2  , SLOT( slotMoveTank()        ));
         QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), TankForPlay2  , SLOT( slotTankShot(QString) ));   // Постріл танком
-        QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), this          , SLOT( slotShotTank()        ));   // Постріл танком
+        QObject::connect( TankForPlay2   , SIGNAL( signalShot(QString) ), this          , SLOT( slotShotTank(QString) ));   // Постріл танком
         QObject::connect( TankForPlay2   , SIGNAL( signalTankTookStar()), this          , SLOT( slotRemoveBonus()     ));
 
         QObject::connect( client , SIGNAL( signalReadInformationOpponent(int,int, int, bool)), this, SLOT( slotMoveOpponent(int,int, int, bool) ));
@@ -281,7 +290,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
     QObject::connect( TankForPlay1   , SIGNAL( signalShot(QString) ) , TankForPlay1 , SLOT( slotTankShot(QString) ));   // Постріл танком
     QObject::connect( TankForPlay1   , SIGNAL( signalShot(QString) ) , this         , SLOT( slotShotTank(QString) ));   // Постріл танком
 
-    QObject::connect( timerMoveBots , SIGNAL( timeout() )  , this, SLOT( slotMoveBots() ));
+    //QObject::connect( timerMoveBots , SIGNAL( timeout() )  , this, SLOT( slotMoveBots() ));
 
     QObject::connect( bot   , SIGNAL( destroyed(QObject*) ), this , SLOT( slotAddBot_1() )); // убили первого бота - вернуть на карту
     QObject::connect( bot_2 , SIGNAL( destroyed(QObject*) ), this , SLOT( slotAddBot_2() ));
@@ -289,25 +298,24 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
     QObject::connect( bot_4 , SIGNAL( destroyed(QObject*) ), this , SLOT( slotAddBot_4() ));
 
 
-    QObject::connect( timerMoveBot   , SIGNAL( timeout()                       )   , this  , SLOT( slotRunOneBot() ));        // добавить первого бота на карту
-    QObject::connect( this           , SIGNAL( signalMoveOneBot()              )   , this  , SLOT( slotTimeout()   ));        // обновить первого бота
-    QObject::connect( this           , SIGNAL( signalTimeoutForOneBot()        )   , bot   , SLOT( Atack(        ) ));        // найти путь к цели и переместить бота
-    QObject::connect( this           , SIGNAL( signalTimeoutForOneBot(int,int) )   , bot   , SLOT( Atack(int, int) ));        // найти путь к цели и переместить бота
+    QObject::connect( timerRunBot    , SIGNAL( timeout()                       )   , this  , SLOT( slotRunOneBot() ));        // добавить первого бота на карту
+    QObject::connect( timerMoveBot   , SIGNAL( timeout()                       )   , this  , SLOT( Atack()   ));        // обновить первого бота
+    //QObject::connect( this           , SIGNAL( signalTimeoutForOneBot()        )   , bot   , SLOT( Atack(        ) ));        // найти путь к цели и переместить бота
     QObject::connect( bot            , SIGNAL( signalShot(QString)             )   , bot   , SLOT( slotTankShot(QString)  )); // стрелять
 
-    QObject::connect( timerMoveBot_2 , SIGNAL( timeout()                       )   , this  , SLOT( slotRunTwoBot() ));
-    QObject::connect( this           , SIGNAL( signalMoveTwoBot()              )   , this  , SLOT( slotTimeout()   ));
-    QObject::connect( this           , SIGNAL( signalTimeoutForTwoBot()        )   , bot_2 , SLOT( Atack(        ) ));
+    QObject::connect( timerRunBot_2 , SIGNAL( timeout()                       )   , this  , SLOT( slotRunTwoBot() ));
+    QObject::connect( timerMoveBot_2           , SIGNAL( signalMoveTwoBot()              )   , this  , SLOT( Atack()   ));
+    //QObject::connect( this           , SIGNAL( signalTimeoutForTwoBot()        )   , bot_2 , SLOT( Atack(        ) ));
     QObject::connect( bot_2          , SIGNAL( signalShot(QString)             )   , bot_2 , SLOT( slotTankShot(QString)  ));
 
-    QObject::connect( timerMoveBot_3 , SIGNAL ( timeout()                          ) , this  , SLOT( slotRunThreeBot()  ));
-    QObject::connect( this           , SIGNAL ( signalMoveThreeBot()               ) , this  , SLOT( slotTimeout()      ));
-    QObject::connect( this           , SIGNAL ( signalTimeoutForThreeBot(int,int)  ) , bot_3 , SLOT( Atack(int, int)    ));
+    QObject::connect( timerRunBot_3 , SIGNAL ( timeout()                          ) , this  , SLOT( slotRunThreeBot()  ));
+    QObject::connect( this           , SIGNAL ( signalMoveThreeBot(int,int)               ) , this  , SLOT( Atack(int,int)      ));
+    //QObject::connect( this           , SIGNAL ( signalTimeoutForThreeBot(int,int)  ) , bot_3 , SLOT( Atack(int, int)    ));
     QObject::connect( bot_3          , SIGNAL ( signalShot(QString)                ) , bot_3 , SLOT( slotTankShot(QString)     ));
 
-    QObject::connect( timerMoveBot_4 , SIGNAL( timeout()                        ) , this   , SLOT( slotRunFourBot()   ));
-    QObject::connect( this           , SIGNAL( signalMoveFourBot()              ) , this   , SLOT( slotTimeout()                ));
-    QObject::connect( this           , SIGNAL( signalTimeoutForFourBot(int,int) ) , bot_4  , SLOT( Atack(int, int )             ));
+    QObject::connect( timerRunBot_4 , SIGNAL( timeout()                        ) , this   , SLOT( slotRunFourBot()   ));
+    QObject::connect( this           , SIGNAL( signalMoveFourBot(int,int)              ) , this   , SLOT( Atack(int,int)                ));
+    //QObject::connect( this           , SIGNAL( signalTimeoutForFourBot(int,int) ) , bot_4  , SLOT( Atack(int, int )             ));
     QObject::connect( bot_4          , SIGNAL( signalShot(QString)              ) , bot_4  , SLOT( slotTankShot(QString)        ));
 
     QObject::connect( timerForShowBonus          , SIGNAL( timeout()                      ), SLOT( slotShowBonus()              ));                 // Додавання бонусів на карту
@@ -335,6 +343,9 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient *client, QO
     QObject::connect( bot_3       , SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
     QObject::connect( bot_4       , SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
 
+
+    QObject::connect( bot_3, SIGNAL( signalSearchNewWayFor_3_4_Bots(int,int)), this, SLOT( slotSendPosAfterCollision(int,int) ));
+    QObject::connect( bot_4, SIGNAL( signalSearchNewWayFor_3_4_Bots(int,int)), this, SLOT( slotSendPosAfterCollision(int,int) ));
 
     QObject::connect( timerForSendPosPlayer , SIGNAL( timeout()), this, SLOT( slotSetPosPlayerForSend() ));
 
@@ -380,7 +391,7 @@ BattleCityMap::~BattleCityMap() {
 
 bool BattleCityMap::AuditPressKey(int key)
 {
-    if (_regimeGame == 1 || _regimeGame == 3)   // если один игрок или сервер
+    if (!_regimeGame == 2)   // если один игрок или сервер
     {
         if (
             key != Qt::Key_Space &&
@@ -393,7 +404,7 @@ bool BattleCityMap::AuditPressKey(int key)
             return false;
         }
     }
-    else if (_regimeGame == 2)                  // два игрока
+    else                     // два игрока
     {
         if (
             key != Qt::Key_Space &&
@@ -411,20 +422,6 @@ bool BattleCityMap::AuditPressKey(int key)
             return false;
         }
     }
-    else                                        // клиент
-    {
-        if (
-            key != Qt::Key_B     &&
-            key != Qt::Key_W     &&
-            key != Qt::Key_S     &&
-            key != Qt::Key_A     &&
-            key != Qt::Key_D
-           )
-        {
-            return false;
-        }
-    }
-
     return true;
 }
 
@@ -469,6 +466,24 @@ void BattleCityMap::slotIncreaseSpeedBots()
     }
 }
 
+void BattleCityMap::slotSendPosAfterCollision(int x, int y)
+{
+    if (QObject::sender()->objectName() == OBJ_NAME_BOT_3)
+    { qDebug() << "send pos";
+        bot_3->_searchWayNow = true;
+        bot_3->bad_x = x;
+        bot_3->bad_y = y;
+        emit bot_3->signalOneSearchWay(bot_3->x(), bot_3->y(), TankForPlay1->x(), TankForPlay1->y());
+    }
+    else
+    {qDebug() << "bot4";
+        bot_4->_searchWayNow = true;
+        bot_4->bad_x = x;
+        bot_4->bad_y = y;
+        emit bot_3->signalOneSearchWay(bot_4->x(), bot_4->y(), TankForPlay1->x(), TankForPlay1->y());
+    }
+}
+
 void BattleCityMap::slotTimeout()
 { 
     if (runFourBot) // если все 4 бота на карте
@@ -476,18 +491,13 @@ void BattleCityMap::slotTimeout()
         switch (updateOnlyOneBots)
         {
         case 0:
-            {
-                if (_increaseSpeedBots == 40)
-                {
-                    emit signalTimeoutForOneBot(TankForPlay1->x(),  TankForPlay1->x());
-                }
-                else
-                {
-                    emit signalTimeoutForOneBot();
-                }
+            { 
+                emit signalTimeoutForOneBot();
                 ++updateOnlyOneBots;
+
             break;
-            }
+
+        }
         case 1:
             {
                emit signalTimeoutForTwoBot() ;
@@ -528,20 +538,18 @@ void BattleCityMap::slotTimeout()
     {
         if (updateOnlyTwoBots)
         {
-            emit signalTimeoutForOneBot ();
-
+            emit signalTimeoutForOneBot();
             updateOnlyTwoBots = false;
         }
         else
         {
-            emit signalTimeoutForTwoBot ();
-
+            emit signalTimeoutForTwoBot();
             updateOnlyTwoBots = true;
         }
     }
     else if (runOneBot)
     {
-        emit signalTimeoutForOneBot     ();
+        emit signalTimeoutForOneBot();
     }
 
 }
@@ -575,30 +583,55 @@ void BattleCityMap::slotMoveBots()
 
 void BattleCityMap::slotRunOneBot()
 {
-    timerMoveBot->stop(); // останавливаем таймер для бота
-    bot->setPos(CNT_BEGIN_X_ONE_BOT, CNT_BEGIN_Y_ONE_BOT);    // помещяем на карту
-    runOneBot = true;     // розрешаем боту двигатся
+    //timerMoveBot->stop();                                     // останавливаем таймер для бота
+    if (runOneBot)
+    {
+         emit signalMoveOneBot();
+    }
+    else
+    {
+        bot->setPos(CNT_BEGIN_X_ONE_BOT, CNT_BEGIN_Y_ONE_BOT);    // помещяем на карту
+        runOneBot = true;                                         // розрешаем боту двигатся
+    }
 }
 
 void BattleCityMap::slotRunTwoBot()
 {
-    timerMoveBot_2->stop();
-    bot_2->setPos(CNT_BEGIN_X_TWO_BOT, CNT_BEGIN_Y_TWO_BOT);
-    runTwoBot = true;
+    if (runTwoBot)
+    {
+        emit signalMoveTwoBot();
+    }
+    else
+    {
+        bot_2->setPos(CNT_BEGIN_X_TWO_BOT, CNT_BEGIN_Y_TWO_BOT);
+        runTwoBot = true;
+    }
 }
 
 void BattleCityMap::slotRunThreeBot()
 {
-    timerMoveBot_3->stop();
-    bot_3->setPos(CNT_BEGIN_X_THREE_BOT, CNT_BEGIN_Y_THREE_BOT);
-    runThreeBot = true;
+    if (runThreeBot)
+    {
+        emit signalMoveThreeBot();
+    }
+    else
+    {
+        bot_3->setPos(CNT_BEGIN_X_THREE_BOT, CNT_BEGIN_Y_THREE_BOT);
+        runThreeBot = true;
+    }
 }
 
 void BattleCityMap::slotRunFourBot()
 {
-    timerMoveBot_4->stop();
-    bot_4->setPos(CNT_BEGIN_X_FOUR_BOT, CNT_BEGIN_Y_FOUR_BOT);
-    runFourBot = true;
+    if (runFourBot)
+    {
+        emit signalMoveFourBot();
+    }
+    else
+    {
+        bot_4->setPos(CNT_BEGIN_X_FOUR_BOT, CNT_BEGIN_Y_FOUR_BOT);
+        runFourBot = true;
+    }
 }
 
 void BattleCityMap::slotGameOver()
@@ -691,6 +724,7 @@ void BattleCityMap::slotBuildProtectionForBase()
 
 void BattleCityMap::slotRemoveBonusForBase()
 {
+    this->removeItem(pixmapForBase);
     timerForShowProtectionBase->start(CNT_SECOND_PROTECTION_BASE);
     timerRemoveProtectionBase->stop();
 
@@ -838,11 +872,12 @@ void BattleCityMap::slotAddBot_2()
     } while(listItems.size() != 0);
 
     _x -= 32;
-    bot_2->setPos(_x, 0);
+    bot_2->setPos(128, 0);
     bot_2->setData(0, OBJ_NAME_BOT_2);
     bot_2->setObjectName(OBJ_NAME_BOT_2);
     bot_2->setZValue(0.5);
     this->addItem(bot_2);
+
 }
 
 void BattleCityMap::slotAddBot_3()

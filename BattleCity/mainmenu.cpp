@@ -34,7 +34,6 @@ mainMenu::mainMenu(): id_elementOfMenu(1) {
     this->move(400,0);
     this->show();
 
-
     btnServer = new QPushButton("create server");
     btnClient = new QPushButton("create client");
 
@@ -388,7 +387,6 @@ void mainMenu::slotCreateClient()
 
 void mainMenu::slotRunServer()
 {
-
     if (editIpServer->text() == "" || editNameServer->text() == "")
     {
         QMessageBox::critical(0, "error", "not correct value");
@@ -512,6 +510,13 @@ void mainMenu::slotRunGameFriend()
 
 void mainMenu::slotStartGameServer()
 {
+    if (server->_strIpForSend == "")
+    {
+        QMessageBox::critical(this, "error", "not found client \n"
+                                             "please connect and again");
+        return;
+    }
+
     view = new BattleCityView(3, _friend, server);
     viewRunServer->close();
     view->move(400,0);

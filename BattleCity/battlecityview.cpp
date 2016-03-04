@@ -9,7 +9,7 @@
 #include <QLabel>
 #include <QGraphicsPixmapItem>
 #include <QDebug>
-#include "battlecityview.h"
+#include "battlecityview.h"ч
 
 BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client): QGraphicsView() {
 
@@ -22,12 +22,13 @@ BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client):
     ShowWalls(OBJ_NAME_RED_WALL  , OBJ_TYPE_RED_WALL  , ":/walls/3.jpg");
     ShowWalls(OBJ_NAME_GRASS     , OBJ_TYPE_GRASS     , ":/walls/4.png");
     ShowWalls(OBJ_NAME_WHITE_WALL, OBJ_TYPE_WHITE_WALL, ":/walls/5.jpg");
-    ShowWalls(OBJ_NAME_BASE      , OBJ_TYPE_BASE      , ":/Explosion/base.png");
+    //ShowWalls(OBJ_NAME_BASE      , OBJ_TYPE_BASE      , ":/Explosion/base.png");
 
     QObject::connect(map, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
 }
 
-BattleCityView::~BattleCityView() {
+BattleCityView::~BattleCityView()
+{
     map->~BattleCityMap();
 }
 

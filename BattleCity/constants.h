@@ -66,11 +66,11 @@ const int CNT_BEGIN_Y_TWO_PLAYER = 475;
 const int CNT_BEGIN_X_ONE_PLAYER_BATTLE = 250;
 const int CNT_BEGIN_Y_ONE_PLAYER_BATTLE = 0;
 
-const int CNT_BEGIN_X_ONE_BOT   = 0;
+const int CNT_BEGIN_X_ONE_BOT   = 50;
 const int CNT_BEGIN_Y_ONE_BOT   = 0;
 const int CNT_BEGIN_X_TWO_BOT   = 400;
 const int CNT_BEGIN_Y_TWO_BOT   = 0;
-const int CNT_BEGIN_X_THREE_BOT = 32;
+const int CNT_BEGIN_X_THREE_BOT = 62;
 const int CNT_BEGIN_Y_THREE_BOT = 0;
 const int CNT_BEGIN_X_FOUR_BOT  = 350;
 const int CNT_BEGIN_Y_FOUR_BOT  = 0;
@@ -92,7 +92,7 @@ const int CNT_TIMER_FOR_SEND_POS_PLAYER = 10;
 
 const int CNT_PORT_FOR_CONNECT = 2424;
 
-const int CNT_SECOND_SEARCH_NEW_WAY = 2000;
+const int CNT_SECOND_SEARCH_NEW_WAY = 7000;
 
 #endif // CONSTANTS
 

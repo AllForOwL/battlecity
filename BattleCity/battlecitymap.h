@@ -1,4 +1,4 @@
-#ifndef BATTLECITYMAP_H
+﻿#ifndef BATTLECITYMAP_H
 #define BATTLECITYMAP_H
 
 #include <QGraphicsScene>
@@ -30,6 +30,10 @@ public:
 private:
     QTimer *timerMoveTank1;                 // Таймер для переміщення танку плеєра 1
     QTimer *timerMoveTank2;                 // та плеєра 2
+    QTimer *timerRunBot;
+    QTimer *timerRunBot_2;
+    QTimer *timerRunBot_3;
+    QTimer *timerRunBot_4;
     QTimer *timerMoveBot;
     QTimer *timerMoveBot_2;
     QTimer *timerMoveBot_3;
@@ -104,8 +108,8 @@ signals:
 
     void signalMoveOneBot   ();
     void signalMoveTwoBot   ();
-    void signalMoveThreeBot ();
-    void signalMoveFourBot  ();
+    void signalMoveThreeBot (int x, int y);
+    void signalMoveFourBot  (int x, int y);
 
     void signalUpdateBase(QString typeWall);
 
@@ -145,6 +149,8 @@ public slots:
     void slotMoveOpponent(int x, int y, int rotate, bool shot2);
     void slotShotTank(QString str);
     void slotIncreaseSpeedBots();
+
+    void slotSendPosAfterCollision(int x, int y);
 };
 
 #endif // BATTLECITYMAP_H

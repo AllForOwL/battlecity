@@ -6,9 +6,8 @@
 
 QT       += core gui
 QT       += network
-
+config       += debug
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 TARGET = BattleCity
 TEMPLATE = app
 

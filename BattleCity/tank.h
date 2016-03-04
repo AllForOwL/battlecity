@@ -42,6 +42,9 @@ public:
 
     int _friendOrBattle;
 
+    int bad_x;
+    int bad_y;
+
 protected:
     struct Frame {
         QPixmap pixmap;
@@ -70,7 +73,7 @@ public:
     int currentFrame;                           // Значение текущего фрейма
     QList<Frame> frames;                        // Список фреймов, для танка.
                                                 // Картинки, с которых делается анимация
-
+    bool  _searchWayNow;
     int   _speed;                               // Скорость танка
     int   _rotate;                              // Быстрота текущее направление танка
     bool  _shot;
@@ -99,6 +102,7 @@ signals:
     void signalGameOver2();
 
     void signalSearchNewWay(bool useRotate);
+    void signalSearchNewWayFor_3_4_Bots(int x, int y);
 };
 
 #endif // TANK_H

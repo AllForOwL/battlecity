@@ -50,7 +50,7 @@ void UdpClient::slotReadMessageClient()
 
     QDataStream in(&baDatagram, QIODevice::ReadOnly);
 
-    in.setVersion(QDataStream::Qt_5_5);
+    in.setVersion(QDataStream::Qt_5_4);
 
     if (_strNameServer == "") // при первом чтении сообщения клиентом
     {
@@ -82,7 +82,7 @@ void UdpClient::SendMessage(int x, int y, int rotate, bool shot)
     QByteArray baDatagram;
 
     QDataStream out(&baDatagram, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_5_5);
+    out.setVersion(QDataStream::Qt_5_4);
     out << x << y << rotate << shot;
 
     _socket->writeDatagram(baDatagram, QHostAddress(_strIpForSend), CNT_PORT_FOR_CONNECT);
@@ -93,7 +93,7 @@ void UdpClient::SendMessageForConnection()
     QByteArray baDatagram;
 
     QDataStream out(&baDatagram, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_5_5);
+    out.setVersion(QDataStream::Qt_5_4);
     out << _strNameServer;
 
     _socket->writeDatagram(baDatagram, QHostAddress(_strIpForSend), CNT_PORT_FOR_CONNECT);
@@ -104,7 +104,7 @@ void UdpClient::SendIpClient()
     QByteArray baDatagram;
 
     QDataStream out(&baDatagram, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_5_5);
+    out.setVersion(QDataStream::Qt_5_4);
     out << _strIpForBind;
 
     _socket->writeDatagram(baDatagram, QHostAddress(_strIpForSend), CNT_PORT_FOR_CONNECT);
