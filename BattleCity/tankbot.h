@@ -49,7 +49,6 @@ private:
     QVector<point> vectorFoundWay;
 
     int    mapSearchWay[CNT_ROWS_MAP][CNT_COLS_MAP];
-    QTimer *timerFoundNewWay;
 
     QTimer* timerSetAtackRegime;
 
@@ -70,7 +69,6 @@ signals:
     void signalOneSearchWay(int x_begin, int y_begin, int x_end, int y_end);
 
 public slots:
-    void slotForStartSearchPath();
     void slotSearchPath(int x_begin, int y_begin, int x_end, int y_end);
     void Atack(int xPlayer, int yPlayer);   // поиск пути для игроков
     void Atack();                           // поиск пути для ботов

@@ -9,7 +9,7 @@
 #include <QLabel>
 #include <QGraphicsPixmapItem>
 #include <QDebug>
-#include "battlecityview.h"ч
+#include "battlecityview.h"
 
 BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client): QGraphicsView() {
 

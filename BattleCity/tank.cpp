@@ -186,7 +186,7 @@ void Tank::slotMoveTank() {
        {
            lastKey = this->iArrowLeft;
        }
-    }
+  }
 
     QPointF np;
     np.setX(0);
@@ -234,13 +234,10 @@ void Tank::slotMoveTank() {
     if (
          (x+33)  > WINDOW_WIDTH   ||
          (y+33)  >= WINDOW_HEIGHT ||
-         (x < 0) || (y < 0)       &&
-         (this->objectName() == OBJ_NAME_BOT_1)||
-         (this->objectName() == OBJ_NAME_BOT_2)
+         (x < 0) || (y < 0)
         )
     {
         this->moveBy(-np.x(), -np.y());
-        emit signalSearchNewWay(true);
     }
 
     QList<QGraphicsItem *> obstacle = scene()->collidingItems(this);
@@ -253,55 +250,26 @@ void Tank::slotMoveTank() {
             it->data(0)  == OBJ_NAME_BOT_2 ||
             it->data(0)  == OBJ_NAME_BOT_3 ||
             it->data(0)  == OBJ_NAME_BOT_4 &&
-            this->objectName() != OBJ_NAME_PLAYER_1 &&
-            this->objectName() != OBJ_NAME_PLAYER_2
+            this->objectName() != OBJ_NAME_BOT_3 &&
+            this->objectName() != OBJ_NAME_BOT_4
            )
         {
             this->moveBy(-np.x(), -np.y());
-
-            if (
-                this->objectName() != OBJ_NAME_BOT_3 &&
-                this->objectName() != OBJ_NAME_BOT_4
-               )
-            {
-                emit signalSearchNewWay(true);
-                return;
-            }
         }
 
         if (
             it->data(0)  == OBJ_NAME_WATER      ||
             it->data(0)  == OBJ_NAME_WHITE_WALL ||
-            it->data(0)  == OBJ_NAME_PLAYER_1  ||
+            it->data(0)  == OBJ_NAME_PLAYER_1   ||
             it->data(0)  == OBJ_NAME_PLAYER_2
           )
         {
             this->moveBy(-np.x(), -np.y());
-
-            if (
-                this->objectName() != OBJ_NAME_BOT_3 &&
-                this->objectName() != OBJ_NAME_BOT_4
-               )
-            {
-                emit signalSearchNewWay(true);
-                return;
-            }
          }
          else if (it->data(0)  == OBJ_NAME_RED_WALL)
          {
              this->moveBy(-np.x(), -np.y());
          }
-
-            if (
-                 this->objectName() == OBJ_NAME_BOT_1 ||
-                 this->objectName() == OBJ_NAME_BOT_2 ||
-                 this->objectName() == OBJ_NAME_BOT_3 ||
-                 this->objectName() == OBJ_NAME_BOT_4
-               )
-            {
-                emit signalShot(this->objectName());
-            }
-
 
         if (it->data(0) == OBJ_NAME_STAR)
         {
@@ -321,6 +289,7 @@ void Tank::slotMoveTank() {
             emit signalExplosionAllBots();
         }
     }
+
     scene()->update();
 }
 

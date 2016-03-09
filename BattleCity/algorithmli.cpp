@@ -2,82 +2,10 @@
 #include <QException>
 #include "algorithmli.h"
 
-algorithmLI::algorithmLI(int x_begin, int y_begin, int x_end, int y_end, QString nameBot)
+algorithmLI::algorithmLI()
 {
     p_ReadFromFile = new Parsing();
     p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_map);   // Завантаження карти з файлу
-
-    _nameBot = nameBot;
-
-    int _i = 0;
-    if (SearchWay(x_begin, y_begin, x_end, y_end))
-    {
-        if (_nameBot == OBJ_NAME_BOT_3 || _nameBot == OBJ_NAME_BOT_4)
-        {
-            begin_x_Three_Bot = x_begin;
-            begin_y_Three_Bot = y_begin;
-            end_x_Three_Bot = x_end;
-            end_y_Three_Bot = y_end;
-        }
-
-        while (vectorFoundWay[_i].index >= 10) // пока не достигли начала
-        {
-            int tempStep;
-
-            tempStep = vectorFoundWay[_i].index;
-            --tempStep;
-
-            for (int i(vectorPassableElement.size()-1); i >= 0; i--)
-                {
-                    if (vectorPassableElement[i].index == tempStep)
-                    {
-                        if (_nameBot != OBJ_NAME_BOT_3 && _nameBot != OBJ_NAME_BOT_4)
-                        {
-                           if (
-                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x-1 ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y   )) ||
-                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x   ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y+1 )) ||
-                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x+1 ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y   )) ||
-                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x   ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y-1 ))
-                               )
-                            {
-                                vectorFoundWay.push_back(vectorPassableElement[i]);
-                                break;
-                            }
-                        } else if (_nameBot == OBJ_NAME_BOT_3 || _nameBot == OBJ_NAME_BOT_4)
-                            {
-                                if (
-                                    (( vectorPassableElement[i].x == vectorFoundWay[_i].x    &&  vectorPassableElement[i].y == vectorFoundWay[_i].y-1) && (vectorPassableElement[i].y >= begin_y_Three_Bot && vectorPassableElement[i].y <= end_y_Three_Bot)) ||
-                                    (( vectorPassableElement[i].x == vectorFoundWay[_i].x-1  &&  vectorPassableElement[i].y == vectorFoundWay[_i].y)   && (vectorPassableElement[i].x >= begin_x_Three_Bot && vectorPassableElement[i].x <= end_x_Three_Bot))
-                                   )
-                                {
-                                    vectorFoundWay.push_back(vectorPassableElement[i]);
-                                    break;
-                                }
-                            }
-                            else if (_nameBot == OBJ_NAME_BOT_4)
-                            {
-                            vectorFoundWay.push_back(vectorPassableElement[i]);
-                            break;
-                            }
-                    }
-            }
-
-              ++_i;
-
-            if (vectorFoundWay.size() == _i)
-            {
-                break;
-            }
-        }
-        for (int _i(vectorFoundWay.size()-1); _i >= 0; _i--)
-        {
-            n_map[vectorFoundWay[_i].x][vectorFoundWay[_i].y] = -1;
-        }
-    }
-    else
-    {
-        qDebug() << "Path not found(((";
-    }
 }
 
 bool algorithmLI::SearchWay(int x, int y, int end_x, int end_y)
@@ -237,6 +165,76 @@ bool algorithmLI::SearchWay(int x, int y, int end_x, int end_y)
         }
     }
     return false; // если пути не нашли
+}
+
+bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end, QString nameBot)
+{
+    _nameBot = nameBot;
+
+    int _i = 0;
+    if (SearchWay(x_begin, y_begin, x_end, y_end))
+    {
+        if (_nameBot == OBJ_NAME_BOT_3 || _nameBot == OBJ_NAME_BOT_4)
+        {
+            begin_x_Three_Four_Bot = x_begin;
+            begin_y_Three_Four_Bot = y_begin;
+            end_x_Three_Four_Bot = x_end;
+            end_y_Three_Four_Bot = y_end;
+        }
+
+        while (vectorFoundWay[_i].index >= 10) // пока не достигли начала
+        {
+            int tempStep;
+
+            tempStep = vectorFoundWay[_i].index;
+            --tempStep;
+
+            for (int i(vectorPassableElement.size()-1); i >= 0; i--)
+                {
+                    if (vectorPassableElement[i].index == tempStep)
+                    {
+                        if (_nameBot != OBJ_NAME_BOT_3 && _nameBot != OBJ_NAME_BOT_4)
+                        {
+                           if (
+                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x-1 ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y   )) ||
+                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x   ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y+1 )) ||
+                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x+1 ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y   )) ||
+                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x   ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y-1 ))
+                               )
+                            {
+                                vectorFoundWay.push_back(vectorPassableElement[i]);
+                                break;
+                            }
+                        } else
+                            {
+                                if (
+                                    (( vectorPassableElement[i].x == vectorFoundWay[_i].x    &&  vectorPassableElement[i].y == vectorFoundWay[_i].y-1) && (vectorPassableElement[i].y >= begin_y_Three_Four_Bot && vectorPassableElement[i].y <= end_y_Three_Four_Bot)) ||
+                                    (( vectorPassableElement[i].x == vectorFoundWay[_i].x-1  &&  vectorPassableElement[i].y == vectorFoundWay[_i].y)   && (vectorPassableElement[i].x >= begin_x_Three_Four_Bot && vectorPassableElement[i].x <= end_x_Three_Four_Bot))
+                                   )
+                                {
+                                    vectorFoundWay.push_back(vectorPassableElement[i]);
+                                    break;
+                                }
+                            }
+                    }
+               }
+
+              ++_i;
+
+            if (vectorFoundWay.size() == _i)
+            {
+                break;
+            }
+        }
+        for (int _i(vectorFoundWay.size()-1); _i >= 0; _i--)
+        {
+            n_map[vectorFoundWay[_i].x][vectorFoundWay[_i].y] = -1;
+        }
+    }
+    else
+    {
+        qDebug() << "Path not found(((";
+    }
 }
 
 void algorithmLI::setBadWay(int y, int x)

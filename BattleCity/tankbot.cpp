@@ -21,13 +21,10 @@ TankBot::TankBot(const QList<QString> fileNames): Tank(fileNames)
     numberDeaths = 0;
     _previousPoint.x = 0;
     _previousPoint.y = 0;
-    timerFoundNewWay    = new QTimer(this);
-    timerFoundNewWay->setObjectName("timer");
+    algorithmSearchWay = new algorithmLI;
 
-    //QObject::connect( timerFoundNewWay, SIGNAL(timeout())                          , this, SLOT(slotForStartSearchPath()            ));
-    QObject::connect( this            , SIGNAL(signalOneSearchWay(int,int,int,int)), this, SLOT(slotSearchPath(int,int,int,int)     ));
-
-    QObject::connect( this            , SIGNAL(signalSearchNewWay(bool))           , this, SLOT(slotSearchNewWayAfterCollision(bool)));
+    QObject::connect(this, SIGNAL (signalOneSearchWay(int,int,int,int)), this, SLOT (slotSearchPath(int,int,int,int)));
+    QObject::connect(this, SIGNAL (signalSearchNewWay(bool)),            this, SLOT (slotSearchNewWayAfterCollision(bool)));
 }
 
 void TankBot::setModeOfAtack(TankBot::MODE_ATACK M_A)
@@ -35,33 +32,25 @@ void TankBot::setModeOfAtack(TankBot::MODE_ATACK M_A)
     MODE_OF_ATACK = M_A;
 }
 
-void TankBot::slotForStartSearchPath()
-{
-    if ((this->objectName() == OBJ_NAME_BOT_3) ||  (this->objectName() == OBJ_NAME_BOT_4))
-    {
-        emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
-    }
-}
-
 void TankBot::slotSearchPath(int x_begin, int y_begin, int x_end, int y_end)
 {
-    searchWay = true; // состоялся поиск пути
-    indexWay = CNT_NOT_FOUND_WAY;
-
-    algorithmSearchWay  = new algorithmLI(x_begin, y_begin, x_end, y_end, this->objectName());
+    algorithmSearchWay->AuditSearchWay(x_begin, y_begin, x_end, y_end, this->objectName());
 
     if (
         (algorithmSearchWay->vectorFoundWay.size() == 0) ||
         (algorithmSearchWay->vectorFoundWay.size() == 1)
        )
     {
-        emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, y_end/SIZE_WALL, x_end/SIZE_WALL);
+        return;
     }
     else
     {
         vectorFoundWay.resize(algorithmSearchWay->vectorFoundWay.size());
         copy(algorithmSearchWay->vectorFoundWay.begin(), algorithmSearchWay->vectorFoundWay.end(),
         vectorFoundWay.begin()); // копирование пути в вектор этого класса с класса нахождения пути
+
+        searchWay = true; // состоялся поиск пути
+        indexWay = CNT_NOT_FOUND_WAY;
     }
 }
 
@@ -100,7 +89,7 @@ void TankBot::Atack(int xPlayer, int yPlayer) {
             }
             else
             {
-                if (x_end > this->x())   // если тaекущий x менше x следующего елемента пути
+                if (x_end > this->x())   // если текущий x менше x следующего елемента пути
                 {
                     this->_rotate = 90;  // едем вправо
                 }
@@ -142,6 +131,9 @@ void TankBot::Atack(int xPlayer, int yPlayer) {
                }
                 else
                  {
+                    x_end = vectorFoundWay[indexWay].y * SIZE_WALL;
+                    y_end = vectorFoundWay[indexWay].x * SIZE_WALL;
+
                     if (x_end == this->x())      // когда текущий x и x - следующего елемента пути ровны
                     {
                         if (y_end < this->y())   // если текущий y больше y - следующего шага пути
@@ -214,17 +206,20 @@ void TankBot::Atack(int xPlayer, int yPlayer) {
 // поиск пути для ботов
 void TankBot::Atack()
 {
-    if (indexWay == 0 )// если достигли финиша
+    if (indexWay == 0) // если достигли финиша
     {
         qDebug() << "finish";
         searchWay = false;
         indexWay = CNT_NOT_FOUND_WAY;
+        _searchWayNow = false;
     }
+
     if (searchWay)                         // был найден путь
     {
-        if (indexWay == CNT_NOT_FOUND_WAY) // и бот находится вконце пути
+        if (indexWay == CNT_NOT_FOUND_WAY)
         {
             indexWay = vectorFoundWay.size() - 2;           // получаем предпоследний елемент пути
+
             x_end = vectorFoundWay[indexWay].y * SIZE_WALL; // получаем x и y предпоследнего
             y_end = vectorFoundWay[indexWay].x * SIZE_WALL; // елемента пути
 
@@ -241,7 +236,7 @@ void TankBot::Atack()
             }
             else
             {
-                if (x_end > this->x())   // если тaекущий x менше x следующего елемента пути
+                if (x_end > this->x())   // если текущий x менше x следующего елемента пути
                 {
                     this->_rotate = 90;  // едем вправо
                 }
@@ -250,42 +245,71 @@ void TankBot::Atack()
                     this->_rotate = 270; // едем влево
                 }
             }
+
         }
         else if (this->x() == x_end && this->y() == y_end) // когда текущие x і y ровны елементу пути
-            {
-                --indexWay;                                   // переходим к следующему елементу пути
-                x_end = vectorFoundWay[indexWay].y * SIZE_WALL;
-                y_end = vectorFoundWay[indexWay].x * SIZE_WALL;
+                {
+                    --indexWay;                                   // переходим к следующему елементу пути
+                    x_end = vectorFoundWay[indexWay].y * SIZE_WALL;
+                    y_end = vectorFoundWay[indexWay].x * SIZE_WALL;
 
-                if (x_end == this->x())
-                {
-                    if (y_end < this->y())
+                    if (x_end == this->x())
                     {
-                        this->_rotate = 0;
+                        if (y_end < this->y())
+                        {
+                            this->_rotate = 0;
+                        }
+                        else
+                        {
+                            this->_rotate = 180;
+                        }
+                    }
+                    else if (y_end == this->y())
+                    {
+                        if (x_end > this->x())
+                        {
+                            this->_rotate = 90;
+                        }
+                        else
+                        {
+                            this->_rotate = 270;
+                        }
+                    }
+               }
+                else
+                 {
+                    x_end = vectorFoundWay[indexWay].y * SIZE_WALL;
+                    y_end = vectorFoundWay[indexWay].x * SIZE_WALL;
+
+                    if (x_end == this->x())      // когда текущий x и x - следующего елемента пути ровны
+                    {
+                        if (y_end < this->y())   // если текущий y больше y - следующего шага пути
+                        {
+                            this->_rotate = 0;   // едем вверх
+                        }
+                        else
+                        {
+                            this->_rotate = 180; // едем вниз
+                        }
                     }
                     else
                     {
-                        this->_rotate = 180;
+                        if (x_end > this->x())   // если тaекущий x менше x следующего елемента пути
+                        {
+                            this->_rotate = 90;  // едем вправо
+                        }
+                        else
+                        {
+                            this->_rotate = 270; // едем влево
+                        }
                     }
-                }
-                else if (y_end == this->y())
-                {
-                    if (x_end > this->x())
-                    {
-                        this->_rotate = 90;
-                    }
-                    else
-                    {
-                        this->_rotate = 270;
-                    }
-                }
+                 }
             }
-    }
-    else
-    {
-        emit signalSearchNewWay(false);
-        return;
-    }
+            else
+            {
+                emit signalSearchNewWay(false);
+                return;
+            }
 
     activeKey.clear();
     switch (MODE_OF_ATACK) {
@@ -334,7 +358,7 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                     if (this->x() >= 250)
                     {
                         qsrand(QTime::currentTime().msec());
-                        xPlayer = rand() % 128 + 64;
+                        xPlayer = rand() % 128 + 64 ;
                         yPlayer = this->y();
                     }
                     else
@@ -467,7 +491,7 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                     else
                     {
                         qsrand(QTime::currentTime().msec());
-                        xPlayer = rand() % 440 + 380;
+                        xPlayer = rand() % 440 + 340;
                         yPlayer = this->y();
                     }
                     break;
@@ -477,6 +501,7 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
     }
     else
     {
+
         qsrand(QTime::currentTime().msec());
         xPlayer = rand() % 450 + 100;
         yPlayer = rand() % 450 + 100;
@@ -494,17 +519,7 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
         ++_yPlayer;
     }
 
-    changeRotate = true;
     emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
-}
-
-void TankBot::outMap(/*const int map[CNT_ROWS_MAP][CNT_COLS_MAP]*/) {
-    for (int i = 0; i < CNT_ROWS_MAP; ++i) {
-        for (int j = 0; j < CNT_COLS_MAP; ++j) {
-            qDebug() << map[i][j];
-        }
-        qDebug() << endl;
-    }
 }
 
 TankBot::~TankBot()

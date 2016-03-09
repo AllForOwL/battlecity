@@ -28,41 +28,39 @@ public:
     bool _deleteBase;
 
 private:
-    QTimer *timerMoveTank1;                 // Таймер для переміщення танку плеєра 1
-    QTimer *timerMoveTank2;                 // та плеєра 2
-    QTimer *timerRunBot;
-    QTimer *timerRunBot_2;
-    QTimer *timerRunBot_3;
-    QTimer *timerRunBot_4;
-    QTimer *timerMoveBot;
-    QTimer *timerMoveBot_2;
-    QTimer *timerMoveBot_3;
-    QTimer *timerMoveBot_4;
-    QTimer *timerMoveBots;
-    QTimer *timerAuditBots;
+    QTimer* timerMoveTank1;                 // Таймер для переміщення танку плеєра 1
+    QTimer* timerMoveTank2;                 // та плеєра 2
+    QTimer* timerRunBot;
+    QTimer* timerRunBot_2;
+    QTimer* timerRunBot_3;
+    QTimer* timerRunBot_4;
+    QTimer* timerMoveBot;
+    QTimer* timerMoveBot_2;
+    QTimer* timerMoveBot_3;
+    QTimer* timerMoveBot_4;
+    QTimer* timerMoveBots;
+    QTimer* timerAuditBots;
 
-    QTimer *timerForShowBonus;              // Таймер для відображення та знищення бонусів
-    QTimer *timerRemoveStar;
+    QTimer* timerForShowBonus;              // Таймер для відображення та знищення бонусів
+    QTimer* timerRemoveStar;
 
-    QTimer *timerForShowProtectionBase;
-    QTimer *timerRemoveProtectionBase;
+    QTimer* timerForShowProtectionBase;
+    QTimer* timerRemoveProtectionBase;
 
-    QTimer *timerForShowTimeBonus;
-    QTimer *timerForSearchTimerBonus;
-    QTimer *timerRemoveTimerBonus;
+    QTimer* timerForShowTimeBonus;
+    QTimer* timerForSearchTimerBonus;
+    QTimer* timerRemoveTimerBonus;
 
-    QTimer *timerForShowExplosionBonus;
-    QTimer *timerRemoveExplosionBonus;
+    QTimer* timerForShowExplosionBonus;
+    QTimer* timerRemoveExplosionBonus;
 
-    QTimer *timerChangeSpeedBots;
+    TankForPlayer* TankForPlay1;            // Танк первого и
+    TankForPlayer* TankForPlay2;            // в второго игрока
 
-    TankForPlayer *TankForPlay1;            // Танк первого и
-    TankForPlayer *TankForPlay2;            // в второго игрока
-
-    TankBot       *bot;
-    TankBot       *bot_2;
-    TankBot       *bot_3;
-    TankBot       *bot_4;
+    TankBot* bot;
+    TankBot* bot_2;
+    TankBot* bot_3;
+    TankBot* bot_4;
 
     QGraphicsTextItem* textGameOver;
 
@@ -107,7 +105,7 @@ signals:
     void signalTimeoutForFourBot  (int xPlayer, int yPlayer);
 
     void signalMoveOneBot   ();
-    void signalMoveTwoBot   ();
+    void signalMoveTwoBot   (int x, int y);
     void signalMoveThreeBot (int x, int y);
     void signalMoveFourBot  (int x, int y);
 
@@ -141,6 +139,8 @@ public slots:
     void slotRunThreeBot ();
     void slotRunFourBot  ();
 
+    void slotMoveOneBot();
+    void slotMoveTwoBot();
     void slotMoveThreeBot();
     void slotMoveFourBot();
 
@@ -149,9 +149,6 @@ public slots:
     void slotSetPosPlayerForSend();
     void slotMoveOpponent(int x, int y, int rotate, bool shot2);
     void slotShotTank(QString str);
-    void slotIncreaseSpeedBots();
-
-    void slotSendPosAfterCollision(int x, int y);
 };
 
 #endif // BATTLECITYMAP_H
