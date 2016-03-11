@@ -249,13 +249,10 @@ void Tank::slotMoveTank() {
             it->data(0)  == OBJ_NAME_BOT_1 ||
             it->data(0)  == OBJ_NAME_BOT_2 ||
             it->data(0)  == OBJ_NAME_BOT_3 ||
-            it->data(0)  == OBJ_NAME_BOT_4 &&
-            this->objectName() != OBJ_NAME_BOT_3 &&
-            this->objectName() != OBJ_NAME_BOT_4
+            it->data(0)  == OBJ_NAME_BOT_4
            )
         {
             this->moveBy(-np.x(), -np.y());
-            emit signalCollisionOneTwoBots();
             return;
         }
 
@@ -267,18 +264,7 @@ void Tank::slotMoveTank() {
 
           )
          {
-            if  (this->objectName() != OBJ_NAME_BOT_3 &&  this->objectName() != OBJ_NAME_BOT_4)
-            {
-                this->moveBy(-np.x(), -np.y());
-                emit signalCollisionOneTwoBots();
-                return;
-            }
-            else
-            {
-                this->moveBy(-np.x(), -np.y());
-                emit signalCollisionThreeFourBots();
-                return;
-            }
+            this->moveBy(-np.x(), -np.y());
          }
          else if (it->data(0)  == OBJ_NAME_RED_WALL)
          {

@@ -147,11 +147,6 @@ public slots:
     void slotSetPosPlayerForSend();
     void slotMoveOpponent(int x, int y, int rotate, bool shot2);
     void slotShotTank(QString str);
-
-    void slotCollisionOneBot();
-    void slotCollisionTwoBot();
-    void slotCollisionThreeBot();
-    void slotCollisionFourBot();
 };
 
 #endif // BATTLECITYMAP_H

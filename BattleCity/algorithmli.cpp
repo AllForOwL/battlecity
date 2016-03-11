@@ -5,7 +5,6 @@
 algorithmLI::algorithmLI()
 {
     p_ReadFromFile = new Parsing();
-    p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_map);   // Завантаження карти з файлу
 }
 
 bool algorithmLI::SearchWay(int x, int y, int end_x, int end_y)
@@ -167,9 +166,9 @@ bool algorithmLI::SearchWay(int x, int y, int end_x, int end_y)
     return false; // если пути не нашли
 }
 
-bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end, QString nameBot)
+bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end)
 {
-    _nameBot = nameBot;
+    p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_map);   // Завантаження карти з файлу
 
     int _i = 0;
     if (SearchWay(x_begin, y_begin, x_end, y_end))

@@ -102,9 +102,6 @@ signals:
     void signalGameOver2();
 
     void signalSearchNewWay(bool useRotate);
-
-    void signalCollisionOneTwoBots();
-    void signalCollisionThreeFourBots();
 };
 
 #endif // TANK_H

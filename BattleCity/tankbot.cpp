@@ -34,7 +34,7 @@ void TankBot::setModeOfAtack(TankBot::MODE_ATACK M_A)
 
 void TankBot::slotSearchPath(int x_begin, int y_begin, int x_end, int y_end)
 {
-    algorithmSearchWay->AuditSearchWay(x_begin, y_begin, x_end, y_end, this->objectName());
+    algorithmSearchWay->AuditSearchWay(x_begin, y_begin, x_end, y_end);
 
     if (
         (algorithmSearchWay->vectorFoundWay.size() == 0) ||
