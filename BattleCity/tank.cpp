@@ -253,6 +253,12 @@ void Tank::slotMoveTank() {
            )
         {
             this->moveBy(-np.x(), -np.y());
+
+            if (this->objectName() == OBJ_NAME_BOT_1 || this->objectName() == OBJ_NAME_BOT_2)
+              {
+                    emit signalSearchNewWay(false);
+              }
+
             return;
         }
 
@@ -265,6 +271,12 @@ void Tank::slotMoveTank() {
           )
          {
             this->moveBy(-np.x(), -np.y());
+
+            if (this->objectName() == OBJ_NAME_BOT_1 || this->objectName() == OBJ_NAME_BOT_2)
+              {
+                    emit signalSearchNewWay(false);
+              }
+            return;
          }
          else if (it->data(0)  == OBJ_NAME_RED_WALL)
          {

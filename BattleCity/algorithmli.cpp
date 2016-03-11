@@ -178,17 +178,17 @@ bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end)
         int index;
         point tempPoint;
 
-        rows = vectorPassableElement[vectorPassableElement.size()-1].x;
-        cols = vectorPassableElement[vectorPassableElement.size()-1].y;
-        index = vectorPassableElement[vectorPassableElement.size()-1].index;
+        rows = vectorFoundWay[0].x;
+        cols = vectorFoundWay[0].y;
+        index = vectorFoundWay[0].index;
 
-        while (index >= 9) // пока не достигли начала
+        while (index >= 10) // пока не достигли начала
         {
             --index;
 
-            if (n_map[rows+1][cols] == index)
+            if (n_map[rows-1][cols] == index)
             {
-                tempPoint.x = rows+1;
+                tempPoint.x = rows-1;
                 tempPoint.y = cols;
                 tempPoint.index = index;
                 vectorFoundWay.push_back(tempPoint);
@@ -200,17 +200,17 @@ bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end)
                 tempPoint.index = index;
                 vectorFoundWay.push_back(tempPoint);
             }
-            else if (n_map[rows-1][cols] == index)
-            {
-                tempPoint.x = rows-1;
-                tempPoint.y = cols;
-                tempPoint.index = index;
-                vectorFoundWay.push_back(tempPoint);
-            }
             else if (n_map[rows][cols+1] == index)
             {
                 tempPoint.x = rows;
                 tempPoint.y = cols+1;
+                tempPoint.index = index;
+                vectorFoundWay.push_back(tempPoint);
+            }
+            else if (n_map[rows+1][cols] == index)
+            {
+                tempPoint.x = rows+1;
+                tempPoint.y = cols;
                 tempPoint.index = index;
                 vectorFoundWay.push_back(tempPoint);
             }

@@ -334,11 +334,6 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     QObject::connect( bot_3       , SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
     QObject::connect( bot_4       , SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
 
-    QObject::connect(bot,   SIGNAL(signalCollisionOneTwoBots()),    this, SLOT( slotCollisionOneBot()));   // уничтожение базы
-    QObject::connect(bot_2, SIGNAL(signalCollisionOneTwoBots()),    this, SLOT( slotCollisionTwoBot()));   // уничтожение базы
-    QObject::connect(bot_3, SIGNAL(signalCollisionThreeFourBots()), this, SLOT( slotCollisionThreeBot()));   // уничтожение базы
-    QObject::connect(bot_4, SIGNAL(signalCollisionThreeFourBots()), this, SLOT( slotCollisionFourBot()));   // уничтожение базы
-
     QObject::connect( timerForSendPosPlayer , SIGNAL( timeout()), this, SLOT( slotSetPosPlayerForSend() ));
     delete p_ReadFromFile;
 }

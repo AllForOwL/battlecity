@@ -70,7 +70,7 @@ void TankBot::Atack(int xPlayer, int yPlayer)
     {
         if (indexWay == CNT_NOT_FOUND_WAY)
         {
-            indexWay = vectorFoundWay.size() - 2;           // получаем предпоследний елемент пути
+            indexWay = vectorFoundWay.size()-1;           // получаем предпоследний елемент пути
 
             x_end = vectorFoundWay[indexWay].y * SIZE_WALL; // получаем x и y предпоследнего
             y_end = vectorFoundWay[indexWay].x * SIZE_WALL; // елемента пути
@@ -216,7 +216,7 @@ void TankBot::Atack()
     {
         if (indexWay == CNT_NOT_FOUND_WAY)
         {
-            indexWay = vectorFoundWay.size() - 2;           // получаем предпоследний елемент пути
+            indexWay = vectorFoundWay.size()-1;           // получаем предпоследний елемент пути
 
             x_end = vectorFoundWay[indexWay].y * SIZE_WALL; // получаем x и y предпоследнего
             y_end = vectorFoundWay[indexWay].x * SIZE_WALL; // елемента пути
@@ -502,7 +502,7 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
 
         qsrand(QTime::currentTime().msec());
         xPlayer = rand() % 450 + 100;
-        yPlayer = rand() % 450 + 100;
+        yPlayer = rand() % 450 + 200;
     }
 
     _xPlayer = xPlayer;
