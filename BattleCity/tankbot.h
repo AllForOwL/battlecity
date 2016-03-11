@@ -30,7 +30,7 @@ public:
     void setMap(int map[CNT_ROWS_MAP][CNT_COLS_MAP]);
     ~TankBot();
 
-private:
+public:
     enum MODE_ATACK {FREE, KILL_PLAYER, KILL_FLAG};
     MODE_ATACK MODE_OF_ATACK;
     void setModeOfAtack(MODE_ATACK M_A);

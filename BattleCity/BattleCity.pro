@@ -38,7 +38,8 @@ HEADERS  += battlecityview.h \
     tankbot.h \
     algorithmli.h \
     udpclient.h \
-    mainmenu.h
+    mainmenu.h \
+    algorithmli.h
 
 RESOURCES += \
     tanks.qrc \

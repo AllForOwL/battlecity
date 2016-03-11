@@ -105,7 +105,7 @@ signals:
     void signalTimeoutForFourBot  (int xPlayer, int yPlayer);
 
     void signalMoveOneBot   ();
-    void signalMoveTwoBot   (int x, int y);
+    void signalMoveTwoBot   ();
     void signalMoveThreeBot (int x, int y);
     void signalMoveFourBot  (int x, int y);
 
@@ -139,8 +139,6 @@ public slots:
     void slotRunThreeBot ();
     void slotRunFourBot  ();
 
-    void slotMoveOneBot();
-    void slotMoveTwoBot();
     void slotMoveThreeBot();
     void slotMoveFourBot();
 
@@ -149,6 +147,11 @@ public slots:
     void slotSetPosPlayerForSend();
     void slotMoveOpponent(int x, int y, int rotate, bool shot2);
     void slotShotTank(QString str);
+
+    void slotCollisionOneBot();
+    void slotCollisionTwoBot();
+    void slotCollisionThreeBot();
+    void slotCollisionFourBot();
 };
 
 #endif // BATTLECITYMAP_H

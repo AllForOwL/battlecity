@@ -174,61 +174,50 @@ bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end,
     int _i = 0;
     if (SearchWay(x_begin, y_begin, x_end, y_end))
     {
-        if (_nameBot == OBJ_NAME_BOT_3 || _nameBot == OBJ_NAME_BOT_4)
+        int rows;
+        int cols;
+        int index;
+        point tempPoint;
+
+        rows = vectorPassableElement[vectorPassableElement.size()-1].x;
+        cols = vectorPassableElement[vectorPassableElement.size()-1].y;
+        index = vectorPassableElement[vectorPassableElement.size()-1].index;
+
+        while (index >= 9) // пока не достигли начала
         {
-            begin_x_Three_Four_Bot = x_begin;
-            begin_y_Three_Four_Bot = y_begin;
-            end_x_Three_Four_Bot = x_end;
-            end_y_Three_Four_Bot = y_end;
-        }
+            --index;
 
-        while (vectorFoundWay[_i].index >= 10) // пока не достигли начала
-        {
-            int tempStep;
-
-            tempStep = vectorFoundWay[_i].index;
-            --tempStep;
-
-            for (int i(vectorPassableElement.size()-1); i >= 0; i--)
-                {
-                    if (vectorPassableElement[i].index == tempStep)
-                    {
-                        if (_nameBot != OBJ_NAME_BOT_3 && _nameBot != OBJ_NAME_BOT_4)
-                        {
-                           if (
-                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x-1 ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y   )) ||
-                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x   ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y+1 )) ||
-                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x+1 ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y   )) ||
-                                (( vectorPassableElement[i].x == vectorFoundWay[_i].x   ) && ( vectorPassableElement[i].y == vectorFoundWay[_i].y-1 ))
-                               )
-                            {
-                                vectorFoundWay.push_back(vectorPassableElement[i]);
-                                break;
-                            }
-                        } else
-                            {
-                                if (
-                                    (( vectorPassableElement[i].x == vectorFoundWay[_i].x    &&  vectorPassableElement[i].y == vectorFoundWay[_i].y-1) && (vectorPassableElement[i].y >= begin_y_Three_Four_Bot && vectorPassableElement[i].y <= end_y_Three_Four_Bot)) ||
-                                    (( vectorPassableElement[i].x == vectorFoundWay[_i].x-1  &&  vectorPassableElement[i].y == vectorFoundWay[_i].y)   && (vectorPassableElement[i].x >= begin_x_Three_Four_Bot && vectorPassableElement[i].x <= end_x_Three_Four_Bot))
-                                   )
-                                {
-                                    vectorFoundWay.push_back(vectorPassableElement[i]);
-                                    break;
-                                }
-                            }
-                    }
-               }
-
-              ++_i;
-
-            if (vectorFoundWay.size() == _i)
+            if (n_map[rows+1][cols] == index)
             {
-                break;
+                tempPoint.x = rows+1;
+                tempPoint.y = cols;
+                tempPoint.index = index;
+                vectorFoundWay.push_back(tempPoint);
             }
-        }
-        for (int _i(vectorFoundWay.size()-1); _i >= 0; _i--)
-        {
-            n_map[vectorFoundWay[_i].x][vectorFoundWay[_i].y] = -1;
+            else if (n_map[rows][cols-1] == index)
+            {
+                tempPoint.x = rows;
+                tempPoint.y = cols-1;
+                tempPoint.index = index;
+                vectorFoundWay.push_back(tempPoint);
+            }
+            else if (n_map[rows-1][cols] == index)
+            {
+                tempPoint.x = rows-1;
+                tempPoint.y = cols;
+                tempPoint.index = index;
+                vectorFoundWay.push_back(tempPoint);
+            }
+            else if (n_map[rows][cols+1] == index)
+            {
+                tempPoint.x = rows;
+                tempPoint.y = cols+1;
+                tempPoint.index = index;
+                vectorFoundWay.push_back(tempPoint);
+            }
+
+            rows = tempPoint.x;
+            cols = tempPoint.y;
         }
     }
     else

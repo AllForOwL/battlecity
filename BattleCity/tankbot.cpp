@@ -55,14 +55,13 @@ void TankBot::slotSearchPath(int x_begin, int y_begin, int x_end, int y_end)
 }
 
 // поиск пути для игроков
-void TankBot::Atack(int xPlayer, int yPlayer) {
-
+void TankBot::Atack(int xPlayer, int yPlayer)
+{
    _xPlayer = xPlayer;
    _yPlayer = yPlayer;
 
     if (indexWay == 0) // если достигли финиша
     {
-        qDebug() << "finish";
         searchWay = false;
         indexWay = CNT_NOT_FOUND_WAY;
         _searchWayNow = false;
@@ -98,7 +97,6 @@ void TankBot::Atack(int xPlayer, int yPlayer) {
                     this->_rotate = 270; // едем влево
                 }
             }
-
         }
         else if (this->x() == x_end && this->y() == y_end) // когда текущие x і y ровны елементу пути
                 {

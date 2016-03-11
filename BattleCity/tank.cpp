@@ -255,6 +255,8 @@ void Tank::slotMoveTank() {
            )
         {
             this->moveBy(-np.x(), -np.y());
+            emit signalCollisionOneTwoBots();
+            return;
         }
 
         if (
@@ -262,9 +264,21 @@ void Tank::slotMoveTank() {
             it->data(0)  == OBJ_NAME_WHITE_WALL ||
             it->data(0)  == OBJ_NAME_PLAYER_1   ||
             it->data(0)  == OBJ_NAME_PLAYER_2
+
           )
-        {
-            this->moveBy(-np.x(), -np.y());
+         {
+            if  (this->objectName() != OBJ_NAME_BOT_3 &&  this->objectName() != OBJ_NAME_BOT_4)
+            {
+                this->moveBy(-np.x(), -np.y());
+                emit signalCollisionOneTwoBots();
+                return;
+            }
+            else
+            {
+                this->moveBy(-np.x(), -np.y());
+                emit signalCollisionThreeFourBots();
+                return;
+            }
          }
          else if (it->data(0)  == OBJ_NAME_RED_WALL)
          {
