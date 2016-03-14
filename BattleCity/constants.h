@@ -58,6 +58,7 @@ const int CNT_SECOND_STOP_ALL_BOT       = 40000;
 const int CNT_SECOND_EXPLOSION_ALL_BOTS = 60000;
 
 const int CNT_NOT_FOUND_WAY = 999;
+const int CNT_FOUND_WAY     = 1000;
 
 const int CNT_BEGIN_X_ONE_PLAYER = 150;
 const int CNT_BEGIN_Y_ONE_PLAYER = 475;

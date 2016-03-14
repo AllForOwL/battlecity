@@ -36,7 +36,6 @@ public:
 
     bool SearchWay(int x, int y, int end_x, int end_y); // находить кратчайшый путь
     bool AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end);
-    void setBadWay(int y, int x);
     bool PassableElement(int x, int y);
     bool PassableElementMoreThree(int i, int _i);
     bool PassableElementLessThree(int i, int _i);

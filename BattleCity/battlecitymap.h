@@ -38,8 +38,8 @@ private:
     QTimer* timerMoveBot_2;
     QTimer* timerMoveBot_3;
     QTimer* timerMoveBot_4;
-    QTimer* timerMoveBots;
     QTimer* timerAuditBots;
+    QTimer* timerMoveBots;
 
     QTimer* timerForShowBonus;              // Таймер для відображення та знищення бонусів
     QTimer* timerRemoveStar;

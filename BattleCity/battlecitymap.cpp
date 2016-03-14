@@ -66,7 +66,6 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     timerMoveBot_4  = new QTimer(this);
     timerMoveBots   = new QTimer(this);
 
-
     runOneBot   = false;
     runTwoBot   = false;
     runThreeBot = false;

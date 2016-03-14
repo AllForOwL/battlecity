@@ -15,7 +15,7 @@ TankBot::TankBot(const QList<QString> fileNames): Tank(fileNames)
 //    MODE_OF_ATACK = KILL_FLAG;
     setRotate(270);
     searchWay = false;
-    indexWay  = CNT_NOT_FOUND_WAY;
+    indexWay  = 0;
     addTank = false;
     changeRotate = false;
     numberDeaths = 0;
@@ -49,8 +49,7 @@ void TankBot::slotSearchPath(int x_begin, int y_begin, int x_end, int y_end)
         copy(algorithmSearchWay->vectorFoundWay.begin(), algorithmSearchWay->vectorFoundWay.end(),
         vectorFoundWay.begin()); // копирование пути в вектор этого класса с класса нахождения пути
 
-        searchWay = true; // состоялся поиск пути
-        indexWay = CNT_NOT_FOUND_WAY;
+        indexWay = CNT_FOUND_WAY;
     }
 }
 
@@ -62,13 +61,10 @@ void TankBot::Atack(int xPlayer, int yPlayer)
 
     if (indexWay == 0) // если достигли финиша
     {
-        searchWay = false;
-        indexWay = CNT_NOT_FOUND_WAY;
-        _searchWayNow = false;
+        emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
+        return;
     }
-    if (searchWay)                         // был найден путь
-    {
-        if (indexWay == CNT_NOT_FOUND_WAY)
+        if (indexWay == CNT_FOUND_WAY)
         {
             indexWay = vectorFoundWay.size()-1;           // получаем предпоследний елемент пути
 
@@ -155,21 +151,6 @@ void TankBot::Atack(int xPlayer, int yPlayer)
                         }
                     }
                  }
-            }
-        else
-        {
-            if (_xPlayer % 2 != 0)
-            {
-                ++_xPlayer;
-            }
-            if (_yPlayer % 2 != 0)
-            {
-                ++_yPlayer;
-            }
-
-            emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL); // поиск пути
-            return;
-        }
 
     activeKey.clear();
     switch (MODE_OF_ATACK) {
@@ -206,15 +187,11 @@ void TankBot::Atack()
 {
     if (indexWay == 0) // если достигли финиша
     {
-        qDebug() << "finish";
-        searchWay = false;
-        indexWay = CNT_NOT_FOUND_WAY;
-        _searchWayNow = false;
+        emit signalSearchNewWay(false);
+        return;
     }
 
-    if (searchWay)                         // был найден путь
-    {
-        if (indexWay == CNT_NOT_FOUND_WAY)
+        if (indexWay == CNT_FOUND_WAY)
         {
             indexWay = vectorFoundWay.size()-1;           // получаем предпоследний елемент пути
 
@@ -302,12 +279,6 @@ void TankBot::Atack()
                         }
                     }
                  }
-            }
-            else
-            {
-                emit signalSearchNewWay(false);
-                return;
-            }
 
     activeKey.clear();
     switch (MODE_OF_ATACK) {
@@ -507,15 +478,6 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
 
     _xPlayer = xPlayer;
     _yPlayer = yPlayer;
-
-    if (_xPlayer % 2 != 0)
-    {
-        ++_xPlayer;
-    }
-    if (_yPlayer % 2 != 0)
-    {
-        ++_yPlayer;
-    }
 
     emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
 }
