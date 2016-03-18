@@ -168,7 +168,7 @@ bool algorithmLI::SearchWay(int x, int y, int end_x, int end_y)
 
 bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end)
 {
-    p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_map);   // Завантаження карти з файлу
+    p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_map, true);   // Завантаження карти з файлу
 
     if (SearchWay(x_begin, y_begin, x_end, y_end))
     {
@@ -216,11 +216,11 @@ bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end)
 
             rows = tempPoint.x;
             cols = tempPoint.y;
-
         }
     }
     else
     {
+        vectorFoundWay.clear();
         qDebug() << "Path not found(((";
     }
 }

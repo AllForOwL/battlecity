@@ -10,7 +10,7 @@ class Parsing
 public:
     Parsing();
 
-    bool ParsTextFile(const QString &nameFile, int n_Map[CNT_ROWS_MAP][CNT_COLS_MAP]);
+    bool ParsTextFile(const QString &nameFile, int n_Map[CNT_ROWS_MAP][CNT_COLS_MAP], bool searchGoodWay);
 };
 
 #endif // PARSING_H

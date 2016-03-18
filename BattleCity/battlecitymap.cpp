@@ -24,7 +24,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     _deleteBase = false;
 
     p_ReadFromFile = new Parsing();
-    p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_Map);   // Завантаження карти з файлу
+    p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_Map, false);   // Завантаження карти з файлу
 
     QList<QString> fileNames;                                   // Фрейми для анімації танка
 
@@ -260,7 +260,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     bot_3->addTank = false;
     bot_3->setData(0, OBJ_NAME_BOT_3);
     bot_3->setObjectName(OBJ_NAME_BOT_3);
-    bot_3->setPos(-32, 0);
+    bot_3->setPos(-64, 0);
     bot_3->setZValue(0.5);
     this->addItem(bot_3);
 
@@ -427,7 +427,6 @@ void BattleCityMap::slotMoveOpponent(int x, int y, int rotate, bool shot2)
     if (shot2)
     {
         emit TankForPlay2->signalShot(TankForPlay2->objectName());
-        qDebug() << "tank2 shot";
     }
 }
 
@@ -475,12 +474,12 @@ void BattleCityMap::slotRunFourBot()
 
 void BattleCityMap::slotMoveThreeBot()
 {
-    emit signalMoveThreeBot(TankForPlay1->x(), TankForPlay1->y());
+    emit signalMoveThreeBot(250, 510);
 }
 
 void BattleCityMap::slotMoveFourBot()
 {
-    emit signalMoveFourBot(TankForPlay1->x(), TankForPlay1->y());
+    emit signalMoveFourBot(250, 510);
 }
 
 void BattleCityMap::slotGameOver()

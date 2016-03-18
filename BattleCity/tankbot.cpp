@@ -11,8 +11,6 @@ using namespace std;
 
 TankBot::TankBot(const QList<QString> fileNames): Tank(fileNames)
 {
-    MODE_OF_ATACK = FREE;
-//    MODE_OF_ATACK = KILL_FLAG;
     setRotate(270);
     searchWay = false;
     indexWay  = 0;
@@ -27,19 +25,11 @@ TankBot::TankBot(const QList<QString> fileNames): Tank(fileNames)
     QObject::connect(this, SIGNAL (signalSearchNewWay(bool)),            this, SLOT (slotSearchNewWayAfterCollision(bool)));
 }
 
-void TankBot::setModeOfAtack(TankBot::MODE_ATACK M_A)
+void TankBot::slotSearchPath(int temp_x_begin, int temp_y_begin, int temp_x_end, int temp_y_end)
 {
-    MODE_OF_ATACK = M_A;
-}
+    algorithmSearchWay->AuditSearchWay(temp_x_begin, temp_y_begin, temp_x_end, temp_y_end);
 
-void TankBot::slotSearchPath(int x_begin, int y_begin, int x_end, int y_end)
-{
-    algorithmSearchWay->AuditSearchWay(x_begin, y_begin, x_end, y_end);
-
-    if (
-        (algorithmSearchWay->vectorFoundWay.size() == 0) ||
-        (algorithmSearchWay->vectorFoundWay.size() == 1)
-       )
+    if  (algorithmSearchWay->vectorFoundWay.size() == 0)
     {
         return;
     }
@@ -49,21 +39,23 @@ void TankBot::slotSearchPath(int x_begin, int y_begin, int x_end, int y_end)
         copy(algorithmSearchWay->vectorFoundWay.begin(), algorithmSearchWay->vectorFoundWay.end(),
         vectorFoundWay.begin()); // копирование пути в вектор этого класса с класса нахождения пути
 
-        indexWay = CNT_FOUND_WAY;
+         indexWay = CNT_FOUND_WAY;
     }
 }
 
 // поиск пути для игроков
 void TankBot::Atack(int xPlayer, int yPlayer)
 {
-   _xPlayer = xPlayer;
-   _yPlayer = yPlayer;
-
-    if (indexWay == 0) // если достигли финиша
+    if (this->objectName() == "")
     {
-        emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
         return;
     }
+
+   if (indexWay == 0) // если достигли финиша
+   {
+       emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, yPlayer/SIZE_WALL, xPlayer/SIZE_WALL);
+       return;
+   }
         if (indexWay == CNT_FOUND_WAY)
         {
             indexWay = vectorFoundWay.size()-1;           // получаем предпоследний елемент пути
@@ -153,31 +145,22 @@ void TankBot::Atack(int xPlayer, int yPlayer)
                  }
 
     activeKey.clear();
-    switch (MODE_OF_ATACK) {
-        case FREE: {
-            switch (this->_rotate) {
-            case 0:
-                    activeKey.push_back(Qt::Key_Up);
-                break;
-            case 90:
-                    activeKey.push_back(Qt::Key_Right);
-                break;
-            case 180:
-                    activeKey.push_back(Qt::Key_Down);
-                break;
-            case 270:
-                    activeKey.push_back(Qt::Key_Left);
-                break;
-        }
+    switch (this->_rotate)
+    {
+    case 0:
+            activeKey.push_back(Qt::Key_Up);
         break;
-        }
-        case KILL_PLAYER: {
-            break;
-        }
-        case KILL_FLAG: {
-            break;
-        }
+    case 90:
+            activeKey.push_back(Qt::Key_Right);
+        break;
+    case 180:
+            activeKey.push_back(Qt::Key_Down);
+        break;
+    case 270:
+            activeKey.push_back(Qt::Key_Left);
+        break;
     }
+
       emit slotMoveTank();
       emit slotTankShot(this->objectName());
 }
@@ -281,31 +264,23 @@ void TankBot::Atack()
                  }
 
     activeKey.clear();
-    switch (MODE_OF_ATACK) {
-    case FREE: {
-        switch (this->_rotate) {
-        case 0:
-            activeKey.push_back(Qt::Key_Up);
-            break;
-        case 90:
-            activeKey.push_back(Qt::Key_Right);
-            break;
-        case 180:
-            activeKey.push_back(Qt::Key_Down);
-            break;
-        case 270:
-            activeKey.push_back(Qt::Key_Left);
-            break;
-        }
+    switch (this->_rotate)
+    {
+    case 0:
+        activeKey.push_back(Qt::Key_Up);
+        break;
+    case 90:
+        activeKey.push_back(Qt::Key_Right);
+        break;
+    case 180:
+        activeKey.push_back(Qt::Key_Down);
+        break;
+    case 270:
+        activeKey.push_back(Qt::Key_Left);
         break;
     }
-    case KILL_PLAYER: {
-        break;
-    }
-    case KILL_FLAG: {
-        break;
-    }
-    }
+
+
 
     emit slotMoveTank();
     emit slotTankShot(this->objectName());
@@ -472,14 +447,11 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
     {
 
         qsrand(QTime::currentTime().msec());
-        xPlayer = rand() % 450 + 100;
-        yPlayer = rand() % 450 + 200;
+        xPlayer = rand() % 400 + 100;
+        yPlayer = rand() % 400 + 200;
     }
 
-    _xPlayer = xPlayer;
-    _yPlayer = yPlayer;
-
-    emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, _yPlayer/SIZE_WALL, _xPlayer/SIZE_WALL);
+    emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL,  yPlayer/SIZE_WALL, xPlayer/SIZE_WALL);
 }
 
 TankBot::~TankBot()

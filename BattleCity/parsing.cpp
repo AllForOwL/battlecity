@@ -6,7 +6,7 @@
 
 Parsing::Parsing() {}
 
-bool Parsing::ParsTextFile(const QString &nameFile, int n_Map[CNT_ROWS_MAP][CNT_COLS_MAP])
+bool Parsing::ParsTextFile(const QString &nameFile, int n_Map[CNT_ROWS_MAP][CNT_COLS_MAP], bool searchGoodWay)
 {
     QFile   n_FileForRead(nameFile);
     if (!n_FileForRead.exists()) {
@@ -25,8 +25,20 @@ bool Parsing::ParsTextFile(const QString &nameFile, int n_Map[CNT_ROWS_MAP][CNT_
 
     QTextStream  n_StreamReadFile(&n_FileForRead);
 
+    int audit_j;
+
     while (!n_StreamReadFile.atEnd()) {
         n_StreamReadFile >> n_Map[i][j];
+
+        if (searchGoodWay && audit_j > 2)
+        {--audit_j;
+            if ( n_Map[i][j] == OBJ_TYPE_WHITE_WALL || n_Map[i][j] == OBJ_TYPE_WATER &&
+                 n_Map[i][audit_j] != OBJ_TYPE_WHITE_WALL && OBJ_TYPE_WATER
+               )
+            {
+                n_Map[i][audit_j] = OBJ_TYPE_WHITE_WALL;
+            }
+        }
 
         if ((i == (tempRows) && (j == (tempCols)))) {
             break;
@@ -38,6 +50,8 @@ bool Parsing::ParsTextFile(const QString &nameFile, int n_Map[CNT_ROWS_MAP][CNT_
         else {
             ++j;
         }
+
+        audit_j = j;
     }
 
     n_FileForRead.flush();
