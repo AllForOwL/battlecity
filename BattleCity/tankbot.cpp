@@ -39,18 +39,13 @@ void TankBot::slotSearchPath(int temp_x_begin, int temp_y_begin, int temp_x_end,
         copy(algorithmSearchWay->vectorFoundWay.begin(), algorithmSearchWay->vectorFoundWay.end(),
         vectorFoundWay.begin()); // копирование пути в вектор этого класса с класса нахождения пути
 
-         indexWay = CNT_FOUND_WAY;
+           indexWay = CNT_FOUND_WAY;
     }
 }
 
 // поиск пути для игроков
 void TankBot::Atack(int xPlayer, int yPlayer)
 {
-    if (this->objectName() == "")
-    {
-        return;
-    }
-
    if (indexWay == 0) // если достигли финиша
    {
        emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL, yPlayer/SIZE_WALL, xPlayer/SIZE_WALL);

@@ -474,7 +474,7 @@ void BattleCityMap::slotRunFourBot()
 
 void BattleCityMap::slotMoveThreeBot()
 {
-    emit signalMoveThreeBot(250, 510);
+    emit signalMoveThreeBot(CNT_BASE_X, CNT_BASE_Y);
 }
 
 void BattleCityMap::slotMoveFourBot()
@@ -731,6 +731,7 @@ void BattleCityMap::slotAddBot_2()
 void BattleCityMap::slotAddBot_3()
 {
     ++bot_3->numberDeaths;
+    bot_3->indexWay = 0;
 
     QList <QGraphicsItem *> listItems;
     int _x = 0;
@@ -751,7 +752,6 @@ void BattleCityMap::slotAddBot_3()
         {
             _x = 0;
         }
-        qDebug() << "bot_3";
     } while(listItems.size() != 0);
 
     _x -= 32;
@@ -765,6 +765,7 @@ void BattleCityMap::slotAddBot_3()
 void BattleCityMap::slotAddBot_4()
 {
     ++bot_4->numberDeaths;
+    bot_4->indexWay = 0;
 
     QList <QGraphicsItem *> listItems;
     int _x = 0;
@@ -785,8 +786,6 @@ void BattleCityMap::slotAddBot_4()
         {
             _x = 0;
         }
-
-        qDebug() << "bot_2";
     } while(listItems.size() != 0);
 
     _x += 32;
