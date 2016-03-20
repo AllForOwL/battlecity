@@ -177,13 +177,31 @@ bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end)
         int index;
         point tempPoint;
 
+        int tempCols_, tempCols__;
+
         rows = vectorFoundWay[0].x;
         cols = vectorFoundWay[0].y;
         index = vectorFoundWay[0].index;
 
-        while (index >= 10) // пока не достигли начала
+        while (index > 10) // пока не достигли начала
         {
             --index;
+
+            if (y_begin > y_end)
+            {
+                tempCols_  = cols + 1;
+                tempCols__ = cols - 1;
+            }
+            else
+            {
+                tempCols_  = cols - 1;
+                tempCols__ = cols + 1;
+            }
+
+            if (rows < 0 || cols < 0)
+            {
+                return false;
+            }
 
             if (n_map[rows-1][cols] == index)
             {
@@ -192,17 +210,17 @@ bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end)
                 tempPoint.index = index;
                 vectorFoundWay.push_back(tempPoint);
             }
-            else if (n_map[rows][cols-1] == index)
+            else if (n_map[rows][tempCols_] == index)
             {
                 tempPoint.x = rows;
-                tempPoint.y = cols-1;
+                tempPoint.y = tempCols_;
                 tempPoint.index = index;
                 vectorFoundWay.push_back(tempPoint);
             }
-            else if (n_map[rows][cols+1] == index)
+            else if (n_map[rows][tempCols__] == index)
             {
                 tempPoint.x = rows;
-                tempPoint.y = cols+1;
+                tempPoint.y = tempCols__;
                 tempPoint.index = index;
                 vectorFoundWay.push_back(tempPoint);
             }
@@ -221,6 +239,5 @@ bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end)
     else
     {
         vectorFoundWay.clear();
-        qDebug() << "Path not found(((";
     }
 }

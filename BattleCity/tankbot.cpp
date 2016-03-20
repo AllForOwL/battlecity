@@ -27,6 +27,7 @@ TankBot::TankBot(const QList<QString> fileNames): Tank(fileNames)
 
 void TankBot::slotSearchPath(int temp_x_begin, int temp_y_begin, int temp_x_end, int temp_y_end)
 {
+
     algorithmSearchWay->AuditSearchWay(temp_x_begin, temp_y_begin, temp_x_end, temp_y_end);
 
     if  (algorithmSearchWay->vectorFoundWay.size() == 0)

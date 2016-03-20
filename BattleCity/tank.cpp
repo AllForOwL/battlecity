@@ -301,7 +301,6 @@ void Tank::slotMoveTank() {
             emit signalExplosionAllBots();
         }
     }
-
     scene()->update();
 }
 
