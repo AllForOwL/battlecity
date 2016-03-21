@@ -97,6 +97,7 @@ const int CNT_TIMER_FOR_SEND_POS_PLAYER = 10;
 const int CNT_PORT_FOR_CONNECT = 2424;
 
 const int CNT_SEARCH_NEW_WAY = 10;
+const int CNT_END_WAY = 0;
 
 #endif // CONSTANTS
 

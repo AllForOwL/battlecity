@@ -477,7 +477,7 @@ void BattleCityMap::slotMoveThreeBot()
 
 void BattleCityMap::slotMoveFourBot()
 {
-    emit signalMoveFourBot(250, 510);
+    emit signalMoveFourBot(CNT_BASE_X, CNT_BASE_Y);
 }
 
 void BattleCityMap::slotGameOver()
@@ -700,7 +700,7 @@ void BattleCityMap::slotAddBot_2()
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
-    myRect.setWidth(128);
+    myRect.setWidth(64);
     myRect.setHeight(30);
 
     do
@@ -708,7 +708,7 @@ void BattleCityMap::slotAddBot_2()
         listItems.clear();
         myRect.setX(_x);
         _x += 32;
-        listItems = this->items(myRect, Qt::IntersectsItemShape, Qt::AscendingOrder);
+        listItems = this->items(myRect, Qt::IntersectsItemBoundingRect);
 
         if (_x > 500)
         {
@@ -731,29 +731,31 @@ void BattleCityMap::slotAddBot_3()
     ++bot_3->numberDeaths;
     bot_3->indexWay = 0;
 
+    qsrand(QTime::currentTime().msec());
+
     QList <QGraphicsItem *> listItems;
     int _x = rand () % 400 + 200;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
-    myRect.setWidth(128);
+    myRect.setWidth(64);
     myRect.setHeight(30);
 
-//    do
-//    {
-//        listItems.clear();
-//        myRect.setX(_x);
-//        _x -= 32;
-//        listItems = this->items(myRect, Qt::IntersectsItemShape, Qt::AscendingOrder);
+    do
+    {
+        listItems.clear();
+        myRect.setX(_x);
+        _x -= 32;
+        listItems = this->items(myRect, Qt::IntersectsItemBoundingRect);
 
-//        if (_x < 0)
-//        {
-//            _x = rand () % 400 + 200;
-//        }
-//    } while(listItems.size() != 0);
+        if (_x < 0)
+        {
+            _x = rand () % 400 + 200;
+        }
+    } while(listItems.size() != 0);
 
     _x += 32;
-    bot_3->setPos(CNT_BEGIN_X_FOUR_BOT, 0);
+    bot_3->setPos(_x, 0);
     bot_3->setData(0, OBJ_NAME_BOT_3);
     bot_3->setObjectName(OBJ_NAME_BOT_3);
     bot_3->setZValue(0.5);
@@ -765,6 +767,8 @@ void BattleCityMap::slotAddBot_4()
     ++bot_4->numberDeaths;
     bot_4->indexWay = 0;
 
+    qsrand(QTime::currentTime().msec());
+
     QList <QGraphicsItem *> listItems;
     int _x = rand () % 150 + 15;
     QRectF myRect;
@@ -773,21 +777,21 @@ void BattleCityMap::slotAddBot_4()
     myRect.setWidth(64);
     myRect.setHeight(30);
 
-//    do
-//    {
-//        listItems.clear();
-//        myRect.setX(_x);
-//        _x += 32;
-//        listItems = this->items(myRect, Qt::IntersectsItemShape, Qt::AscendingOrder);
+    do
+    {
+        listItems.clear();
+        myRect.setX(_x);
+        _x += 32;
+        listItems = this->items(myRect, Qt::IntersectsItemBoundingRect);
 
-//        if (_x > 500)
-//        {
-//            _x = rand () % 150 + 15;
-//        }
-//    } while(listItems.size() != 0);
+        if (_x > 500)
+        {
+            _x = rand () % 150 + 15;
+        }
+    } while(listItems.size() != 0);
 
     _x -= 32;
-    bot_4->setPos(CNT_BEGIN_X_FOUR_BOT, 0);
+    bot_4->setPos(_x, 0);
     bot_4->setData(0, OBJ_NAME_BOT_4);
     bot_4->setObjectName(OBJ_NAME_BOT_4);
     bot_4->setZValue(0.5);
@@ -803,7 +807,7 @@ void BattleCityMap::slotAddBot_1()
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
-    myRect.setWidth(128);
+    myRect.setWidth(64);
     myRect.setHeight(30);
 
     do
@@ -811,7 +815,7 @@ void BattleCityMap::slotAddBot_1()
         listItems.clear();
         myRect.setX(_x);
         _x += 32;
-        listItems = this->items(myRect, Qt::IntersectsItemShape, Qt::AscendingOrder);
+        listItems = this->items(myRect, Qt::IntersectsItemBoundingRect);
 
         if (_x > 500)
         {

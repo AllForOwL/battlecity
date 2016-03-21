@@ -163,10 +163,18 @@ void TankBot::Atack(int xPlayer, int yPlayer)
 // поиск пути для ботов
 void TankBot::Atack()
 {
-    if (indexWay == 0 || countStep == CNT_SEARCH_NEW_WAY) // если достигли финиша
+    if (countStep == CNT_SEARCH_NEW_WAY)
     {
         countStep = 0;
         emit signalSearchNewWay(true);
+
+        return;
+    }
+    else if (indexWay == CNT_END_WAY) // если достигли финиша
+    {
+        countStep = 0;
+        emit signalSearchNewWay(false);
+
         return;
     }
 
@@ -286,6 +294,8 @@ void TankBot::Atack()
 
 void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
 {
+    qsrand(QTime::currentTime().msec());
+
     int xPlayer = 0;
     int yPlayer = 0;
 
@@ -299,13 +309,11 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                 {qDebug() << "0";
                     if (this->x() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
-                        xPlayer = rand() % 128 + 64 ;
+                        xPlayer = rand() % 480 + 64 ;
                         yPlayer = this->y();
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = rand() % 440 + 380;
                         yPlayer = this->y();
                     }
@@ -315,15 +323,13 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                 {qDebug() << "90";
                     if (this->y() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
-                        yPlayer = rand() % 128 + 64;
+                        yPlayer = rand() % 280 + 128;
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
-                        yPlayer = rand() % 440 + 380;
+                        yPlayer = rand() % 480 + 200;
                     }
                     break;
                 }
@@ -331,14 +337,12 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                 {qDebug() << "180";
                     if (this->x() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = rand() % 128 + 64;
                         yPlayer = this->y();
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
-                        xPlayer = rand() % 440 + 380;
+                        xPlayer = rand() % 480 + 380;
                         yPlayer = this->y();
                     }
                     break;
@@ -347,23 +351,14 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                 {qDebug() << "270";
                     if (this->y() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
-                        yPlayer = rand() % 128 + 64;
+                        yPlayer = rand() % 280 + 128;
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
-                        yPlayer = rand() % 440 + 380;
+                        yPlayer = rand() % 480 + 250;
                     }
-                    break;
-                }
-                default:
-                {
-                    qsrand(QTime::currentTime().msec());
-                    xPlayer = rand() % 450 + 100;
-                    yPlayer = rand() % 450 + 100;
                     break;
                 }
             }
@@ -376,15 +371,13 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                 {qDebug() << "90";
                     if (this->y() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
-                        yPlayer = rand() % 128 + 64;
+                        yPlayer = rand() % 280 + 128;
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
-                        yPlayer = rand() % 440 + 380;
+                        yPlayer = rand() % 480 + 380;
                     }
                     break;
                 }
@@ -392,13 +385,11 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                     {qDebug() << "0";
                         if (this->x() >= 250)
                         {
-                            qsrand(QTime::currentTime().msec());
                             xPlayer = rand() % 128 + 64;
                             yPlayer = this->y();
                         }
                         else
                         {
-                            qsrand(QTime::currentTime().msec());
                             xPlayer = rand() % 440 + 380;
                             yPlayer = this->y();
                         }
@@ -410,15 +401,13 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                     {qDebug() << "270";
                         if (this->y() >= 250)
                         {
-                            qsrand(QTime::currentTime().msec());
                             xPlayer = this->x();
-                            yPlayer = rand() % 128 + 64;
+                            yPlayer = rand() % 280 + 128;
                         }
                         else
                         {
-                            qsrand(QTime::currentTime().msec());
                             xPlayer = this->x();
-                            yPlayer = rand() % 440 + 380;
+                            yPlayer = rand() % 480 + 350;
                         }
                         break;
                     }
@@ -426,14 +415,12 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                 {qDebug() << "180";
                     if (this->x() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = rand() % 128 + 64;
                         yPlayer = this->y();
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
-                        xPlayer = rand() % 440 + 340;
+                        xPlayer = rand() % 480 + 340;
                         yPlayer = this->y();
                     }
                     break;
@@ -443,10 +430,8 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
     }
     else
     {
-
-        qsrand(QTime::currentTime().msec());
-        xPlayer = rand() % 400 + 100;
-        yPlayer = rand() % 400 + 200;
+        xPlayer = rand() % 480 + 100;
+        yPlayer = rand() % 480 + 200;
     }
 
     emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL,  yPlayer/SIZE_WALL, xPlayer/SIZE_WALL);
