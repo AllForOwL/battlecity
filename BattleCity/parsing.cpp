@@ -25,18 +25,27 @@ bool Parsing::ParsTextFile(const QString &nameFile, int n_Map[CNT_ROWS_MAP][CNT_
 
     QTextStream  n_StreamReadFile(&n_FileForRead);
 
-    int audit_j;
+    int audit_rows_dec = 0;
+    int audit_rows_inc = 0;
 
     while (!n_StreamReadFile.atEnd()) {
         n_StreamReadFile >> n_Map[i][j];
 
-        if (searchGoodWay && audit_j > 2)
-        {--audit_j;
+        if (searchGoodWay && audit_rows_dec > 2)
+        {
+            --audit_rows_dec;
+            ++audit_rows_inc;
             if ( n_Map[i][j] == OBJ_TYPE_WHITE_WALL || n_Map[i][j] == OBJ_TYPE_WATER &&
-                 n_Map[i][audit_j] != OBJ_TYPE_WHITE_WALL && OBJ_TYPE_WATER
+                 n_Map[i][audit_rows_dec] != OBJ_TYPE_WHITE_WALL && OBJ_TYPE_WATER
                )
             {
-                n_Map[i][audit_j] = OBJ_TYPE_WHITE_WALL;
+                n_Map[i][audit_rows_dec] = OBJ_TYPE_WHITE_WALL;
+            }
+            else if ( n_Map[i][j] == OBJ_TYPE_WHITE_WALL || n_Map[i][j] == OBJ_TYPE_WATER &&
+                      n_Map[i][audit_rows_inc] != OBJ_TYPE_WHITE_WALL && OBJ_TYPE_WATER
+                    )
+            {
+                n_Map[i][audit_rows_inc] = OBJ_TYPE_WHITE_WALL;
             }
         }
 
@@ -51,7 +60,8 @@ bool Parsing::ParsTextFile(const QString &nameFile, int n_Map[CNT_ROWS_MAP][CNT_
             ++j;
         }
 
-        audit_j = j;
+        audit_rows_dec = j;
+        audit_rows_inc = j;
     }
 
     n_FileForRead.flush();

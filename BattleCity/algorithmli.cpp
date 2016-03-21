@@ -179,8 +179,8 @@ bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end)
 
         int tempCols_, tempCols__;
 
-        rows = vectorFoundWay[0].x;
-        cols = vectorFoundWay[0].y;
+        rows  = vectorFoundWay[0].x;
+        cols  = vectorFoundWay[0].y;
         index = vectorFoundWay[0].index;
 
         while (index > 10) // пока не достигли начала
@@ -235,9 +235,13 @@ bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end)
             rows = tempPoint.x;
             cols = tempPoint.y;
         }
+
+        return true;
     }
     else
     {
         vectorFoundWay.clear();
+
+        return false;
     }
 }

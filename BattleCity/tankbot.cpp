@@ -19,6 +19,7 @@ TankBot::TankBot(const QList<QString> fileNames): Tank(fileNames)
     numberDeaths = 0;
     _previousPoint.x = 0;
     _previousPoint.y = 0;
+    countStep = 0;
     algorithmSearchWay = new algorithmLI;
 
     QObject::connect(this, SIGNAL (signalOneSearchWay(int,int,int,int)), this, SLOT (slotSearchPath(int,int,int,int)));
@@ -28,9 +29,7 @@ TankBot::TankBot(const QList<QString> fileNames): Tank(fileNames)
 void TankBot::slotSearchPath(int temp_x_begin, int temp_y_begin, int temp_x_end, int temp_y_end)
 {
 
-    algorithmSearchWay->AuditSearchWay(temp_x_begin, temp_y_begin, temp_x_end, temp_y_end);
-
-    if  (algorithmSearchWay->vectorFoundWay.size() == 0)
+    if  (!algorithmSearchWay->AuditSearchWay(temp_x_begin, temp_y_begin, temp_x_end, temp_y_end))
     {
         return;
     }
@@ -40,7 +39,7 @@ void TankBot::slotSearchPath(int temp_x_begin, int temp_y_begin, int temp_x_end,
         copy(algorithmSearchWay->vectorFoundWay.begin(), algorithmSearchWay->vectorFoundWay.end(),
         vectorFoundWay.begin()); // копирование пути в вектор этого класса с класса нахождения пути
 
-           indexWay = CNT_FOUND_WAY;
+        indexWay = CNT_FOUND_WAY;
     }
 }
 
@@ -164,11 +163,14 @@ void TankBot::Atack(int xPlayer, int yPlayer)
 // поиск пути для ботов
 void TankBot::Atack()
 {
-    if (indexWay == 0) // если достигли финиша
+    if (indexWay == 0 || countStep == CNT_SEARCH_NEW_WAY) // если достигли финиша
     {
-        emit signalSearchNewWay(false);
+        countStep = 0;
+        signalSearchNewWay(true);
+
         return;
     }
+        ++countStep;
 
         if (indexWay == CNT_FOUND_WAY)
         {
@@ -287,6 +289,8 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
     int xPlayer = 0;
     int yPlayer = 0;
 
+    qsrand(QTime::currentTime().msec());
+
     if (useRotate)
     {
         if (this->y() <= 250)
@@ -294,64 +298,56 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
             switch (this->_rotate)
             {
                 case 0:
-                {qDebug() << "0";
+                {
                     if (this->x() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = rand() % 128 + 64 ;
                         yPlayer = this->y();
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = rand() % 440 + 380;
                         yPlayer = this->y();
                     }
                     break;
                 }
                 case 90:
-                {qDebug() << "90";
+                {
                     if (this->y() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
                         yPlayer = rand() % 128 + 64;
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
                         yPlayer = rand() % 440 + 380;
                     }
                     break;
                 }
                 case 180:
-                {qDebug() << "180";
+                {
                     if (this->x() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = rand() % 128 + 64;
                         yPlayer = this->y();
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = rand() % 440 + 380;
                         yPlayer = this->y();
                     }
                     break;
                 }
                 case 270:
-                {qDebug() << "270";
+                {
                     if (this->y() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
                         yPlayer = rand() % 128 + 64;
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
                         yPlayer = rand() % 440 + 380;
                     }
@@ -359,7 +355,6 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                 }
                 default:
                 {
-                    qsrand(QTime::currentTime().msec());
                     xPlayer = rand() % 450 + 100;
                     yPlayer = rand() % 450 + 100;
                     break;
@@ -371,32 +366,28 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
             switch (this->_rotate)
             {
                 case 0:
-                {qDebug() << "90";
+                {
                     if (this->y() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
                         yPlayer = rand() % 128 + 64;
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = this->x();
                         yPlayer = rand() % 440 + 380;
                     }
                     break;
                 }
                     case 90:
-                    {qDebug() << "0";
+                    {
                         if (this->x() >= 250)
                         {
-                            qsrand(QTime::currentTime().msec());
                             xPlayer = rand() % 128 + 64;
                             yPlayer = this->y();
                         }
                         else
                         {
-                            qsrand(QTime::currentTime().msec());
                             xPlayer = rand() % 440 + 380;
                             yPlayer = this->y();
                         }
@@ -405,32 +396,28 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
 
 
                     case 180:
-                    {qDebug() << "270";
+                    {
                         if (this->y() >= 250)
                         {
-                            qsrand(QTime::currentTime().msec());
                             xPlayer = this->x();
                             yPlayer = rand() % 128 + 64;
                         }
                         else
                         {
-                            qsrand(QTime::currentTime().msec());
                             xPlayer = this->x();
                             yPlayer = rand() % 440 + 380;
                         }
                         break;
                     }
                 case 270:
-                {qDebug() << "180";
+                {
                     if (this->x() >= 250)
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = rand() % 128 + 64;
                         yPlayer = this->y();
                     }
                     else
                     {
-                        qsrand(QTime::currentTime().msec());
                         xPlayer = rand() % 440 + 340;
                         yPlayer = this->y();
                     }
@@ -441,8 +428,6 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
     }
     else
     {
-
-        qsrand(QTime::currentTime().msec());
         xPlayer = rand() % 400 + 100;
         yPlayer = rand() % 400 + 200;
     }

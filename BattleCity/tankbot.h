@@ -51,6 +51,7 @@ public:
     point _previousPoint;
 
     bool changeRotate;
+    int  countStep;
 
 public:
     int x_end;
