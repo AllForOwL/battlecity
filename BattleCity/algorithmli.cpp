@@ -198,7 +198,7 @@ bool algorithmLI::AuditSearchWay(int x_begin, int y_begin, int x_end, int y_end)
                 tempCols__ = cols + 1;
             }
 
-            if (rows < 0 || cols < 0)
+            if (rows < 0 || cols < 0 || rows > 32 || cols > 32)
             {
                 return false;
             }

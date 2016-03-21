@@ -163,7 +163,7 @@ void TankBot::Atack(int xPlayer, int yPlayer)
 // поиск пути для ботов
 void TankBot::Atack()
 {
-    if (countStep == CNT_SEARCH_NEW_WAY)
+    if (countStep >= CNT_SEARCH_NEW_WAY)
     {
         countStep = 0;
         emit signalSearchNewWay(true);
@@ -324,12 +324,12 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                     if (this->y() >= 250)
                     {
                         xPlayer = this->x();
-                        yPlayer = rand() % 280 + 128;
+                        yPlayer = rand() % 480 + 220;
                     }
                     else
                     {
                         xPlayer = this->x();
-                        yPlayer = rand() % 480 + 200;
+                        yPlayer = rand() % 480 + 220;
                     }
                     break;
                 }
@@ -352,12 +352,12 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                     if (this->y() >= 250)
                     {
                         xPlayer = this->x();
-                        yPlayer = rand() % 280 + 128;
+                        yPlayer = rand() % 480 + 220;
                     }
                     else
                     {
                         xPlayer = this->x();
-                        yPlayer = rand() % 480 + 250;
+                        yPlayer = rand() % 480 + 220;
                     }
                     break;
                 }
@@ -372,12 +372,12 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                     if (this->y() >= 250)
                     {
                         xPlayer = this->x();
-                        yPlayer = rand() % 280 + 128;
+                        yPlayer = rand() % 480 + 220;
                     }
                     else
                     {
                         xPlayer = this->x();
-                        yPlayer = rand() % 480 + 380;
+                        yPlayer = rand() % 480 + 220;
                     }
                     break;
                 }
@@ -402,12 +402,12 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
                         if (this->y() >= 250)
                         {
                             xPlayer = this->x();
-                            yPlayer = rand() % 280 + 128;
+                            yPlayer = rand() % 480 + 220;
                         }
                         else
                         {
                             xPlayer = this->x();
-                            yPlayer = rand() % 480 + 350;
+                            yPlayer = rand() % 480 + 220;
                         }
                         break;
                     }
@@ -431,7 +431,7 @@ void TankBot::slotSearchNewWayAfterCollision(bool useRotate)
     else
     {
         xPlayer = rand() % 480 + 100;
-        yPlayer = rand() % 480 + 200;
+        yPlayer = rand() % 480 + 220;
     }
 
     emit signalOneSearchWay(this->y()/SIZE_WALL, this->x()/SIZE_WALL,  yPlayer/SIZE_WALL, xPlayer/SIZE_WALL);

@@ -7,6 +7,7 @@
 #include "battlecitymap.h"
 #include <QDebug>
 #include <QMessageBox>
+#include <QTime>
 
 BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QObject* parent) : QGraphicsScene(parent)
 {
@@ -696,7 +697,7 @@ void BattleCityMap::slotAddBot_2()
     ++bot_2->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
-    int _x = 128;
+    int _x = 450;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
@@ -707,17 +708,15 @@ void BattleCityMap::slotAddBot_2()
     {
         listItems.clear();
         myRect.setX(_x);
-        _x += 32;
+        _x -= 32;
         listItems = this->items(myRect, Qt::IntersectsItemBoundingRect);
 
-        if (_x > 500)
+        if (_x < 50)
         {
-            _x = 0;
+            _x = 450;
         }
-        qDebug() << "bot_2";
     } while(listItems.size() != 0);
 
-    _x -= 32;
     bot_2->setPos(_x, 0);
     bot_2->setData(0, OBJ_NAME_BOT_2);
     bot_2->setObjectName(OBJ_NAME_BOT_2);
@@ -734,7 +733,7 @@ void BattleCityMap::slotAddBot_3()
     qsrand(QTime::currentTime().msec());
 
     QList <QGraphicsItem *> listItems;
-    int _x = rand () % 400 + 200;
+    int _x = 400;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
@@ -748,13 +747,12 @@ void BattleCityMap::slotAddBot_3()
         _x -= 32;
         listItems = this->items(myRect, Qt::IntersectsItemBoundingRect);
 
-        if (_x < 0)
+        if (_x < 50)
         {
-            _x = rand () % 400 + 200;
+            _x = 400;
         }
     } while(listItems.size() != 0);
 
-    _x += 32;
     bot_3->setPos(_x, 0);
     bot_3->setData(0, OBJ_NAME_BOT_3);
     bot_3->setObjectName(OBJ_NAME_BOT_3);
@@ -770,7 +768,7 @@ void BattleCityMap::slotAddBot_4()
     qsrand(QTime::currentTime().msec());
 
     QList <QGraphicsItem *> listItems;
-    int _x = rand () % 150 + 15;
+    int _x = 50;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
@@ -784,13 +782,13 @@ void BattleCityMap::slotAddBot_4()
         _x += 32;
         listItems = this->items(myRect, Qt::IntersectsItemBoundingRect);
 
-        if (_x > 500)
+        if (_x > 450)
         {
-            _x = rand () % 150 + 15;
+            _x = 50;
         }
     } while(listItems.size() != 0);
 
-    _x -= 32;
+    _x -= 40;
     bot_4->setPos(_x, 0);
     bot_4->setData(0, OBJ_NAME_BOT_4);
     bot_4->setObjectName(OBJ_NAME_BOT_4);
@@ -803,7 +801,7 @@ void BattleCityMap::slotAddBot_1()
     ++bot->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
-    int _x = 0;
+    int _x = 50;
     QRectF myRect;
     myRect.setX(_x);
     myRect.setY(0);
@@ -817,14 +815,14 @@ void BattleCityMap::slotAddBot_1()
         _x += 32;
         listItems = this->items(myRect, Qt::IntersectsItemBoundingRect);
 
-        if (_x > 500)
+        if (_x > 450)
         {
-            _x = 0;
+            _x = 50;
         }
 
     } while(listItems.size() != 0);
 
-    _x -= 32;
+    _x -= 40;
     bot->setPos(_x, 0);
     bot->setData(0, OBJ_NAME_BOT_1);
     bot->setObjectName(OBJ_NAME_BOT_1);
