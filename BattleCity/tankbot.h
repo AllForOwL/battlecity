@@ -48,8 +48,6 @@ public:
 
     QTimer* timerSetAtackRegime;
 
-    point _previousPoint;
-
     bool changeRotate;
 
 public:
@@ -57,7 +55,8 @@ public:
     int y_end;
 
     bool addTank;       // розрешение добавлени бота на карту
-    int numberDeaths;   // количевство смертей
+    int  numberDeaths;   // количевство смертей
+    int  countStep;
 
 signals:
     void signalOneSearchWay(int temp_x_begin, int temp_y_begin, int temp_x_end, int temp_y_end);

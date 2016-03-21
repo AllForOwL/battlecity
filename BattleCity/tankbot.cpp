@@ -17,8 +17,7 @@ TankBot::TankBot(const QList<QString> fileNames): Tank(fileNames)
     addTank = false;
     changeRotate = false;
     numberDeaths = 0;
-    _previousPoint.x = 0;
-    _previousPoint.y = 0;
+    countStep = 0;
     algorithmSearchWay = new algorithmLI;
 
     QObject::connect(this, SIGNAL (signalOneSearchWay(int,int,int,int)), this, SLOT (slotSearchPath(int,int,int,int)));
@@ -164,11 +163,14 @@ void TankBot::Atack(int xPlayer, int yPlayer)
 // поиск пути для ботов
 void TankBot::Atack()
 {
-    if (indexWay == 0) // если достигли финиша
+    if (indexWay == 0 || countStep == CNT_SEARCH_NEW_WAY) // если достигли финиша
     {
-        emit signalSearchNewWay(false);
+        countStep = 0;
+        emit signalSearchNewWay(true);
         return;
     }
+
+    ++countStep;
 
         if (indexWay == CNT_FOUND_WAY)
         {
