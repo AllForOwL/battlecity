@@ -27,15 +27,25 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
 
     QList<QString> fileNames;                                   // Фрейми для анімації танка
 
-    fileNames << ":/Tanks/YellowTank/tank_Yellow_down_1.png"
-              << ":/Tanks/YellowTank/tank_Yellow_down_2.png"
-              << ":/Tanks/YellowTank/tank_Yellow_left_1.png"
-              << ":/Tanks/YellowTank/tank_Yellow_left_2.png"
-              << ":/Tanks/YellowTank/tank_Yellow_up_1.png"
-              << ":/Tanks/YellowTank/tank_Yellow_up_2.png"
-              << ":/Tanks/YellowTank/tank_Yellow_right_1.png"
-              << ":/Tanks/YellowTank/tank_Yellow_right_2.png"
-                 ;
+//    fileNames << ":/Tanks/YellowTank/tank_Yellow_down_1.png"
+//              << ":/Tanks/YellowTank/tank_Yellow_down_2.png"
+//              << ":/Tanks/YellowTank/tank_Yellow_left_1.png"
+//              << ":/Tanks/YellowTank/tank_Yellow_left_2.png"
+//              << ":/Tanks/YellowTank/tank_Yellow_up_1.png"
+//              << ":/Tanks/YellowTank/tank_Yellow_up_2.png"
+//              << ":/Tanks/YellowTank/tank_Yellow_right_1.png"
+//              << ":/Tanks/YellowTank/tank_Yellow_right_2.png"
+//                 ;
+
+        fileNames << ":/Tanks/GreenTankPlayer/down_1.png"
+                  << ":/Tanks/GreenTankPlayer/down_2.png"
+                  << ":/Tanks/GreenTankPlayer/left_1.png"
+                  << ":/Tanks/GreenTankPlayer/left_2.png"
+                  << ":/Tanks/GreenTankPlayer/up_1.png"
+                  << ":/Tanks/GreenTankPlayer/up_2.png"
+                  << ":/Tanks/GreenTankPlayer/right_1.png"
+                  << ":/Tanks/GreenTankPlayer/right_2.png"
+                     ;
 
 
     timerMoveTank1      = new QTimer(this);
