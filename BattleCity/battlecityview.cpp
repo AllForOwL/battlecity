@@ -15,7 +15,9 @@ BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client):
 
     map = new BattleCityMap(regimeGame,_friend, client);
     this->setScene(map);
-    this->setFixedSize(WINDOW_WIDTH+2, WINDOW_HEIGHT+2);
+    this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     ShowWalls(OBJ_NAME_WATER     , OBJ_TYPE_WATER     , ":/walls/1.jpg");
     ShowWalls(OBJ_NAME_ICE       , OBJ_TYPE_ICE       , ":/walls/2.jpg");

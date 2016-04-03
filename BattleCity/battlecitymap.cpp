@@ -26,18 +26,19 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_Map, false);   // Завантаження карти з файлу
 
     QList<QString> fileNames;                                   // Фрейми для анімації танка
+    QList<QString> fileNames2;
 
-//    fileNames << ":/Tanks/YellowTank/tank_Yellow_down_1.png"
-//              << ":/Tanks/YellowTank/tank_Yellow_down_2.png"
-//              << ":/Tanks/YellowTank/tank_Yellow_left_1.png"
-//              << ":/Tanks/YellowTank/tank_Yellow_left_2.png"
-//              << ":/Tanks/YellowTank/tank_Yellow_up_1.png"
-//              << ":/Tanks/YellowTank/tank_Yellow_up_2.png"
-//              << ":/Tanks/YellowTank/tank_Yellow_right_1.png"
-//              << ":/Tanks/YellowTank/tank_Yellow_right_2.png"
-//                 ;
+    fileNames << ":/Tanks/YellowTank/tank_Yellow_down_1.png"
+              << ":/Tanks/YellowTank/tank_Yellow_down_2.png"
+              << ":/Tanks/YellowTank/tank_Yellow_left_1.png"
+              << ":/Tanks/YellowTank/tank_Yellow_left_2.png"
+              << ":/Tanks/YellowTank/tank_Yellow_up_1.png"
+              << ":/Tanks/YellowTank/tank_Yellow_up_2.png"
+              << ":/Tanks/YellowTank/tank_Yellow_right_1.png"
+              << ":/Tanks/YellowTank/tank_Yellow_right_2.png"
+                 ;
 
-        fileNames << ":/Tanks/GreenTankPlayer/down_1.png"
+        fileNames2 << ":/Tanks/GreenTankPlayer/down_1.png"
                   << ":/Tanks/GreenTankPlayer/down_2.png"
                   << ":/Tanks/GreenTankPlayer/left_1.png"
                   << ":/Tanks/GreenTankPlayer/left_2.png"
@@ -85,7 +86,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
 
     if (regimeGame == 1)    // режым игры одного игрока
     {
-        TankForPlay1 = new TankForPlayer(fileNames, 1);             // TankForPlayer приймає 2 параметри:
+        TankForPlay1 = new TankForPlayer(fileNames2, 1);             // TankForPlayer приймає 2 параметри:
                                                                     // 1) фрейми для анімації
                                                                     // 2) Номер клавіш управління. Наприклад:
                                                                     //      1 - керування стрілками та вистріл через клавішу "space"
