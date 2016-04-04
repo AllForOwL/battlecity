@@ -42,8 +42,9 @@ HEADERS  += battlecityview.h \
     algorithmli.h
 
 RESOURCES += \
-    tanks.qrc \
     walls.qrc \
     map.qrc \
     explosion.qrc \
-    imgs.qrc
+    imgs.qrc \
+    playertank.qrc \
+    botstank.qrc

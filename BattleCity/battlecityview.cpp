@@ -15,7 +15,7 @@ BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client):
 
     map = new BattleCityMap(regimeGame,_friend, client);
     this->setScene(map);
-    this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    this->setFixedSize(WINDOW_WIDTH+2, WINDOW_HEIGHT+2);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 

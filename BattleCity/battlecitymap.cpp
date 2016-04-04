@@ -28,24 +28,24 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     QList<QString> fileNames;                                   // Фрейми для анімації танка
     QList<QString> fileNames2;
 
-    fileNames << ":/Tanks/YellowTank/tank_Yellow_down_1.png"
-              << ":/Tanks/YellowTank/tank_Yellow_down_2.png"
-              << ":/Tanks/YellowTank/tank_Yellow_left_1.png"
-              << ":/Tanks/YellowTank/tank_Yellow_left_2.png"
-              << ":/Tanks/YellowTank/tank_Yellow_up_1.png"
-              << ":/Tanks/YellowTank/tank_Yellow_up_2.png"
-              << ":/Tanks/YellowTank/tank_Yellow_right_1.png"
-              << ":/Tanks/YellowTank/tank_Yellow_right_2.png"
+    fileNames << ":/easyBots/Tanks/YellowTank/tank_Yellow_down_1.png"
+              << ":/easyBots/Tanks/YellowTank/tank_Yellow_down_2.png"
+              << ":/easyBots/Tanks/YellowTank/tank_Yellow_left_1.png"
+              << ":/easyBots/Tanks/YellowTank/tank_Yellow_left_2.png"
+              << ":/easyBots/Tanks/YellowTank/tank_Yellow_up_1.png"
+              << ":/easyBots/Tanks/YellowTank/tank_Yellow_up_2.png"
+              << ":/easyBots/Tanks/YellowTank/tank_Yellow_right_1.png"
+              << ":/easyBots/Tanks/YellowTank/tank_Yellow_right_2.png"
                  ;
 
-        fileNames2 << ":/Tanks/GreenTankPlayer/down_1.png"
-                  << ":/Tanks/GreenTankPlayer/down_2.png"
-                  << ":/Tanks/GreenTankPlayer/left_1.png"
-                  << ":/Tanks/GreenTankPlayer/left_2.png"
-                  << ":/Tanks/GreenTankPlayer/up_1.png"
-                  << ":/Tanks/GreenTankPlayer/up_2.png"
-                  << ":/Tanks/GreenTankPlayer/right_1.png"
-                  << ":/Tanks/GreenTankPlayer/right_2.png"
+        fileNames2 << ":/easyTank/Tanks/tankplayer/easyTank/down_1.png"
+                  << ":/easyTank/Tanks/tankplayer/easyTank/down_2.png"
+                  << ":/easyTank/Tanks/tankplayer/easyTank/left_1.png"
+                  << ":/easyTank/Tanks/tankplayer/easyTank/left_2.png"
+                  << ":/easyTank/Tanks/tankplayer/easyTank/up_1.png"
+                  << ":/easyTank/Tanks/tankplayer/easyTank/up_2.png"
+                  << ":/easyTank/Tanks/tankplayer/easyTank/right_1.png"
+                  << ":/easyTank/Tanks/tankplayer/easyTank/right_2.png"
                      ;
 
 
