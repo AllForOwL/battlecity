@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     tankbot.cpp \
     algorithmli.cpp \
     udpclient.cpp \
-    mainmenu.cpp
+    mainmenu.cpp \
+    fieldgame.cpp
 
 HEADERS  += battlecityview.h \
     battlecitymap.h \
@@ -39,7 +40,8 @@ HEADERS  += battlecityview.h \
     algorithmli.h \
     udpclient.h \
     mainmenu.h \
-    algorithmli.h
+    algorithmli.h \
+    fieldgame.h
 
 RESOURCES += \
     walls.qrc \
@@ -47,4 +49,5 @@ RESOURCES += \
     explosion.qrc \
     imgs.qrc \
     playertank.qrc \
-    botstank.qrc
+    botstank.qrc \
+    fieldstatistic.qrc

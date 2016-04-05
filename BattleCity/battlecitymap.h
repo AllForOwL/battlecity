@@ -82,6 +82,9 @@ private:
 
     Parsing *p_ReadFromFile;                // Клас для парсингу карти
 
+    QGraphicsScene* m_gsHeadScene;
+
+
     /* /// Сеть /// */
 
     UdpClient *_client;

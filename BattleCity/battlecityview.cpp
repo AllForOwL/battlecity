@@ -10,12 +10,19 @@
 #include <QGraphicsPixmapItem>
 #include <QDebug>
 #include "battlecityview.h"
+#include <QImage>
 
 BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client): QGraphicsView() {
 
     map = new BattleCityMap(regimeGame,_friend, client);
     this->setScene(map);
-    this->setFixedSize(WINDOW_WIDTH+2, WINDOW_HEIGHT+2);
+
+    //fieldGame = new FieldGame();
+
+   // this->setParent(fieldGame);
+    //fieldGame->show();
+
+    this->setFixedSize(WINDOW_WIDTH+100, WINDOW_HEIGHT+2);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -24,6 +31,7 @@ BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client):
     ShowWalls(OBJ_NAME_RED_WALL  , OBJ_TYPE_RED_WALL  , ":/walls/3.jpg");
     ShowWalls(OBJ_NAME_GRASS     , OBJ_TYPE_GRASS     , ":/walls/4.png");
     ShowWalls(OBJ_NAME_WHITE_WALL, OBJ_TYPE_WHITE_WALL, ":/walls/5.jpg");
+    ShowStatistic();
     //ShowWalls(OBJ_NAME_BASE      , OBJ_TYPE_BASE      , ":/Explosion/base.png");
 
     QObject::connect(map, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
@@ -87,6 +95,41 @@ void BattleCityView::ShowWalls(const QString &strTypeWall,
 
                 map->addItem(p_MyImage);
             }
+}
+
+void BattleCityView::ShowStatistic()
+{
+    QGraphicsRectItem* fieldStatistic = new QGraphicsRectItem();
+
+    fieldStatistic->setRect(512, 0, 100, 514);
+
+    QBrush brush(Qt::SolidPattern);
+
+    brush.setColor(Qt::darkGray);
+    fieldStatistic->setBrush(brush);
+    fieldStatistic->setZValue(1.0);
+
+    map->addItem(fieldStatistic);
+
+    int x;
+    int y = 78;
+
+    for (int j(0); j < 3; j++)
+    {
+        x = 496;
+        y += 22;
+        for (int i(0); i < 3; i++)
+        {
+            x += 28;
+            QGraphicsPixmapItem* imageTank = new QGraphicsPixmapItem();
+            imageTank->setPixmap(QPixmap(":/statistic/tank.png"));
+            imageTank->setPos(x, y);
+            imageTank->setData(0, "tankStatistic");
+            imageTank->setZValue(1.0);
+            map->addItem(imageTank);
+        }
+    }
+
 }
 
 void BattleCityView::slotClose(int numberKillsOnePlayer, int numberKillsTwoPlayer)

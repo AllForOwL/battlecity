@@ -12,7 +12,7 @@
 BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QObject* parent) : QGraphicsScene(parent)
 {
     this->setBackgroundBrush(Qt::black);                        // Встановлення фонового кольору
-    this->setSceneRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);      // Встановлення розміру сцени з початковими координатами 0,0
+    this->setSceneRect(0, 0, WINDOW_WIDTH+100, WINDOW_HEIGHT);      // Встановлення розміру сцени з початковими координатами 0,0
     // вверху лівої частини вікна
 
     timerForSendPosPlayer = new QTimer(this);
