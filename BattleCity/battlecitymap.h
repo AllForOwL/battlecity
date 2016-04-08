@@ -116,6 +116,8 @@ signals:
 
     void signalGameOver(int numberKillsOnePlayer, int numberKillsTwoPlayer);
 
+    void signalKillBotForStatistic();
+
 public slots:
     void slotAddBot_1 ();           // появление бота на карте после уничтожения
     void slotAddBot_2 ();

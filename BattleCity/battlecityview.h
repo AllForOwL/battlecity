@@ -27,10 +27,14 @@ private:
     QGraphicsTextItem* m_txtLevel;
     QGraphicsTextItem* m_txtCountLife;
 
+    QList<QGraphicsPixmapItem*> listTank;
 
 public slots:
 
     void slotClose(int numberKillsOnePlayer, int numberKillsTwoPlayer);
+
+    void slotKillBotStatistic();
+
 };
 
 #endif // BATTLECITYVIEW_H

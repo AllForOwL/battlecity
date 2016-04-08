@@ -11,6 +11,7 @@
 #include <QDebug>
 #include "battlecityview.h"
 #include <QImage>
+#include <QList>
 
 BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client): QGraphicsView() {
 
@@ -33,6 +34,9 @@ BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client):
     //ShowWalls(OBJ_NAME_BASE      , OBJ_TYPE_BASE      , ":/Explosion/base.png");
 
     QObject::connect(map, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
+
+    QObject::connect(map, SIGNAL(signalKillBotForStatistic()), this, SLOT(slotKillBotStatistic()));
+
 }
 
 BattleCityView::~BattleCityView()
@@ -124,6 +128,7 @@ void BattleCityView::ShowStatistic()
             imageTank->setPos(x, y);
             imageTank->setData(0, "tankStatistic");
             imageTank->setZValue(1.0);
+            listTank.append(imageTank);
             map->addItem(imageTank);
         }
     }
@@ -150,7 +155,7 @@ void BattleCityView::ShowStatistic()
     map->addItem(countLife);
 
     QGraphicsPixmapItem* countLifeTank = new QGraphicsPixmapItem();
-    countLifeTank->setPixmap(QPixmap(":/statistic/tankCountLife.png"));
+    countLifeTank->setPixmap(QPixmap(":/statistic/tank.png"));
     countLifeTank->setPos(540, 365);
     countLifeTank->setData(0, "countLife");
     countLifeTank->setZValue(1.0);
@@ -159,10 +164,9 @@ void BattleCityView::ShowStatistic()
     m_txtCountLife->setPlainText("3");
     m_txtCountLife->setFont(QFont("Serif", 15, QFont::Bold));
     m_txtCountLife->setDefaultTextColor(Qt::black);
-    m_txtCountLife->setPos(555, 360);
+    m_txtCountLife->setPos(558, 358);
     m_txtCountLife->setZValue(1.0);
     map->addItem(m_txtCountLife);
-
 }
 
 void BattleCityView::slotClose(int numberKillsOnePlayer, int numberKillsTwoPlayer)
@@ -446,4 +450,10 @@ void BattleCityView::slotClose(int numberKillsOnePlayer, int numberKillsTwoPlaye
 
     this->close();
     view->show();
+}
+
+void BattleCityView::slotKillBotStatistic()
+{
+    listTank[listTank.size()-1]->~QGraphicsPixmapItem();
+    listTank.removeLast();
 }
