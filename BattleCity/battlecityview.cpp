@@ -17,14 +17,12 @@ BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client):
     map = new BattleCityMap(regimeGame,_friend, client);
     this->setScene(map);
 
-    //fieldGame = new FieldGame();
-
-   // this->setParent(fieldGame);
-    //fieldGame->show();
-
     this->setFixedSize(WINDOW_WIDTH+100, WINDOW_HEIGHT+2);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    m_txtLevel     = new QGraphicsTextItem();
+    m_txtCountLife = new QGraphicsTextItem();
 
     ShowWalls(OBJ_NAME_WATER     , OBJ_TYPE_WATER     , ":/walls/1.jpg");
     ShowWalls(OBJ_NAME_ICE       , OBJ_TYPE_ICE       , ":/walls/2.jpg");
@@ -129,6 +127,41 @@ void BattleCityView::ShowStatistic()
             map->addItem(imageTank);
         }
     }
+
+    QGraphicsPixmapItem* level = new QGraphicsPixmapItem();
+    level->setPixmap(QPixmap(":/statistic/level.png"));
+    level->setPos(540, 420);
+    level->setData(0, "level");
+    level->setZValue(1.0);
+    map->addItem(level);
+
+    m_txtLevel->setPlainText("1");
+    m_txtLevel->setFont(QFont("Serif", 15, QFont::Bold));
+    m_txtLevel->setDefaultTextColor(Qt::black);
+    m_txtLevel->setPos(555, 440);
+    m_txtLevel->setZValue(1.0);
+    map->addItem(m_txtLevel);
+
+    QGraphicsPixmapItem* countLife = new QGraphicsPixmapItem();
+    countLife->setPixmap(QPixmap(":/statistic/countLife.png"));
+    countLife->setPos(540, 330);
+    countLife->setData(0, "countLife");
+    countLife->setZValue(1.0);
+    map->addItem(countLife);
+
+    QGraphicsPixmapItem* countLifeTank = new QGraphicsPixmapItem();
+    countLifeTank->setPixmap(QPixmap(":/statistic/tankCountLife.png"));
+    countLifeTank->setPos(540, 365);
+    countLifeTank->setData(0, "countLife");
+    countLifeTank->setZValue(1.0);
+    map->addItem(countLifeTank);
+
+    m_txtCountLife->setPlainText("3");
+    m_txtCountLife->setFont(QFont("Serif", 15, QFont::Bold));
+    m_txtCountLife->setDefaultTextColor(Qt::black);
+    m_txtCountLife->setPos(555, 360);
+    m_txtCountLife->setZValue(1.0);
+    map->addItem(m_txtCountLife);
 
 }
 

@@ -24,6 +24,9 @@ public:
 private:
     BattleCityMap* map;
     FieldGame* fieldGame;
+    QGraphicsTextItem* m_txtLevel;
+    QGraphicsTextItem* m_txtCountLife;
+
 
 public slots:
 
