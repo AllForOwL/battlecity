@@ -82,7 +82,7 @@ void Tank::setRotate(int r) {
 }
 
 QRectF Tank::boundingRect() const {
-    return QRectF(0, 0, 31, 31);
+    return QRectF(0, 0, 29, 29);
 }
 
 QPainterPath Tank::shape() const {

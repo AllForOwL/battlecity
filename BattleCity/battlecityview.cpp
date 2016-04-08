@@ -10,23 +10,33 @@
 #include <QGraphicsPixmapItem>
 #include <QDebug>
 #include "battlecityview.h"
+#include <QImage>
+#include <QList>
 
 BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client): QGraphicsView() {
 
     map = new BattleCityMap(regimeGame,_friend, client);
     this->setScene(map);
-    this->setFixedSize(WINDOW_WIDTH+2, WINDOW_HEIGHT+2);
+
+    this->setFixedSize(WINDOW_WIDTH+100, WINDOW_HEIGHT+2);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    m_txtLevel     = new QGraphicsTextItem();
+    m_txtCountLife = new QGraphicsTextItem();
 
     ShowWalls(OBJ_NAME_WATER     , OBJ_TYPE_WATER     , ":/walls/1.jpg");
     ShowWalls(OBJ_NAME_ICE       , OBJ_TYPE_ICE       , ":/walls/2.jpg");
     ShowWalls(OBJ_NAME_RED_WALL  , OBJ_TYPE_RED_WALL  , ":/walls/3.jpg");
     ShowWalls(OBJ_NAME_GRASS     , OBJ_TYPE_GRASS     , ":/walls/4.png");
     ShowWalls(OBJ_NAME_WHITE_WALL, OBJ_TYPE_WHITE_WALL, ":/walls/5.jpg");
+    ShowStatistic();
     //ShowWalls(OBJ_NAME_BASE      , OBJ_TYPE_BASE      , ":/Explosion/base.png");
 
     QObject::connect(map, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
+
+    QObject::connect(map, SIGNAL(signalKillBotForStatistic()), this, SLOT(slotKillBotStatistic()));
+
 }
 
 BattleCityView::~BattleCityView()
@@ -87,6 +97,76 @@ void BattleCityView::ShowWalls(const QString &strTypeWall,
 
                 map->addItem(p_MyImage);
             }
+}
+
+void BattleCityView::ShowStatistic()
+{
+    QGraphicsRectItem* fieldStatistic = new QGraphicsRectItem();
+
+    fieldStatistic->setRect(512, 0, 100, 514);
+
+    QBrush brush(Qt::SolidPattern);
+
+    brush.setColor(Qt::darkGray);
+    fieldStatistic->setBrush(brush);
+    fieldStatistic->setZValue(1.0);
+
+    map->addItem(fieldStatistic);
+
+    int x;
+    int y = 78;
+
+    for (int j(0); j < 3; j++)
+    {
+        x = 496;
+        y += 22;
+        for (int i(0); i < 3; i++)
+        {
+            x += 28;
+            QGraphicsPixmapItem* imageTank = new QGraphicsPixmapItem();
+            imageTank->setPixmap(QPixmap(":/statistic/tank.png"));
+            imageTank->setPos(x, y);
+            imageTank->setData(0, "tankStatistic");
+            imageTank->setZValue(1.0);
+            listTank.append(imageTank);
+            map->addItem(imageTank);
+        }
+    }
+
+    QGraphicsPixmapItem* level = new QGraphicsPixmapItem();
+    level->setPixmap(QPixmap(":/statistic/level.png"));
+    level->setPos(540, 420);
+    level->setData(0, "level");
+    level->setZValue(1.0);
+    map->addItem(level);
+
+    m_txtLevel->setPlainText("1");
+    m_txtLevel->setFont(QFont("Serif", 15, QFont::Bold));
+    m_txtLevel->setDefaultTextColor(Qt::black);
+    m_txtLevel->setPos(555, 440);
+    m_txtLevel->setZValue(1.0);
+    map->addItem(m_txtLevel);
+
+    QGraphicsPixmapItem* countLife = new QGraphicsPixmapItem();
+    countLife->setPixmap(QPixmap(":/statistic/countLife.png"));
+    countLife->setPos(540, 330);
+    countLife->setData(0, "countLife");
+    countLife->setZValue(1.0);
+    map->addItem(countLife);
+
+    QGraphicsPixmapItem* countLifeTank = new QGraphicsPixmapItem();
+    countLifeTank->setPixmap(QPixmap(":/statistic/tank.png"));
+    countLifeTank->setPos(540, 365);
+    countLifeTank->setData(0, "countLife");
+    countLifeTank->setZValue(1.0);
+    map->addItem(countLifeTank);
+
+    m_txtCountLife->setPlainText("3");
+    m_txtCountLife->setFont(QFont("Serif", 15, QFont::Bold));
+    m_txtCountLife->setDefaultTextColor(Qt::black);
+    m_txtCountLife->setPos(558, 358);
+    m_txtCountLife->setZValue(1.0);
+    map->addItem(m_txtCountLife);
 }
 
 void BattleCityView::slotClose(int numberKillsOnePlayer, int numberKillsTwoPlayer)
@@ -370,4 +450,10 @@ void BattleCityView::slotClose(int numberKillsOnePlayer, int numberKillsTwoPlaye
 
     this->close();
     view->show();
+}
+
+void BattleCityView::slotKillBotStatistic()
+{
+    listTank[listTank.size()-1]->~QGraphicsPixmapItem();
+    listTank.removeLast();
 }

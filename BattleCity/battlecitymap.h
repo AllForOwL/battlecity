@@ -82,6 +82,9 @@ private:
 
     Parsing *p_ReadFromFile;                // Клас для парсингу карти
 
+    QGraphicsScene* m_gsHeadScene;
+
+
     /* /// Сеть /// */
 
     UdpClient *_client;
@@ -112,6 +115,8 @@ signals:
     void signalUpdateBase(QString typeWall);
 
     void signalGameOver(int numberKillsOnePlayer, int numberKillsTwoPlayer);
+
+    void signalKillBotForStatistic();
 
 public slots:
     void slotAddBot_1 ();           // появление бота на карте после уничтожения

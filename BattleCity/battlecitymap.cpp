@@ -12,7 +12,7 @@
 BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QObject* parent) : QGraphicsScene(parent)
 {
     this->setBackgroundBrush(Qt::black);                        // Встановлення фонового кольору
-    this->setSceneRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);      // Встановлення розміру сцени з початковими координатами 0,0
+    this->setSceneRect(0, 0, WINDOW_WIDTH+100, WINDOW_HEIGHT);      // Встановлення розміру сцени з початковими координатами 0,0
     // вверху лівої частини вікна
 
     timerForSendPosPlayer = new QTimer(this);
@@ -344,6 +344,9 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     QObject::connect( bot_4       , SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
 
     QObject::connect( timerForSendPosPlayer , SIGNAL( timeout()), this, SLOT( slotSetPosPlayerForSend() ));
+
+    //QObject::connect( this, SIGNAL(signalKillBotForStatistic()),
+
     delete p_ReadFromFile;
 }
 
@@ -705,6 +708,8 @@ void BattleCityMap::slotRemoveBonusForTimeBonus()
 
 void BattleCityMap::slotAddBot_2()
 {
+    emit signalKillBotForStatistic();
+
     ++bot_2->numberDeaths;
 
     QList <QGraphicsItem *> listItems;
@@ -714,7 +719,7 @@ void BattleCityMap::slotAddBot_2()
     myRect.setY(0);
     myRect.setWidth(64);
     myRect.setHeight(30);
-
+/*
     do
     {
         listItems.clear();
@@ -726,7 +731,7 @@ void BattleCityMap::slotAddBot_2()
         {
             _x = 450;
         }
-    } while(listItems.size() != 0);
+    }*/ while(listItems.size() != 0);
 
     bot_2->setPos(_x, 0);
     bot_2->setData(0, OBJ_NAME_BOT_2);
@@ -738,6 +743,8 @@ void BattleCityMap::slotAddBot_2()
 
 void BattleCityMap::slotAddBot_3()
 {
+    emit signalKillBotForStatistic();
+
     ++bot_3->numberDeaths;
     bot_3->indexWay = 0;
 
@@ -773,6 +780,8 @@ void BattleCityMap::slotAddBot_3()
 
 void BattleCityMap::slotAddBot_4()
 {
+    emit signalKillBotForStatistic();
+
     ++bot_4->numberDeaths;
     bot_4->indexWay = 0;
 
@@ -809,6 +818,8 @@ void BattleCityMap::slotAddBot_4()
 
 void BattleCityMap::slotAddBot_1()
 {
+    emit signalKillBotForStatistic();
+
     ++bot->numberDeaths;
 
     QList <QGraphicsItem *> listItems;

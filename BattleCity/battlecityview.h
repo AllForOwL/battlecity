@@ -6,6 +6,7 @@
 
 #include "battlecitymap.h"
 #include "constants.h"
+#include "fieldgame.h"
 
 class BattleCityView : public QGraphicsView
 {
@@ -15,15 +16,25 @@ public:
     ~BattleCityView();
 
     void ShowWalls(const QString &strTypeWall, int numberTypeWall, const QString &pathToImage);
+    void ShowStatistic();
+
 
     int _map[WINDOW_WIDTH][WINDOW_HEIGHT];
 
 private:
     BattleCityMap* map;
+    FieldGame* fieldGame;
+    QGraphicsTextItem* m_txtLevel;
+    QGraphicsTextItem* m_txtCountLife;
+
+    QList<QGraphicsPixmapItem*> listTank;
 
 public slots:
 
     void slotClose(int numberKillsOnePlayer, int numberKillsTwoPlayer);
+
+    void slotKillBotStatistic();
+
 };
 
 #endif // BATTLECITYVIEW_H
