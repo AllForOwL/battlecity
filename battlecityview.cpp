@@ -19,10 +19,19 @@ BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client):
 
     map = new BattleCityMap(regimeGame,_friend, client);
 
-    //this->setScene(map);
+    QGraphicsRectItem* rect = new QGraphicsRectItem(0, 0, WINDOW_WIDTH+100, WINDOW_HEIGHT);
+    rect->setBrush(QBrush(Qt::gray));
+
+    QGraphicsTextItem* levels = new QGraphicsTextItem("levels");
+    levels->setZValue(2.0);
+
+    rect->setZValue(2.0);
+    map->addItem(rect);
+    map->addItem(levels);
+    this->setScene(map);
 
     m_sceneSwitchBetweenLevels = new SwitchBetweenLevel();
-    this->setScene(m_sceneSwitchBetweenLevels);
+    //this->setScene(m_sceneSwitchBetweenLevels);
 
     this->setFixedSize(WINDOW_WIDTH+100, WINDOW_HEIGHT+2);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
