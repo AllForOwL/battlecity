@@ -15,8 +15,17 @@
 
 BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client): QGraphicsView() {
 
+    m_iCountLevel = 1;
+
     map = new BattleCityMap(regimeGame,_friend, client);
-    this->setScene(map);
+    map_2 = new BattleCityMap(regimeGame,_friend, client);
+    map_3 = new BattleCityMap(regimeGame,_friend, client);
+    map_4 = new BattleCityMap(regimeGame,_friend, client);
+
+    //this->setScene(map);
+
+    m_sceneSwitchBetweenLevels = new SwitchBetweenLevel();
+    this->setScene(m_sceneSwitchBetweenLevels);
 
     this->setFixedSize(WINDOW_WIDTH+100, WINDOW_HEIGHT+2);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -25,24 +34,42 @@ BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client):
     m_txtLevel     = new QGraphicsTextItem();
     m_txtCountLife = new QGraphicsTextItem();
 
-    ShowWalls(OBJ_NAME_WATER     , OBJ_TYPE_WATER     , ":/walls/1.jpg");
-    ShowWalls(OBJ_NAME_ICE       , OBJ_TYPE_ICE       , ":/walls/2.jpg");
-    ShowWalls(OBJ_NAME_RED_WALL  , OBJ_TYPE_RED_WALL  , ":/walls/3.jpg");
-    ShowWalls(OBJ_NAME_GRASS     , OBJ_TYPE_GRASS     , ":/walls/4.png");
-    ShowWalls(OBJ_NAME_WHITE_WALL, OBJ_TYPE_WHITE_WALL, ":/walls/5.jpg");
-    ShowStatistic();
+
+//    ShowWalls(OBJ_NAME_WATER     , OBJ_TYPE_WATER     , ":/walls/1.jpg");
+//    ShowWalls(OBJ_NAME_ICE       , OBJ_TYPE_ICE       , ":/walls/2.jpg");
+//    ShowWalls(OBJ_NAME_RED_WALL  , OBJ_TYPE_RED_WALL  , ":/walls/3.jpg");
+//    ShowWalls(OBJ_NAME_GRASS     , OBJ_TYPE_GRASS     , ":/walls/4.png");
+//    ShowWalls(OBJ_NAME_WHITE_WALL, OBJ_TYPE_WHITE_WALL, ":/walls/5.jpg");
+//    ShowStatistic();
     //ShowWalls(OBJ_NAME_BASE      , OBJ_TYPE_BASE      , ":/Explosion/base.png");
+
+    QObject::connect(m_sceneSwitchBetweenLevels, SIGNAL(signalShowNextLevel()), this, SLOT(slotShowNextLevel()));
 
     QObject::connect(map, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
 
     QObject::connect(map, SIGNAL(signalKillBotForStatistic()), this, SLOT(slotKillBotStatistic()));
     QObject::connect(map->TankForPlay1, SIGNAL(signalKillPlayer()), this, SLOT(slotKillPlayer()));
 
+    QObject::connect(map_2, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
+
+    QObject::connect(map_2, SIGNAL(signalKillBotForStatistic()), this, SLOT(slotKillBotStatistic()));
+    QObject::connect(map_2->TankForPlay1, SIGNAL(signalKillPlayer()), this, SLOT(slotKillPlayer()));
+
+    QObject::connect(map_3, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
+
+    QObject::connect(map_3, SIGNAL(signalKillBotForStatistic()), this, SLOT(slotKillBotStatistic()));
+    QObject::connect(map_3->TankForPlay1, SIGNAL(signalKillPlayer()), this, SLOT(slotKillPlayer()));
+
+    QObject::connect(map_4, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
+
+    QObject::connect(map_4, SIGNAL(signalKillBotForStatistic()), this, SLOT(slotKillBotStatistic()));
+    QObject::connect(map_4->TankForPlay1, SIGNAL(signalKillPlayer()), this, SLOT(slotKillPlayer()));
+
 }
 
 BattleCityView::~BattleCityView()
 {
-    map->~BattleCityMap();
+   m_sceneSwitchBetweenLevels->~QGraphicsScene();
 }
 
 void BattleCityView::ShowWalls(const QString &strTypeWall,
@@ -168,6 +195,44 @@ void BattleCityView::ShowStatistic()
     m_txtCountLife->setPos(558, 358);
     m_txtCountLife->setZValue(1.0);
     map->addItem(m_txtCountLife);
+}
+
+void BattleCityView::BuildNextLevel()
+{
+
+    switch(m_iCountLevel)
+    {
+        case 1:
+            {
+                 this->setScene(map);
+            break;
+            }
+        case 2:
+            {
+                map->~BattleCityMap();
+                 this->setScene(map_2);
+            break;
+            }
+        case 3:
+            {
+                map_2->~BattleCityMap();
+                 this->setScene(map_3);
+            break;
+            }
+        case 4:
+            {
+                map_3->~BattleCityMap();
+                 this->setScene(map_4);
+            break;
+            }
+    }
+
+    ShowWalls(OBJ_NAME_WATER     , OBJ_TYPE_WATER     , ":/walls/1.jpg");
+    ShowWalls(OBJ_NAME_ICE       , OBJ_TYPE_ICE       , ":/walls/2.jpg");
+    ShowWalls(OBJ_NAME_RED_WALL  , OBJ_TYPE_RED_WALL  , ":/walls/3.jpg");
+    ShowWalls(OBJ_NAME_GRASS     , OBJ_TYPE_GRASS     , ":/walls/4.png");
+    ShowWalls(OBJ_NAME_WHITE_WALL, OBJ_TYPE_WHITE_WALL, ":/walls/5.jpg");
+    ShowStatistic();
 }
 
 void BattleCityView::slotClose(int numberKillsOnePlayer, int numberKillsTwoPlayer)
@@ -457,6 +522,33 @@ void BattleCityView::slotKillBotStatistic()
 {
     listTank[listTank.size()-1]->~QGraphicsPixmapItem();
     listTank.removeLast();
+
+   // if (listTank.empty())
+    //{
+      //  map->~BattleCityMap();
+
+
+
+        ShowNameLevel();
+   // }
+
+ //   if (listTank.empty())
+  //  {
+//        for (int i(0); i < CNT_ROWS_MAP; i++)
+//            for (int j(0); j < CNT_COLS_MAP; j++)
+//            {
+//                map->n_Map[i][j] = rand() % 5 + 1;
+//            }
+
+//        ShowWalls(OBJ_NAME_WATER     , OBJ_TYPE_WATER     , ":/walls/1.jpg");
+//        ShowWalls(OBJ_NAME_ICE       , OBJ_TYPE_ICE       , ":/walls/2.jpg");
+//        ShowWalls(OBJ_NAME_RED_WALL  , OBJ_TYPE_RED_WALL  , ":/walls/3.jpg");
+//        ShowWalls(OBJ_NAME_GRASS     , OBJ_TYPE_GRASS     , ":/walls/4.png");
+//        ShowWalls(OBJ_NAME_WHITE_WALL, OBJ_TYPE_WHITE_WALL, ":/walls/5.jpg");
+//        ShowStatistic();
+
+//        this->map->update();
+    //}
 }
 
 void BattleCityView::slotKillPlayer()
@@ -480,4 +572,38 @@ void BattleCityView::slotKillPlayer()
     }
 
     m_txtCountLife->setPlainText(strCountLife);
+}
+
+void BattleCityView::slotShowNextLevel()
+{
+    BuildNextLevel();
+}
+
+void BattleCityView::ShowNameLevel()
+{
+    ++m_iCountLevel;
+    m_sceneSwitchBetweenLevels->SetNameLevel(QString("Level" + m_iCountLevel));
+
+    this->setScene(m_sceneSwitchBetweenLevels);
+
+
+
+//    switch(m_iCountLevel)
+//    {
+//        case 2:
+//            {
+//                map->~QGraphicsScene();
+//            break;
+//            }
+//        case 3:
+//            {
+//                map_2->~BattleCityMap();
+//            break;
+//            }
+//        case 4:
+//            {
+//                map_3->~BattleCityMap();
+//            break;
+//            }
+//    }
 }

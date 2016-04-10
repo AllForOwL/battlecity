@@ -6,7 +6,7 @@
 
 #include "battlecitymap.h"
 #include "constants.h"
-#include "fieldgame.h"
+#include "switchbetweenlevel.h"
 
 class BattleCityView : public QGraphicsView
 {
@@ -17,17 +17,25 @@ public:
 
     void ShowWalls(const QString &strTypeWall, int numberTypeWall, const QString &pathToImage);
     void ShowStatistic();
-
+    void BuildNextLevel();
+    void ShowNameLevel();
 
     int _map[WINDOW_WIDTH][WINDOW_HEIGHT];
 
 private:
     BattleCityMap* map;
-    FieldGame* fieldGame;
-    QGraphicsTextItem* m_txtLevel;
-    QGraphicsTextItem* m_txtCountLife;
+    BattleCityMap* map_2;
+    BattleCityMap* map_3;
+    BattleCityMap* map_4;
+    QGraphicsTextItem*  m_txtLevel;
+    QGraphicsTextItem*  m_txtCountLife;
+    SwitchBetweenLevel* m_sceneSwitchBetweenLevels;
 
     QList<QGraphicsPixmapItem*> listTank;
+
+    int m_iCountLevel;
+
+    int m_iarrMap[CNT_ROWS_MAP][CNT_COLS_MAP];      // розмер карты
 
 public slots:
 
@@ -36,6 +44,7 @@ public slots:
     void slotKillBotStatistic();
     void slotKillPlayer();
 
+    void slotShowNextLevel();
 };
 
 #endif // BATTLECITYVIEW_H
