@@ -84,6 +84,8 @@ public:
 
     QGraphicsScene* m_gsHeadScene;
 
+    void LoadMapForNewLevel();
+    void ShowNewLevel();
 
     /* /// Сеть /// */
 

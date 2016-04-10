@@ -285,10 +285,10 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     timerMoveTank1->start(CNT_SPEED_MOVE_ONE_PLAYER);
     timerMoveTank1->setObjectName(OBJ_NAME_PLAYER_1);
 
-    timerForShowBonus->start(CNT_SECOND_SHOW_STAR);
-    timerForShowProtectionBase->start(CNT_SECOND_PROTECTION_BASE);
-    timerForShowTimeBonus->start(CNT_SECOND_STOP_ALL_BOT);
-    timerForShowExplosionBonus->start(CNT_SECOND_EXPLOSION_ALL_BOTS);
+//    timerForShowBonus->start(CNT_SECOND_SHOW_STAR);
+//    timerForShowProtectionBase->start(CNT_SECOND_PROTECTION_BASE);
+//    timerForShowTimeBonus->start(CNT_SECOND_STOP_ALL_BOT);
+//    timerForShowExplosionBonus->start(CNT_SECOND_EXPLOSION_ALL_BOTS);
 
     QObject::connect( timerMoveTank1 , SIGNAL( timeout()           ) , TankForPlay1 , SLOT( slotMoveTank()        ));   // Переміщення танка
     QObject::connect( TankForPlay1   , SIGNAL( signalShot(QString) ) , TankForPlay1 , SLOT( slotTankShot(QString) ));   // Постріл танком
@@ -343,7 +343,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     QObject::connect( bot_3       , SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
     QObject::connect( bot_4       , SIGNAL( signalGameOver2()    ), this, SLOT( slotGameOver()    ));   // уничтожение базы
 
-    QObject::connect( timerForSendPosPlayer , SIGNAL( timeout()), this, SLOT( slotSetPosPlayerForSend() ));
+   // QObject::connect( timerForSendPosPlayer , SIGNAL( timeout()), this, SLOT( slotSetPosPlayerForSend() ));
 
     delete p_ReadFromFile;
 }
@@ -417,6 +417,38 @@ bool BattleCityMap::AuditPressKey(int key)
         }
     }
     return true;
+}
+
+void BattleCityMap::LoadMapForNewLevel()
+{
+    timerMoveBot->stop();
+    timerMoveBot_2->stop();
+    timerMoveBot_3->stop();
+    timerMoveBot_4->stop();
+    timerMoveTank1->stop();
+
+    bot->setPos(-32, 0);
+    bot_2->setPos(-32, 0);
+    bot_3->setPos(-32, 0);
+    bot_4->setPos(-32, 0);
+    TankForPlay1->setPos(-32 ,0);
+
+    //p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_Map, false);   // Завантаження карти з файлу
+}
+
+void BattleCityMap::ShowNewLevel()
+{
+    TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER, CNT_BEGIN_Y_ONE_PLAYER);
+
+    timerRunBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
+
+    timerRunBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
+
+    timerRunBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
+
+    timerRunBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
+
+    timerMoveTank1->start(CNT_SPEED_MOVE_ONE_PLAYER);
 }
 
 void BattleCityMap::slotSetPosPlayerForSend()

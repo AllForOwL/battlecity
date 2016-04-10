@@ -18,9 +18,6 @@ BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client):
     m_iCountLevel = 1;
 
     map = new BattleCityMap(regimeGame,_friend, client);
-    map_2 = new BattleCityMap(regimeGame,_friend, client);
-    map_3 = new BattleCityMap(regimeGame,_friend, client);
-    map_4 = new BattleCityMap(regimeGame,_friend, client);
 
     //this->setScene(map);
 
@@ -49,22 +46,6 @@ BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client):
 
     QObject::connect(map, SIGNAL(signalKillBotForStatistic()), this, SLOT(slotKillBotStatistic()));
     QObject::connect(map->TankForPlay1, SIGNAL(signalKillPlayer()), this, SLOT(slotKillPlayer()));
-
-    QObject::connect(map_2, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
-
-    QObject::connect(map_2, SIGNAL(signalKillBotForStatistic()), this, SLOT(slotKillBotStatistic()));
-    QObject::connect(map_2->TankForPlay1, SIGNAL(signalKillPlayer()), this, SLOT(slotKillPlayer()));
-
-    QObject::connect(map_3, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
-
-    QObject::connect(map_3, SIGNAL(signalKillBotForStatistic()), this, SLOT(slotKillBotStatistic()));
-    QObject::connect(map_3->TankForPlay1, SIGNAL(signalKillPlayer()), this, SLOT(slotKillPlayer()));
-
-    QObject::connect(map_4, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
-
-    QObject::connect(map_4, SIGNAL(signalKillBotForStatistic()), this, SLOT(slotKillBotStatistic()));
-    QObject::connect(map_4->TankForPlay1, SIGNAL(signalKillPlayer()), this, SLOT(slotKillPlayer()));
-
 }
 
 BattleCityView::~BattleCityView()
@@ -199,34 +180,6 @@ void BattleCityView::ShowStatistic()
 
 void BattleCityView::BuildNextLevel()
 {
-
-    switch(m_iCountLevel)
-    {
-        case 1:
-            {
-                 this->setScene(map);
-            break;
-            }
-        case 2:
-            {
-                map->~BattleCityMap();
-                 this->setScene(map_2);
-            break;
-            }
-        case 3:
-            {
-                map_2->~BattleCityMap();
-                 this->setScene(map_3);
-            break;
-            }
-        case 4:
-            {
-                map_3->~BattleCityMap();
-                 this->setScene(map_4);
-            break;
-            }
-    }
-
     ShowWalls(OBJ_NAME_WATER     , OBJ_TYPE_WATER     , ":/walls/1.jpg");
     ShowWalls(OBJ_NAME_ICE       , OBJ_TYPE_ICE       , ":/walls/2.jpg");
     ShowWalls(OBJ_NAME_RED_WALL  , OBJ_TYPE_RED_WALL  , ":/walls/3.jpg");
@@ -526,9 +479,7 @@ void BattleCityView::slotKillBotStatistic()
    // if (listTank.empty())
     //{
       //  map->~BattleCityMap();
-
-
-
+        map->LoadMapForNewLevel();
         ShowNameLevel();
    // }
 
@@ -577,6 +528,9 @@ void BattleCityView::slotKillPlayer()
 void BattleCityView::slotShowNextLevel()
 {
     BuildNextLevel();
+    map->ShowNewLevel();
+
+    this->setScene(map);
 }
 
 void BattleCityView::ShowNameLevel()
@@ -584,9 +538,8 @@ void BattleCityView::ShowNameLevel()
     ++m_iCountLevel;
     m_sceneSwitchBetweenLevels->SetNameLevel(QString("Level" + m_iCountLevel));
 
+
     this->setScene(m_sceneSwitchBetweenLevels);
-
-
 
 //    switch(m_iCountLevel)
 //    {
