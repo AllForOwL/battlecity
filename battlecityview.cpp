@@ -457,6 +457,8 @@ void BattleCityView::slotKillBotStatistic()
 {
     listTank[listTank.size()-1]->~QGraphicsPixmapItem();
     listTank.removeLast();
+
+    this->setHidden(true);
 }
 
 void BattleCityView::slotKillPlayer()

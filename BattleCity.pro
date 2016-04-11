@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     algorithmli.cpp \
     udpclient.cpp \
     mainmenu.cpp \
-    fieldgame.cpp
+    fieldgame.cpp \
+    switchbetweenlevels.cpp
 
 HEADERS  += battlecityview.h \
     battlecitymap.h \
@@ -41,7 +42,8 @@ HEADERS  += battlecityview.h \
     udpclient.h \
     mainmenu.h \
     algorithmli.h \
-    fieldgame.h
+    fieldgame.h \
+    switchbetweenlevels.h
 
 RESOURCES += \
     walls.qrc \
