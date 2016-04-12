@@ -3,10 +3,11 @@
 
 #include <QGraphicsView>
 #include <QObject>
+#include <QGraphicsItemGroup>
 
 #include "battlecitymap.h"
 #include "constants.h"
-#include "fieldgame.h"
+#include "switchbetweenlevels.h"
 
 class BattleCityView : public QGraphicsView
 {
@@ -17,24 +18,35 @@ public:
 
     void ShowWalls(const QString &strTypeWall, int numberTypeWall, const QString &pathToImage);
     void ShowStatistic();
-
+    void ShowNameLevel();
 
     int _map[WINDOW_WIDTH][WINDOW_HEIGHT];
 
 private:
     BattleCityMap* map;
-    FieldGame* fieldGame;
+
+    SwitchBetweenLevels* m_SwitchBetweenLevels;
+    QGraphicsView      * m_viewSwitchLevels;
+
     QGraphicsTextItem* m_txtLevel;
     QGraphicsTextItem* m_txtCountLife;
 
     QList<QGraphicsPixmapItem*> listTank;
 
-public slots:
+    bool m_blShowNameLevel;
+    QGraphicsRectItem* m_rectShowNameLevel;
+    QGraphicsItemGroup* m_groupLevel;
+    QGraphicsTextItem*  m_txtNameLevel;
 
+    int m_iCountLevel;
+
+public slots:
     void slotClose(int numberKillsOnePlayer, int numberKillsTwoPlayer);
 
     void slotKillBotStatistic();
     void slotKillPlayer();
+
+    void slotShowNextLevel();
 
 };
 

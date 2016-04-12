@@ -11,6 +11,8 @@
 
 BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QObject* parent) : QGraphicsScene(parent)
 {
+    m_blShowNameLevel = true;
+
     this->setBackgroundBrush(Qt::black);                        // Встановлення фонового кольору
     this->setSceneRect(0, 0, WINDOW_WIDTH+100, WINDOW_HEIGHT);      // Встановлення розміру сцени з початковими координатами 0,0
     // вверху лівої частини вікна
@@ -383,6 +385,37 @@ BattleCityMap::~BattleCityMap() {
 
 }
 
+void BattleCityMap::StopGameForSwitchNewLevel()
+{
+    timerMoveBot->stop();
+    timerMoveBot_2->stop();
+    timerMoveBot_3->stop();
+    timerMoveBot_4->stop();
+
+    timerMoveTank1->stop();
+
+    bot->setPos(-32, 0);
+    bot_2->setPos(-32, 0);
+    bot_3->setPos(-32, 0);
+    bot_4->setPos(-32, 0);
+
+    TankForPlay1->setPos(-32, 0);
+}
+
+void BattleCityMap::LoadMapForNewLevel()
+{
+    p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_Map, false);   // Завантаження карти з файлу
+
+    timerRunBot->start(CNT_TIME_APPEARANCE_ONE_BOT);
+    timerRunBot_2->start(CNT_TIME_APPEARANCE_TWO_BOT);
+    timerRunBot_3->start(CNT_TIME_APPEARANCE_THREE_BOT);
+    timerRunBot_4->start(CNT_TIME_APPEARANCE_FOUR_BOT);
+
+    timerMoveTank1->start(CNT_SPEED_MOVE_ONE_PLAYER);
+
+    TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER, CNT_BEGIN_Y_ONE_PLAYER);
+}
+
 bool BattleCityMap::AuditPressKey(int key)
 {
     if (!_regimeGame == 2)   // если один игрок или сервер
@@ -673,6 +706,13 @@ void BattleCityMap::slotRemoveBonusForTimeBonus()
 }
 
 /* virtual*/ void BattleCityMap::keyPressEvent(QKeyEvent *event) {
+
+    if (m_blShowNameLevel)
+    {
+        emit signalShowNextLevel();
+        return;
+    }
+
     int key = event->key();
 
     if (!AuditPressKey(key))

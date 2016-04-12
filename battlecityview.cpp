@@ -15,12 +15,44 @@
 
 BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client): QGraphicsView() {
 
-    map = new BattleCityMap(regimeGame,_friend, client);
+    m_iCountLevel = 1;
+    m_blShowNameLevel = true;
+    m_groupLevel = new QGraphicsItemGroup;
+
+    map = new BattleCityMap(regimeGame, _friend, client);
     this->setScene(map);
 
     this->setFixedSize(WINDOW_WIDTH+100, WINDOW_HEIGHT+2);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    m_rectShowNameLevel = new QGraphicsRectItem();
+    m_rectShowNameLevel->setRect(0, 0, WINDOW_WIDTH+100, WINDOW_HEIGHT);
+    m_rectShowNameLevel->setBrush(Qt::gray);
+
+    m_txtNameLevel = new QGraphicsTextItem("Level 1");
+    m_txtNameLevel->setFont(QFont("Serif", 25, QFont::Bold));
+    m_txtNameLevel->setDefaultTextColor(Qt::black);
+    m_txtNameLevel->setPos(230, 150);
+    m_txtNameLevel->setZValue(2.0);
+
+    m_rectShowNameLevel->setZValue(2.0);
+    this->map->addItem(m_rectShowNameLevel);
+    this->map->addItem(m_txtNameLevel);
+   // m_groupLevel->addToGroup(m_rectShowNameLevel);
+
+   // map->addItem(m_groupLevel);
+
+//    m_SwitchBetweenLevels = new SwitchBetweenLevels();
+//    m_viewSwitchLevels    = new QGraphicsView;
+
+//    m_viewSwitchLevels->setFixedSize(WINDOW_WIDTH+100, WINDOW_HEIGHT+2);
+//    m_viewSwitchLevels->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    m_viewSwitchLevels->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+//    m_viewSwitchLevels->setScene(m_SwitchBetweenLevels);
+//    m_viewSwitchLevels->move(400, 0);
+//    m_viewSwitchLevels->setHidden(true);
 
     m_txtLevel     = new QGraphicsTextItem();
     m_txtCountLife = new QGraphicsTextItem();
@@ -33,6 +65,11 @@ BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client):
     ShowStatistic();
     //ShowWalls(OBJ_NAME_BASE      , OBJ_TYPE_BASE      , ":/Explosion/base.png");
 
+    ShowNameLevel();
+
+   // QObject::connect(m_SwitchBetweenLevels, SIGNAL(signalShowNextLevel()), SLOT(slotShowNextLevel));
+
+    QObject::connect(map, SIGNAL(signalShowNextLevel()), this, SLOT(slotShowNextLevel()));
     QObject::connect(map, SIGNAL(signalGameOver(int,int)), this, SLOT(slotClose(int,int)));
 
     QObject::connect(map, SIGNAL(signalKillBotForStatistic()), this, SLOT(slotKillBotStatistic()));
@@ -65,6 +102,8 @@ void BattleCityView::ShowWalls(const QString &strTypeWall,
 
                 p_MyImage->setPos(SIZE_WALL*j, SIZE_WALL*i);
                 p_MyImage->setData(0, strTypeWall);
+
+                m_groupLevel->addToGroup(p_MyImage);
 
                 if (strTypeWall == OBJ_NAME_GRASS)
                     p_MyImage->setZValue(1.0);
@@ -168,6 +207,16 @@ void BattleCityView::ShowStatistic()
     m_txtCountLife->setPos(558, 358);
     m_txtCountLife->setZValue(1.0);
     map->addItem(m_txtCountLife);
+}
+
+void BattleCityView::ShowNameLevel()
+{
+   // this->setHidden(true);
+  //  m_viewSwitchLevels->setHidden(true);
+    //this->map->removeItem(m_rectShowNameLevel);
+
+   // m_rectShowNameLevel->setBrush(Qt::black);
+   // m_rectShowNameLevel->setZValue(0);
 }
 
 void BattleCityView::slotClose(int numberKillsOnePlayer, int numberKillsTwoPlayer)
@@ -458,7 +507,37 @@ void BattleCityView::slotKillBotStatistic()
     listTank[listTank.size()-1]->~QGraphicsPixmapItem();
     listTank.removeLast();
 
-    this->setHidden(true);
+    //if (listTank.empty())
+    //{
+        QString level;
+        ++m_iCountLevel;
+
+        switch(m_iCountLevel)
+        {
+            case 2:
+                {
+                    level = "Level 2";
+                    break;
+                }
+            case 3:
+                {
+                    level = "Level 3";
+                    break;
+                }
+            case 4:
+                {
+                    level = "Level 4";
+                    break;
+                }
+
+        }
+
+        this->map->m_blShowNameLevel = true;
+        this->map->StopGameForSwitchNewLevel();
+        m_rectShowNameLevel->setBrush(Qt::gray);
+        m_rectShowNameLevel->setZValue(2);
+        m_txtNameLevel->setZValue(2);
+        m_txtNameLevel->setPlainText(level);
 }
 
 void BattleCityView::slotKillPlayer()
@@ -482,4 +561,27 @@ void BattleCityView::slotKillPlayer()
     }
 
     m_txtCountLife->setPlainText(strCountLife);
+}
+
+void BattleCityView::slotShowNextLevel()
+{   
+    this->map->m_blShowNameLevel = false;
+
+    m_rectShowNameLevel->setBrush(Qt::black);
+    m_rectShowNameLevel->setZValue(0);
+
+    m_txtNameLevel->setZValue(0);
+
+    this->map->LoadMapForNewLevel();
+
+    if (m_iCountLevel != 1)
+    {
+       //this->map->destroyItemGroup(m_groupLevel);
+     //   ShowWalls(OBJ_NAME_WATER     , OBJ_TYPE_WATER     , ":/walls/1.jpg");
+     //   ShowWalls(OBJ_NAME_ICE       , OBJ_TYPE_ICE       , ":/walls/2.jpg");
+        ShowWalls(OBJ_NAME_RED_WALL  , OBJ_TYPE_RED_WALL  , ":/walls/3.jpg");
+      //  ShowWalls(OBJ_NAME_GRASS     , OBJ_TYPE_GRASS     , ":/walls/4.png");
+      //  ShowWalls(OBJ_NAME_WHITE_WALL, OBJ_TYPE_WHITE_WALL, ":/walls/5.jpg");
+       // ShowStatistic();
+    }
 }

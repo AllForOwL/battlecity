@@ -13,7 +13,7 @@ class SwitchBetweenLevels : public QGraphicsScene
     Q_OBJECT
 public:
     SwitchBetweenLevels(QObject* parent = 0);
-    ~SwitchBetweenLevels();
+    //~SwitchBetweenLevels();
 
     void SetNameLevel(const QString& nameLevel);
 

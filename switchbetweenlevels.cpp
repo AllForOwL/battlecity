@@ -6,7 +6,6 @@ SwitchBetweenLevels::SwitchBetweenLevels(QObject *parent) : QGraphicsScene(paren
     this->setSceneRect(0, 0, WINDOW_WIDTH+100, WINDOW_HEIGHT);      // Встановлення розміру сцени з початковими координатами 0,0
 
     m_txtNameLevel = new QGraphicsTextItem("Level 1");
-    m_txtNameLevel->
 
     m_txtNameLevel->setFont(QFont("Serif", 25, QFont::Bold));
     m_txtNameLevel->setDefaultTextColor(Qt::black);

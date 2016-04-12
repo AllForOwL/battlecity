@@ -19,6 +19,9 @@ public:
     BattleCityMap(int regimeGame, bool _friend,  UdpClient* client, QObject* parent = 0);
             ~BattleCityMap();
 
+    void StopGameForSwitchNewLevel();
+    void LoadMapForNewLevel();
+
     int n_Map[CNT_ROWS_MAP][CNT_COLS_MAP];      // розмер карты
     QList <QGraphicsItem *> listObjectAtBase;   // Елементы что розмещены вокруг базы
 
@@ -27,7 +30,6 @@ public:
     int  _regimeGame;
     bool _deleteBase;
 
-public:
     QTimer* timerMoveTank1;                 // Таймер для переміщення танку плеєра 1
     QTimer* timerMoveTank2;                 // та плеєра 2
     QTimer* timerRunBot;
@@ -84,6 +86,7 @@ public:
 
     QGraphicsScene* m_gsHeadScene;
 
+    bool m_blShowNameLevel;
 
     /* /// Сеть /// */
 
@@ -117,6 +120,8 @@ signals:
     void signalGameOver(int numberKillsOnePlayer, int numberKillsTwoPlayer);
 
     void signalKillBotForStatistic();
+
+    void signalShowNextLevel();
 
 public slots:
     void slotAddBot_1 ();           // появление бота на карте после уничтожения
