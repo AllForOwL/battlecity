@@ -770,6 +770,15 @@ void BattleCityMap::slotAddBot_2()
 
     ++bot_2->numberDeaths;
 
+    if (bot_2->numberDeaths == 1)
+    {
+        bot_2->LoadNewFrame(m_listFileNamesMiddleBots);
+    }
+    else if (bot_2->numberDeaths == 2)
+    {
+        bot_2->LoadNewFrame(m_listFileNamesHighBots);
+    }
+
     QList <QGraphicsItem *> listItems;
     int _x = 450;
     QRectF myRect;
@@ -804,6 +813,16 @@ void BattleCityMap::slotAddBot_3()
     emit signalKillBotForStatistic();
 
     ++bot_3->numberDeaths;
+
+    if (bot_3->numberDeaths == 1)
+    {
+        bot_3->LoadNewFrame(m_listFileNamesMiddleBots);
+    }
+    else if (bot_3->numberDeaths == 2)
+    {
+        bot_3->LoadNewFrame(m_listFileNamesHighBots);
+    }
+
     bot_3->indexWay = 0;
 
     qsrand(QTime::currentTime().msec());
@@ -816,18 +835,18 @@ void BattleCityMap::slotAddBot_3()
     myRect.setWidth(64);
     myRect.setHeight(30);
 
-    do
-    {
-        listItems.clear();
-        myRect.setX(_x);
-        _x -= 32;
-        listItems = this->items(myRect, Qt::IntersectsItemBoundingRect);
+//    do
+//    {
+//        listItems.clear();
+//        myRect.setX(_x);
+//        _x -= 32;
+//        listItems = this->items(myRect, Qt::IntersectsItemBoundingRect);
 
-        if (_x < 50)
-        {
-            _x = 400;
-        }
-    } while(listItems.size() != 0);
+//        if (_x < 50)
+//        {
+//            _x = 400;
+//        }
+//    } while(listItems.size() != 0);
 
     bot_3->setPos(_x, 0);
     bot_3->setData(0, OBJ_NAME_BOT_3);
@@ -841,6 +860,16 @@ void BattleCityMap::slotAddBot_4()
     emit signalKillBotForStatistic();
 
     ++bot_4->numberDeaths;
+
+    if (bot_4->numberDeaths == 1)
+    {
+        bot_4->LoadNewFrame(m_listFileNamesMiddleBots);
+    }
+    else if (bot_4->numberDeaths == 2)
+    {
+        bot_4->LoadNewFrame(m_listFileNamesHighBots);
+    }
+
     bot_4->indexWay = 0;
 
     qsrand(QTime::currentTime().msec());
@@ -879,6 +908,15 @@ void BattleCityMap::slotAddBot_1()
     emit signalKillBotForStatistic();
 
     ++bot->numberDeaths;
+
+    if (bot->numberDeaths == 1)
+    {
+        bot->LoadNewFrame(m_listFileNamesMiddleBots);
+    }
+    else if (bot->numberDeaths == 2)
+    {
+        bot->LoadNewFrame(m_listFileNamesHighBots);
+    }
 
     QList <QGraphicsItem *> listItems;
     int _x = 50;

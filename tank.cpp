@@ -77,6 +77,21 @@ void Tank::setRotate2(int rotate)
     scene()->update();
 }
 
+void Tank::LoadNewFrame(const QList<QString> &fileNames)
+{
+    frames.clear();
+    int size = fileNames.size();
+    for (int i = 0; i < size; i++) {
+        QPixmap pixmap;
+            pixmap.load(fileNames.at(i));
+        Frame frame;
+            frame.pixmap = pixmap;
+            frame.shape = QPainterPath();
+            frame.boundingRect = pixmap.rect();
+            frames << frame;
+    }
+}
+
 void Tank::setRotate(int r) {
     _rotate = r;
 }

@@ -25,6 +25,8 @@ public:
     );
 
     void setRotate2(int rotate); // поворачивание танка супротивника(при игре по сети)
+    void LoadNewFrame(const QList<QString>& fileNames);
+
 
     bool ArrowUp;
     bool ArrowDown;
