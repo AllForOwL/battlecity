@@ -13,8 +13,8 @@
 #include <QImage>
 #include <QList>
 
-BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client): QGraphicsView() {
-
+BattleCityView::BattleCityView(int regimeGame, bool _friend, UdpClient *client): QGraphicsView()
+{
     m_iCountLevel = 1;
     m_blShowNameLevel = true;
     m_groupLevel = new QGraphicsItemGroup;
@@ -507,8 +507,8 @@ void BattleCityView::slotKillBotStatistic()
     listTank[listTank.size()-1]->~QGraphicsPixmapItem();
     listTank.removeLast();
 
-    //if (listTank.empty())
-    //{
+    if (listTank.empty())
+    {
         QString level;
         ++m_iCountLevel;
 
@@ -538,13 +538,14 @@ void BattleCityView::slotKillBotStatistic()
         m_rectShowNameLevel->setZValue(2);
         m_txtNameLevel->setZValue(2);
         m_txtNameLevel->setPlainText(level);
+    }
 }
 
 void BattleCityView::slotKillPlayer()
 {
     QString strCountLife;
 
-    switch(map->TankForPlay1->numberLife)
+    switch (map->TankForPlay1->numberLife)
     {
         case 1:
             {
@@ -576,12 +577,12 @@ void BattleCityView::slotShowNextLevel()
 
     if (m_iCountLevel != 1)
     {
-       //this->map->destroyItemGroup(m_groupLevel);
+     //this->map->destroyItemGroup(m_groupLevel);
      //   ShowWalls(OBJ_NAME_WATER     , OBJ_TYPE_WATER     , ":/walls/1.jpg");
      //   ShowWalls(OBJ_NAME_ICE       , OBJ_TYPE_ICE       , ":/walls/2.jpg");
-        ShowWalls(OBJ_NAME_RED_WALL  , OBJ_TYPE_RED_WALL  , ":/walls/3.jpg");
+          ShowWalls(OBJ_NAME_RED_WALL  , OBJ_TYPE_RED_WALL  , ":/walls/3.jpg");
       //  ShowWalls(OBJ_NAME_GRASS     , OBJ_TYPE_GRASS     , ":/walls/4.png");
       //  ShowWalls(OBJ_NAME_WHITE_WALL, OBJ_TYPE_WHITE_WALL, ":/walls/5.jpg");
-       // ShowStatistic();
+      //  ShowStatistic();
     }
 }

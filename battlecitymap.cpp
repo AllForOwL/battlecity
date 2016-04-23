@@ -27,29 +27,49 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     p_ReadFromFile = new Parsing();
     p_ReadFromFile->ParsTextFile(":/log_parsing.txt", n_Map, false);   // Завантаження карти з файлу
 
-    QList<QString> fileNames;                                   // Фрейми для анімації танка
-    QList<QString> fileNames2;
+    m_listFileNamesEasyBots
+            << ":/easyBots/Tanks/tankBots/easyBots/down_1.png"
+            << ":/easyBots/Tanks/tankBots/easyBots/down_2.png"
+            << ":/easyBots/Tanks/tankBots/easyBots/left_1.png"
+            << ":/easyBots/Tanks/tankBots/easyBots/left_2.png"
+            << ":/easyBots/Tanks/tankBots/easyBots/up_1.png"
+            << ":/easyBots/Tanks/tankBots/easyBots/up_2.png"
+            << ":/easyBots/Tanks/tankBots/easyBots/right_1.png"
+            << ":/easyBots/Tanks/tankBots/easyBots/right_2.png"
+               ;
 
-    fileNames << ":/easyBots/Tanks/YellowTank/tank_Yellow_down_1.png"
-              << ":/easyBots/Tanks/YellowTank/tank_Yellow_down_2.png"
-              << ":/easyBots/Tanks/YellowTank/tank_Yellow_left_1.png"
-              << ":/easyBots/Tanks/YellowTank/tank_Yellow_left_2.png"
-              << ":/easyBots/Tanks/YellowTank/tank_Yellow_up_1.png"
-              << ":/easyBots/Tanks/YellowTank/tank_Yellow_up_2.png"
-              << ":/easyBots/Tanks/YellowTank/tank_Yellow_right_1.png"
-              << ":/easyBots/Tanks/YellowTank/tank_Yellow_right_2.png"
+    m_listFileNamesMiddleBots
+            << ":/middleBots/Tanks/tankBots/middleBots/down_1.png"
+            << ":/middleBots/Tanks/tankBots/middleBots/down_2.png"
+            << ":/middleBots/Tanks/tankBots/middleBots/left_1.png"
+            << ":/middleBots/Tanks/tankBots/middleBots/left_2.png"
+            << ":/middleBots/Tanks/tankBots/middleBots/up_1.png"
+            << ":/middleBots/Tanks/tankBots/middleBots/up_2.png"
+            << ":/middleBots/Tanks/tankBots/middleBots/right_1.png"
+            << ":/middleBots/Tanks/tankBots/middleBots/right_2.png"
+               ;
+
+    m_listFileNamesHighBots
+            << ":/highBots/Tanks/tankBots/highBots/down_1.png"
+            << ":/highBots/Tanks/tankBots/highBots/down_2.png"
+            << ":/highBots/Tanks/tankBots/highBots/left_1.png"
+            << ":/highBots/Tanks/tankBots/highBots/left_2.png"
+            << ":/highBots/Tanks/tankBots/highBots/up_1.png"
+            << ":/highBots/Tanks/tankBots/highBots/up_2.png"
+            << ":/highBots/Tanks/tankBots/highBots/right_1.png"
+            << ":/highBots/Tanks/tankBots/highBots/right_2.png"
+               ;
+
+    m_listFileNamesTankPlayer
+              << ":/Tanks/YellowTank/tank_Yellow_down_1.png"
+              << ":/Tanks/YellowTank/tank_Yellow_down_2.png"
+              << ":/Tanks/YellowTank/tank_Yellow_left_1.png"
+              << ":/Tanks/YellowTank/tank_Yellow_left_2.png"
+              << ":/Tanks/YellowTank/tank_Yellow_up_1.png"
+              << ":/Tanks/YellowTank/tank_Yellow_up_2.png"
+              << ":/Tanks/YellowTank/tank_Yellow_right_1.png"
+              << ":/Tanks/YellowTank/tank_Yellow_right_2.png"
                  ;
-
-        fileNames2 << ":/easyTank/Tanks/tankplayer/easyTank/down_1.png"
-                  << ":/easyTank/Tanks/tankplayer/easyTank/down_2.png"
-                  << ":/easyTank/Tanks/tankplayer/easyTank/left_1.png"
-                  << ":/easyTank/Tanks/tankplayer/easyTank/left_2.png"
-                  << ":/easyTank/Tanks/tankplayer/easyTank/up_1.png"
-                  << ":/easyTank/Tanks/tankplayer/easyTank/up_2.png"
-                  << ":/easyTank/Tanks/tankplayer/easyTank/right_1.png"
-                  << ":/easyTank/Tanks/tankplayer/easyTank/right_2.png"
-                     ;
-
 
     timerMoveTank1      = new QTimer(this);
     timerMoveTank2      = new QTimer(this);
@@ -88,7 +108,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
 
     if (regimeGame == 1)    // режым игры одного игрока
     {
-        TankForPlay1 = new TankForPlayer(fileNames2, 1);             // TankForPlayer приймає 2 параметри:
+        TankForPlay1 = new TankForPlayer(m_listFileNamesTankPlayer, 1);             // TankForPlayer приймає 2 параметри:
                                                                     // 1) фрейми для анімації
                                                                     // 2) Номер клавіш управління. Наприклад:
                                                                     //      1 - керування стрілками та вистріл через клавішу "space"
@@ -114,13 +134,13 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     }
     else if (regimeGame == 2)   // режым игры двоих игроков
     {
-        TankForPlay1 = new TankForPlayer(fileNames, 1);
+        TankForPlay1 = new TankForPlayer(m_listFileNamesTankPlayer, 1);
         TankForPlay1->setZValue(0.5);
         TankForPlay1->setData(0, OBJ_NAME_PLAYER_1);                            // Ім’я об’єкта
         TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER, CNT_BEGIN_Y_ONE_PLAYER);   // Початкова позиція
         this->addItem(TankForPlay1);                                            // Добавлення на сцену  
 
-        TankForPlay2 = new TankForPlayer(fileNames, 2);
+        TankForPlay2 = new TankForPlayer(m_listFileNamesTankPlayer, 2);
         TankForPlay2->setData(0, OBJ_NAME_PLAYER_2);
         TankForPlay2->setPos(CNT_BEGIN_X_TWO_PLAYER, CNT_BEGIN_Y_TWO_PLAYER);
         TankForPlay2->setZValue(0.5);
@@ -160,13 +180,13 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     }
     else if (regimeGame == 3)                        // игра по сети
     {
-        TankForPlay1 = new TankForPlayer(fileNames, 1);
+        TankForPlay1 = new TankForPlayer(m_listFileNamesTankPlayer, 1);
         TankForPlay1->setZValue(0.5);
         TankForPlay1->setData(0, OBJ_NAME_PLAYER_1);                            // Ім’я об’єкта
         TankForPlay1->setPos(CNT_BEGIN_X_ONE_PLAYER, CNT_BEGIN_Y_ONE_PLAYER);   // Початкова позиція
         this->addItem(TankForPlay1);                                            // Добавлення на сцену
 
-        TankForPlay2 = new TankForPlayer(fileNames, 2);
+        TankForPlay2 = new TankForPlayer(m_listFileNamesTankPlayer, 2);
         TankForPlay2->setData(0, OBJ_NAME_PLAYER_2);
         TankForPlay2->setPos(-40, 0);
         TankForPlay2->setZValue(0.5);
@@ -208,13 +228,13 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     }
     else
     {
-        TankForPlay1 = new TankForPlayer(fileNames, 1);
+        TankForPlay1 = new TankForPlayer(m_listFileNamesTankPlayer, 1);
         TankForPlay1->setZValue(0.5);
         TankForPlay1->setData(0, OBJ_NAME_PLAYER_1);                            // Ім’я об’єкта
         TankForPlay1->setPos(CNT_BEGIN_X_TWO_PLAYER, CNT_BEGIN_Y_TWO_PLAYER);   // Початкова позиція
         this->addItem(TankForPlay1);                                            // Добавлення на сцену
 
-        TankForPlay2 = new TankForPlayer(fileNames, 2);
+        TankForPlay2 = new TankForPlayer(m_listFileNamesTankPlayer, 2);
         TankForPlay2->setData(0, OBJ_NAME_PLAYER_2);
         TankForPlay2->setPos(-40, 0);
         TankForPlay2->setZValue(0.5);
@@ -252,7 +272,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
         QObject::connect( client , SIGNAL( signalReadInformationOpponent(int,int, int, bool)), this, SLOT( slotMoveOpponent(int,int, int, bool) ));
     }
 
-    bot = new TankBot(fileNames);
+    bot = new TankBot(m_listFileNamesEasyBots);
     bot->addTank = false;
     bot->setData(0, OBJ_NAME_BOT_1);
     bot->setObjectName(OBJ_NAME_BOT_1);
@@ -260,7 +280,7 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     bot->setZValue(0.5);
     this->addItem(bot);
 
-    bot_2 = new TankBot(fileNames);
+    bot_2 = new TankBot(m_listFileNamesEasyBots);
     bot_2->addTank = false;
     bot_2->setData(0, OBJ_NAME_BOT_2);
     bot_2->setObjectName(OBJ_NAME_BOT_2);
@@ -268,15 +288,15 @@ BattleCityMap::BattleCityMap(int regimeGame, bool _friend, UdpClient* client, QO
     bot_2->setZValue(0.5);
     this->addItem(bot_2);
 
-    bot_3 = new TankBot(fileNames);
+    bot_3 = new TankBot(m_listFileNamesEasyBots);
     bot_3->addTank = false;
     bot_3->setData(0, OBJ_NAME_BOT_3);
     bot_3->setObjectName(OBJ_NAME_BOT_3);
-    bot_3->setPos(-64, 0);
+    bot_3->setPos(-32, 0);
     bot_3->setZValue(0.5);
     this->addItem(bot_3);
 
-    bot_4 = new TankBot(fileNames);
+    bot_4 = new TankBot(m_listFileNamesEasyBots);
     bot_4->addTank = false;
     bot_4->setData(0, OBJ_NAME_BOT_4);
     bot_4->setObjectName(OBJ_NAME_BOT_4);

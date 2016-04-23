@@ -88,6 +88,11 @@ public:
 
     bool m_blShowNameLevel;
 
+    QList <QString> m_listFileNamesEasyBots;
+    QList <QString> m_listFileNamesMiddleBots;
+    QList <QString> m_listFileNamesHighBots;
+    QList <QString> m_listFileNamesTankPlayer;
+
     /* /// Сеть /// */
 
     UdpClient *_client;

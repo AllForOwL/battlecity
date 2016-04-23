@@ -48,6 +48,6 @@ RESOURCES += \
     map.qrc \
     explosion.qrc \
     imgs.qrc \
-    playertank.qrc \
-    botstank.qrc \
-    fieldstatistic.qrc
+    fieldstatistic.qrc \
+    tankplayer.qrc \
+    tankbots.qrc
